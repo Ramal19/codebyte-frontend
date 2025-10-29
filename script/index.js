@@ -478,12 +478,18 @@ async function loadPosts() {
                 //  scrollbar-width: none;
                 `
 
-                let btnLeft = null;
-                let btnRight = null;
-
-                if (btnLeft === null || btnRight === null) {
+                if (!btnLeft) {
                     btnLeft = document.createElement("button");
+                    btnLeft.classList.add("btn-left");
+                    btnLeft.innerHTML = `<i class="bi bi-arrow-left"></i>`;
+                    // btnDirection.appendChild(btnLeft);
+                }
+
+                if (!btnRight) {
                     btnRight = document.createElement("button");
+                    btnRight.classList.add("btn-right");
+                    btnRight.innerHTML = `<i class="bi bi-arrow-right"></i>`;
+                    // btnDirection.appendChild(btnRight);
                 }
 
 
@@ -503,11 +509,11 @@ async function loadPosts() {
                     })
                 })
 
-                btnLeft.innerHTML = `<i class="bi bi-arrow-left"></i>`
-                btnRight.innerHTML = `<i class="bi bi-arrow-right"></i>`
+                // btnLeft.innerHTML = `<i class="bi bi-arrow-left"></i>`
+                // btnRight.innerHTML = `<i class="bi bi-arrow-right"></i>`
 
-                btnLeft.classList.add("btn-left");
-                btnRight.classList.add("btn-right");
+                // btnLeft.classList.add("btn-left");
+                // btnRight.classList.add("btn-right");
 
                 btnDirection.appendChild(btnLeft);
                 btnDirection.appendChild(btnRight);
