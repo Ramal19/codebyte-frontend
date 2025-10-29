@@ -32,11 +32,11 @@ const conAll = document.querySelector(".conAll")
 
 
 loginBtn.onclick = () => {
-    window.location.href = "./document/login.html"
+    window.location.href = "../document/login.html"
 }
 
 registerBtn.onclick = () => {
-    window.location.href = "./document/register.html"
+    window.location.href = "../document/register.html"
 }
 
 if (localStorage.getItem("exitBtn") === "true" || localStorage.getItem("locationCourse") === "true") {
