@@ -32,11 +32,11 @@ const conAll = document.querySelector(".conAll")
 
 
 loginBtn.onclick = () => {
-    window.location.href = "../document/login.html"
+    window.location.href = "./document/login.html"
 }
 
 registerBtn.onclick = () => {
-    window.location.href = "../document/register.html"
+    window.location.href = "./document/register.html"
 }
 
 if (localStorage.getItem("exitBtn") === "true" || localStorage.getItem("locationCourse") === "true") {
@@ -382,7 +382,7 @@ if (logData) {
     regPart.appendChild(postAdd)
     postAdd.addEventListener("click", () => {
 
-        window.location.href = "./post-add.html"
+        window.location.href = "./document/post-add.html"
     })
     let userDiv = document.createElement("div");
     userDiv.classList.add("user-div");
