@@ -1,0 +1,100 @@
+<!-- <!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Giriş</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Giriş</h1>
+  <form id="loginForm">
+    <input name="username" placeholder="İstifadəçi adı" required><br>
+    <input name="password" type="password" placeholder="Şifrə" required><br>
+    <button>Daxil ol</button>
+    <button id="location">Hesabiniz yoxdurmu ?</button>
+  </form>
+  <p id="msg"></p>
+
+  <script src="../script/login.js"></script>
+</body>
+</html> -->
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CodeByte</title>
+  <link rel="stylesheet" href="../style/login.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+</head>
+
+<body>
+
+  <div class="con">
+    <div class="circle"></div>
+    <form id="loginForm" class="form-box">
+      <div class="box-left">
+        <h1>
+          Daxil ol
+        </h1>
+        <p>
+          CodeByte'a xoş gəlmisiniz!
+        </p>
+        <div class="username">
+          <span class="username-icon icon">
+            <i class="bi bi-person"></i>
+            İstifadəçi adı
+          </span>
+          <input class="input" name="username" type="text" id="username-inp">
+        </div>
+
+        <div class="password">
+          <span class="password-icon icon">
+            <i class="bi bi-lock"></i>
+            Şifrə
+          </span>
+          <input class="input" name="password" type="password" id="password-inp">
+        </div>
+
+        <button id="location" class="loginBtn">
+          İndi daxil ol
+        </button>
+
+        <p>
+          Digərləri ilə <span>daxil olun</span>
+        </p>
+
+        <div class="others-sign">
+          <button class="google-sign">
+            <img src="../image/google.png" alt="Foto">
+            <pre><span>google</span> ilə daxil olun</pre>
+          </button>
+
+          <button class="apple-sign">
+            <img src="../image/apple.png" alt="Foto">
+            <pre><span>Apple</span> ilə daxil olun</pre>
+          </button>
+        </div>
+
+        <p>
+          Hesabınız yoxdurmu ?<a href="./register.html">Qeydiyyatdan keç</a>
+        </p>
+      </div>
+      <div class="box-right">
+        <div class="login-img">
+          <img src="../image/login.png" alt="Foto">
+        </div>
+      </div>
+    </form>
+
+    <p id="msg"></p>
+
+  </div>
+  <script src="../script/login.js"></script>
+</body>
+
+</html>

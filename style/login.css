@@ -1,0 +1,172 @@
+* {
+
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.con {
+
+    width: 100%;
+    height: 100vh;
+    background-color: #2d9ffd5a;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: Arial, Helvetica, sans-serif;
+    position: relative;
+}
+
+
+.con > .circle {
+
+    position: absolute;
+    top: 130px;
+    left: 400px;
+    z-index: -1;
+    width: 100px;
+    height: 100px;
+    border-radius: 9999px;
+    background: #22C1C3;
+    background: linear-gradient(0deg,rgba(34, 193, 195, 1) 0%, rgba(45, 160, 253, 1) 100%);
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+.con > .form-box {
+
+    width: 1000px;
+    display: flex;
+    border-radius: 15px;
+    background-color: #fff;
+    padding: 50px 0;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+.form-box > .box-left {
+
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+
+.box-left > .username {
+
+    position: relative;
+}
+
+.username > .username-icon {
+
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    font-weight: 600;
+    font-size: 18px;
+}
+
+.username > #username-inp {
+
+    width: 250px;
+    outline: none;
+    border-radius: 7px;
+    padding: 5px;
+    font-size: 18px;
+    background-color: #77777742;
+}
+
+.box-left > .password {
+
+    position: relative;
+}
+
+.password > .password-icon {
+
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.password > #password-inp {
+
+    width: 250px;
+    outline: none;
+    border-radius: 7px;
+    padding: 5px;
+    font-size: 18px;
+    background-color: #77777742;
+}
+
+.box-left > .loginBtn {
+
+    width: 150px;
+    padding: 5px 0;
+    font-size: 18px;
+    border-radius: 7px;
+    border: none;
+    background-color: #22c0c382;
+    color: #fff;
+}
+
+.box-left > .loginBtn:hover {
+
+    background-color: #22c0c3bd;
+    transition: all 0.5s ease;
+
+}
+
+.box-left > .others-sign {
+
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.others-sign > .google-sign {
+
+    width: 250px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.google-sign > img {
+
+    width: 30px;
+}
+
+.others-sign > .apple-sign {
+
+    width: 250px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.apple-sign > img {
+
+    width: 25px;
+}
+
+/* RIGHT */
+
+.form-box > .box-right {
+
+    width: 50%;
+}
+
+.box-right > .login-img {
+
+    width: 100%;
+}
+
+.login-img > img {
+
+    width: 100%;
+    border-top-right-radius: 15px;
+    border-bottom-right-radius: 15px;
+}
+

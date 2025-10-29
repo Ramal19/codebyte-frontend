@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Postlar</title>
+  <style>
+    #posts {
+      height: 100vh;
+      background-color: lightblue;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    #posts > div {
+      width: 200px;
+      height: 400px;
+      border: 1px solid;
+      background:#fff;
+      padding: 5px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Paylaşımlar</h1>
+
+  <div id="authActions">
+    <input type="file" id="imageInput">
+    <input type="text" id="textInput" placeholder="Yazını daxil et">
+    <button id="uploadBtn">Paylaş</button>
+    <button id="logoutBtn">Çıxış</button>
+  </div>
+
+  <div id="posts"></div>
+
+  <script>
+    const token = localStorage.getItem("token");
+    if (!token) {
+      alert("Əvvəlcə login olmalısınız");
+      location.href = "login.html";
+    }
+
+    // === safe parse JWT ===
+    let me;
+    try {
+      me = JSON.parse(atob(token.split('.')[1])).username;
+    } catch (e) {
+      localStorage.removeItem("token");
+      location.href = "login.html";
+    }
+
+    const postsDiv = document.getElementById("posts");
+
+    async function loadPosts() {
+      const res = await fetch("http://localhost:3000/posts", {
+        headers: { "Authorization": "Bearer " + token }
+      });
+      const posts = await res.json();
+      postsDiv.innerHTML = "";
+
+      posts.reverse().forEach(p => {
+        const div = document.createElement("div");
+        div.innerHTML = `
+          <p><b>${p.username}</b></p>
+          <p>${p.text}</p>
+          <img src="http://localhost:3000/uploads/${p.cover}" width="200">
+        `;
+        if (p.username === me) {
+          const btn = document.createElement("button");
+          btn.textContent = "Sil";
+          btn.onclick = () => deletePost(p.id);
+          div.appendChild(btn);
+        }
+        postsDiv.appendChild(div);
+      });
+    }
+
+    async function deletePost(id) {
+      const res = await fetch("http://localhost:3000/posts/" + id, {
+        method: "DELETE",
+        headers: { "Authorization": "Bearer " + token }
+      });
+      if (!res.ok) return alert("Silinmədi!");
+      loadPosts();
+    }
+
+    document.getElementById("uploadBtn").addEventListener("click", async () => {
+      const file = imageInput.files[0];
+      const text = textInput.value.trim();
+      if (!file) return alert("Fayl seçin");
+      if (!text) return alert("Mətn daxil edin");
+
+      const formData = new FormData();
+      formData.append("image", file);
+      formData.append("text", text);
+
+      const res = await fetch("http://localhost:3000/posts", {
+        method: "POST",
+        headers: { "Authorization": "Bearer " + token },
+        body: formData
+      });
+
+      if (!res.ok) return alert("Paylaşılmadı");
+      textInput.value = "";
+      imageInput.value = "";
+      loadPosts();
+    });
+
+    logoutBtn.onclick = () => {
+      localStorage.removeItem("token");
+      location.href = "login.html";
+    };
+
+    loadPosts();
+  </script>
+</body>
+</html>

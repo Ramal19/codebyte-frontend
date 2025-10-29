@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Paylaşımlar</title>
+    <link rel="stylesheet" href="../style/post-add.css">
+</head>
+
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo">
+                <img src="../image/codebyteLogoMa.png" alt="LOGO">
+            </div>
+
+            <ul>
+                <li>
+                    <a href="../document/index.html">
+                        Ana Səhifə
+                    </a>
+                </li>
+                <li>
+                    <a href="./kurs.html">
+                        Kurslar
+                    </a>
+                </li>
+                <li>
+                    <a href="./telimciler.html">
+                        Təlimçilər
+                    </a>
+                </li>
+                <li>
+                    <a href="">
+                        Yol xəritəsi
+                    </a>
+                </li>
+                <li>
+                    <a href="./contact.html">
+                        Əlaqə
+                    </a>
+                </li>
+            </ul>
+
+            <div class="search-bar">
+                <button id="search-icon" class="search-button">
+                    <i class="bi bi-search"></i>
+                </button>
+                <input id="search-inp" type="text" placeholder="Axtar...">
+            </div>
+
+            <div class="add">
+                <span class="wishlist-add">
+                    <i class="bi bi-heart"></i>
+                    <i class="bi bi-cart"></i>
+                </span>
+            </div>
+
+
+            <div class="registration-part">
+                <button id="login" class="login-button">
+                    Daxil olun
+                </button>
+                <button id="register" class="register-button">
+                    Qeydiyyat
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <div id="authActions">
+        <h2>Paylaşım əlavə etmək</h2>
+        <!-- <label for="videoInput">
+            Yükləyəcəyiniz videonu seçin:
+             <input type="file" id="videoInput" accept="video/*"> 
+        </label> -->
+
+        <div class="container">
+
+            <div class="folder">
+                <div class="front-side">
+                    <div class="tip"></div>
+                    <div class="cover"></div>
+                </div>
+                <div class="back-side cover"></div>
+            </div>
+
+            <label class="custom-file-upload">
+                <input class="title" type="file" id="videoInput" accept="video/*" />
+                Yükləyəcəyiniz videonu seçin:
+
+            </label>
+        </div>
+        <br>
+        <video id="videoPreview" style="visibility: hidden; width:300px; margin-top:10px;" controls></video>
+
+        <!-- <input type="file" id="coverInput" accept="image/*"> -->
+
+        <!-- From Uiverse.io by 3bdel3ziz-T -->
+        <div class="container">
+
+            <div class="folder">
+                <div class="front-side">
+                    <div class="tip"></div>
+                    <div class="cover"></div>
+                </div>
+                <div class="back-side cover"></div>
+            </div>
+
+            <label class="custom-file-upload">
+                <input class="title" type="file" id="coverInput" accept="image/*" />
+                Video üçün qapaq fotosunu seçin
+            </label>
+        </div>
+
+
+        <br>
+        <img id="coverPreview" style="visibility:hidden; width:200px; margin-top:10px;">
+
+        <input type="text" id="textInput" placeholder="Yazını daxil et">
+        <select name="" id="">
+            <option value="" hidden></option>
+            <option value="">JavaScript</option>
+            <option value="">Canva</option>
+            <option value="">C++</option>
+            <option value="">React JS</option>
+            <option value="">Python</option>
+            <option value="">Other</option>
+        </select>
+        <button id="uploadBtn">Paylaş</button>
+        <!-- <button id="logoutBtn">Çıxış</button> -->
+    </div>
+
+    <h1>Paylaşımlar</h1>
+
+    <div id="posts">
+
+    </div>
+
+    <script src="../script/post-add.js">
+        // const token = localStorage.getItem("token");
+        // if (!token) {
+        //     console.log("Əvvəlcə login olmalısınız");
+        //     window.location.href = "login.html";
+        // }
+
+        // const postsDiv = document.getElementById("posts");
+
+        // function parseJwt(t) {
+        //     return JSON.parse(atob(t.split('.')[1]));
+        // }
+
+        // async function loadPosts() {
+        //     const res = await fetch("http://localhost:3000/posts");
+        //     const posts = await res.json();
+        //     postsDiv.innerHTML = "";
+
+        //     posts.reverse().forEach(p => {
+        //         const div = document.createElement("div");
+        //         div.className = "post-card";
+        //         div.innerHTML = `
+        //   <p><b>${p.username}</b></p>
+        //   <p>${p.text}</p>
+        //   <img src="http://localhost:3000/uploads/${p.cover}" alt="Qapaq şəkil">
+        // `;
+
+        //         div.onclick = () => {
+        //             const videoWindow = window.open("", "_blank");
+        //             videoWindow.document.write(`
+        //     <video src="http://localhost:3000/uploads/${p.video}" controls autoplay style="width:100%; height:500px;"></video>
+        //   `);
+        //         };
+
+        //         const me = parseJwt(token).username;
+        //         if (p.username === me) {
+        //             const btn = document.createElement("button");
+        //             btn.textContent = "Sil";
+        //             btn.onclick = (e) => {
+        //                 e.stopPropagation();
+        //                 deletePost(p.id);
+        //             };
+        //             div.appendChild(btn);
+        //         }
+
+        //         postsDiv.appendChild(div);
+        //     });
+        // }
+
+        // // async function deletePost(id) {
+        // //   await fetch(`http://localhost:3000/posts/${id}`, {
+        // //     method: "DELETE",
+        // //     headers: { "Authorization": "Bearer " + token }
+        // //   });
+        // //   loadPosts();
+        // // }
+
+        // async function deletePost(id) {
+        //     try {
+        //         const res = await fetch(`http://localhost:3000/posts/${id}`, {
+        //             method: "DELETE",
+        //             headers: {
+        //                 "Authorization": "Bearer " + token
+        //             }
+        //         });
+
+        //         if (!res.ok) {
+        //             const err = await res.json();
+        //             alert("Xəta: " + (err.message || "Post silinə bilmədi"));
+        //             return;
+        //         }
+
+        //         loadPosts();
+        //     } catch (error) {
+        //         console.error(error);
+        //         alert("Server ilə əlaqə alınmadı");
+        //     }
+        // }
+
+        // document.getElementById("uploadBtn").addEventListener("click", async () => {
+        //     const video = document.getElementById("videoInput").files[0];
+        //     const cover = document.getElementById("coverInput").files[0];
+        //     const text = document.getElementById("textInput").value;
+
+        //     if (!video) return alert("Video seçin");
+        //     if (!cover) return alert("Qapaq şəkil seçin");
+        //     if (!text) return alert("Text yaz");
+
+        //     // const formData = new FormData();
+        //     // formData.append("video", video);
+        //     // formData.append("cover", cover);
+        //     // formData.append("text", text);
+
+        //     // await fetch("http://localhost:3000/posts", {
+        //     //     method: "POST",
+        //     //     headers: { "Authorization": "Bearer " + token },
+        //     //     body: formData
+        //     // });
+
+        //     const formData = new FormData();
+        //     formData.append("video", video);
+        //     formData.append("cover", cover);
+        //     formData.append("text", text);
+
+        //     await fetch("http://localhost:3000/posts", {
+        //         method: "POST",
+        //         headers: { "Authorization": "Bearer " + token },
+        //         body: formData
+        //     });
+
+        //     loadPosts();
+        // });
+
+        // document.getElementById("logoutBtn").onclick = () => {
+        //     localStorage.removeItem("token");
+        //     location.href = "login.html";
+        // };
+
+        // loadPosts();
+    </script>
+</body>
+
+</html>
