@@ -11,7 +11,7 @@ function parseJwt(t) {
 }
 
 async function loadPosts() {
-    const res = await fetch("http://localhost:3000/posts");
+    const res = await fetch("https://codebyte-backend-ibyq.onrender.com/posts");
     const posts = await res.json();
     postsDiv.innerHTML = "";
 
@@ -26,7 +26,7 @@ async function loadPosts() {
         const div = document.createElement("div");
         div.className = "post-card";
         div.innerHTML = `
-          <img src="http://localhost:3000/uploads/${p.cover}" alt="Qapaq şəkil">
+          <img src="https://codebyte-backend-ibyq.onrender.com/uploads/${p.cover}" alt="Qapaq şəkil">
           <p><b>${p.username}</b></p>
           <p>${p.text}</p>
 
@@ -41,7 +41,7 @@ async function loadPosts() {
         div.onclick = () => {
             const videoWindow = window.open("", "_blank");
             videoWindow.document.write(`
-              <video src="http://localhost:3000/uploads/${p.video}" controls autoplay style="width:100%; height:500px;"></video>
+              <video src="https://codebyte-backend-ibyq.onrender.com/uploads/${p.video}" controls autoplay style="width:100%; height:500px;"></video>
             `);
         };
 
@@ -60,7 +60,7 @@ async function loadPosts() {
 
 async function deletePost(id) {
     try {
-        const res = await fetch(`http://localhost:3000/posts/${id}`, {
+        const res = await fetch(`https://codebyte-backend-ibyq.onrender.com/posts/${id}`, {
             method: "DELETE",
             headers: {
                 "Authorization": "Bearer " + token
@@ -94,7 +94,7 @@ document.getElementById("uploadBtn").addEventListener("click", async () => {
     formData.append("cover", cover);
     formData.append("text", text);
 
-    await fetch("http://localhost:3000/posts", {
+    await fetch("https://codebyte-backend-ibyq.onrender.com/posts", {
         method: "POST",
         headers: { "Authorization": "Bearer " + token },
         body: formData

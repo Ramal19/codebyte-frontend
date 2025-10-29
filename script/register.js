@@ -10,7 +10,7 @@ form.addEventListener("submit", async (e) => {
         email: form.email.value,
         password: form.password.value
     };
-    const res = await fetch("http://localhost:3000/register", {
+    const res = await fetch("https://codebyte-backend-ibyq.onrender.com/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data)
