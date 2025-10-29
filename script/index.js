@@ -478,8 +478,14 @@ async function loadPosts() {
                 //  scrollbar-width: none;
                 `
 
-                let btnLeft = document.createElement("button");
-                let btnRight = document.createElement("button");
+                let btnLeft = null;
+                let btnRight = null;
+
+                if (btnLeft === null || btnRight === null) {
+                    btnLeft = document.createElement("button");
+                    btnRight = document.createElement("button");
+                }
+
 
                 let step = 200;
                 btnLeft.addEventListener("click", () => {
@@ -507,7 +513,7 @@ async function loadPosts() {
                 btnDirection.appendChild(btnRight);
 
 
-                
+
             }
 
         });
