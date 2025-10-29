@@ -478,6 +478,9 @@ async function loadPosts() {
                 //  scrollbar-width: none;
                 `
 
+                let btnLeft = document.querySelector(".btn-left");
+                let btnRight = document.querySelector(".btn-right");
+
                 if (!btnLeft) {
                     btnLeft = document.createElement("button");
                     btnLeft.classList.add("btn-left");
