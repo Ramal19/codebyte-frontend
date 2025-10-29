@@ -450,7 +450,7 @@ const btnDirection = document.querySelector(".btn-direction")
 
 async function loadPosts() {
     try {
-        const res = await fetch("http://localhost:3000/posts");
+        const res = await fetch("https://codebyte-backend-ibyq.onrender.com/posts");
         const posts = await res.json();
 
         postsDiv.innerHTML = "";
@@ -458,7 +458,7 @@ async function loadPosts() {
             const div = document.createElement("div");
             div.classList.add("lesson-card")
             div.innerHTML = `
-                <img src="http://localhost:3000/uploads/${p.cover}" alt="Post şəkli">
+                <img src="https://codebyte-backend-ibyq.onrender.com//uploads/${p.cover}" alt="Post şəkli">
                 <div class="card-text">
                     <h3>${p.text || ""}</h3>
                     <span>${p.username}</span>
