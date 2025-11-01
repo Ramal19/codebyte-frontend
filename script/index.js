@@ -298,7 +298,7 @@ if (userData) {
     regPart.appendChild(postAdd)
     postAdd.addEventListener("click", () => {
 
-        window.location.href = "./post-add.html"
+        window.location.href = "./document/post-add.html"
     })
     let userDiv = document.createElement("div");
     userDiv.classList.add("user-div");
@@ -387,7 +387,7 @@ if (logData) {
     regPart.appendChild(postAdd)
     postAdd.addEventListener("click", () => {
 
-        window.location.href = "./post-add.html"
+        window.location.href = "./document/post-add.html"
     })
     let userDiv = document.createElement("div");
     userDiv.classList.add("user-div");
