@@ -37,7 +37,7 @@ const conAll = document.querySelector(".conAll")
 loginBtn.onclick = () => {
     // window.location.href = "https://codebyte-main.netlify.app/document/login.html"
     console.log("Login btn calisir");
-    
+
 }
 
 registerBtn.onclick = () => {
@@ -469,6 +469,12 @@ async function loadPosts() {
                     <span>${p.username}</span>
                 </div>
           `;
+
+            div.addEventListener("click", () => {
+                localStorage.setItem("selectedPost", JSON.stringify(p));
+                window.location.href = "video.html"; // bu səhifəni yaradacağıq
+            });
+
             postsDiv.appendChild(div);
 
             const lessonCard = document.querySelectorAll(".lesson-card")
@@ -548,3 +554,4 @@ buttons.forEach((btn, index) => {
         btn.style.cssText = `border-bottom: 2px solid #000; color: #000;`;
     })
 })
+
