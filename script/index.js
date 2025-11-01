@@ -463,7 +463,7 @@ async function loadPosts() {
             const div = document.createElement("div");
             div.classList.add("lesson-card")
             div.innerHTML = `
-                <img src="https://codebyte-backend-ibyq.onrender.com/uploads/${p.cover}" alt="Post şəkli">
+                <img src="https://codebyte-backend-ibyq.onrender.com/uploads/${p.courseCover}" alt="Post şəkli">
                 <div class="card-text">
                     <h3>${p.text || ""}</h3>
                     <span>${p.username}</span>
@@ -472,7 +472,7 @@ async function loadPosts() {
 
             div.addEventListener("click", () => {
                 localStorage.setItem("selectedPost", JSON.stringify(p));
-                window.location.href = "./document/video.html"; // bu səhifəni yaradacağıq
+                window.location.href = "./document/video.html";
             });
 
             postsDiv.appendChild(div);

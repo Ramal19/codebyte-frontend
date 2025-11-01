@@ -24,12 +24,10 @@
       const video = document.getElementById("main-video");
       const list = document.getElementById("video-list");
 
-      // ilk videonu göstər
       if (post.videos.length > 0) {
         video.src = `https://codebyte-backend-ibyq.onrender.com/uploads/${post.videos[0]}`;
       }
 
-      // bütün video cover-ləri siyahı kimi göstər
       post.videos.forEach((v, i) => {
         const img = document.createElement("img");
         img.src = `https://codebyte-backend-ibyq.onrender.com/uploads/${post.videoCovers[i] || post.courseCover}`;
