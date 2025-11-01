@@ -24,7 +24,7 @@ form.addEventListener("submit", async (e) => {
             email: data.email
         }));
 
-        window.location.href = "./index.html";
+        window.location.href = "../index.html";
     }
 
 });

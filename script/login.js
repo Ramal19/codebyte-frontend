@@ -27,7 +27,7 @@ form.addEventListener("submit", async (e) => {
 
         // document.getElementById("msg").innerText = "Giriş uğurludur!";
         alert("Giris ugurludur")
-        window.location.href = "../document/index.html"
+        window.location.href = "../index.html"
 
 
     } else {
