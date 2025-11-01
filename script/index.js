@@ -472,7 +472,7 @@ async function loadPosts() {
 
             div.addEventListener("click", () => {
                 localStorage.setItem("selectedPost", JSON.stringify(p));
-                window.location.href = "video.html"; // bu səhifəni yaradacağıq
+                window.location.href = "./document/video.html"; // bu səhifəni yaradacağıq
             });
 
             postsDiv.appendChild(div);

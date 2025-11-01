@@ -230,5 +230,5 @@ uploadCourseBtn.addEventListener("click", async () => {
     }
 
     alert("Kurs uğurla əlavə olundu!");
-    window.location.href = "../document/index.html";
+    window.location.href = "../index.html";
 });
