@@ -11,6 +11,9 @@
 // .then(res => res.json())
 // .then(data => console.log(data));
 
+// Məsələn: sən about.html-də olsan
+// window.history.pushState({}, "", "/index");
+
 
 
 let searchInp = document.getElementById("search-inp");
@@ -32,11 +35,13 @@ const conAll = document.querySelector(".conAll")
 
 
 loginBtn.onclick = () => {
-    window.location.href = "../document/login.html"
+    // window.location.href = "https://codebyte-main.netlify.app/document/login.html"
+    console.log("Login btn calisir");
+    
 }
 
 registerBtn.onclick = () => {
-    window.location.href = "../document/register.html"
+    window.location.href = "frontend/document/register.html"
 }
 
 if (localStorage.getItem("exitBtn") === "true" || localStorage.getItem("locationCourse") === "true") {
@@ -113,7 +118,7 @@ searchInp.addEventListener("input", () => {
 let slideBox = document.querySelector(".slide-box");
 
 let slideFirst = `
-    <img id="slide-img" src="../image/slide-photo.png" alt="Error 404">
+    <img id="slide-img" src="./image/slide-photo.png" alt="Error 404">
     <div class="img-text">
         <h1>Proqramlaşdırma öyrənmək heç vaxt bu qədər asan olmayıb!</h1>
         <p>CodeByte ilə proqramlaşdırma biliklərinizi artırın və karyeranızı yeni zirvələrə daşıyın. İndi başlayın!</p>
@@ -121,7 +126,7 @@ let slideFirst = `
     </div>`;
 
 let slideSecond = `
-    <img id="slide-img" src="../image/slide-photo-second.png" alt="Error 404">
+    <img id="slide-img" src="./image/slide-photo-second.png" alt="Error 404">
     <div class="img-text-second">
         <h1>Texnologiya ilə gələcəyini qur!</h1>
         <p>AI və proqramlaşdırma bacarıqları ilə karyerana yeni nəfəs ver. CodeByte ilə gələcəyə addım at!</p>
@@ -349,10 +354,10 @@ if (userData) {
 
 } else {
     registerBtn.addEventListener("click", () => {
-        window.location.href = "register.html";
+        window.location.href = "./document/register.html";
     });
     loginBtn.addEventListener("click", () => {
-        window.location.href = "login.html";
+        window.location.href = "./document/login.html";
 
     })
 }
@@ -437,10 +442,10 @@ if (logData) {
     })
 } else {
     registerBtn.addEventListener("click", () => {
-        window.location.href = "register.html";
+        window.location.href = "./document/register.html";
     });
     loginBtn.addEventListener("click", () => {
-        window.location.href = "login.html";
+        window.location.href = "./document/login.html";
 
     })
 }
