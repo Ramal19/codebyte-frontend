@@ -16,14 +16,24 @@ if (!post) {
         // img.src = `http://localhost:3000/uploads/${post.videoCovers[i] || post.courseCover}`;
         const div = document.createElement("div");
 
-        div.innerHTML = 
-        `
-            <h2>${post.text}</h2>
+        div.innerHTML =
+            `
             <img class="img" src ="http://localhost:3000/uploads/${post.videoCovers[i] || post.courseCover}">
+            <h2>${post.text}</h2>
+
         `
 
         // const img = document.querySelectorAll(".img");
 
+        div.style.cssText =
+            `
+            margin-top: 60px;
+            width: 300px;
+            height: 150px;
+            background-color: red;
+            display: flex;
+            gap:10px;
+        `
 
         div.addEventListener("click", () => {
             video.src = `http://localhost:3000/uploads/${v}`;
