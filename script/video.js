@@ -12,12 +12,30 @@ if (!post) {
     }
 
     post.videos.forEach((v, i) => {
-        const img = document.createElement("img");
-        img.src = `http://localhost:3000/uploads/${post.videoCovers[i] || post.courseCover}`;
-        img.addEventListener("click", () => {
+        // const img = document.createElement("img");
+        // img.src = `http://localhost:3000/uploads/${post.videoCovers[i] || post.courseCover}`;
+        const div = document.createElement("div");
+
+        div.innerHTML = 
+        `
+            <h2>${post.text}</h2>
+            <img class="img" src ="http://localhost:3000/uploads/${post.videoCovers[i] || post.courseCover}">
+        `
+
+        // const img = document.querySelectorAll(".img");
+
+
+        div.addEventListener("click", () => {
             video.src = `http://localhost:3000/uploads/${v}`;
             video.play();
         });
-        list.appendChild(img);
+        list.appendChild(div);
     });
 }
+
+const logo = document.querySelector(".logo")
+
+logo.addEventListener("click", () => {
+
+    window.location.href = "../index.html"
+})

@@ -477,11 +477,15 @@ async function loadPosts() {
             const div = document.createElement("div");
             div.classList.add("lesson-card")
 
+            let tarix = p.createdAt.slice(0, 10);
+            let tersTarix = tarix.split("-").reverse().join("-");
+
             div.innerHTML = `
                 <img src="${API_URL}/uploads/${p.courseCover}" alt="Post şəkli">
                 <div class="card-text">
                     <h3>${p.text || ""}</h3>
                     <span>${p.username}</span>
+                    <span>${tersTarix}</span>
                     <button class="wish-btn" data-id="${p.id}">❤️ Wishlistə əlavə et</button>
                 </div>
           `;
