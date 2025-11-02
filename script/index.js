@@ -347,8 +347,8 @@ if (userData) {
 
     logOut.addEventListener("click", () => {
 
-        window.location.reload();
         localStorage.removeItem('registeredUser');
+        window.location.reload();
         userDiv.style.display = "none";
     })
 
@@ -436,8 +436,8 @@ if (logData) {
 
     logOut.addEventListener("click", () => {
 
-        window.location.reload();
         localStorage.removeItem('loginUser');
+        window.location.reload();
         userDiv.style.display = "none";
     })
 } else {
@@ -486,7 +486,6 @@ async function loadPosts() {
                     `
                  overflow-X: scroll;
                  overflow-Y: hidden;
-                //  scrollbar-width: none;
                 `
 
                 let btnLeft = document.querySelector(".btn-left");
@@ -545,13 +544,128 @@ async function loadPosts() {
 loadPosts();
 
 const buttons = document.querySelectorAll(".btn-course");
-
 buttons.forEach((btn, index) => {
 
-    buttons[index].addEventListener("click", () => {
+    buttons[index].addEventListener("click", async () => {
 
-        buttons.forEach(item => { item.style.cssText = `border: none; color: #2a2b3f7c` })
+        buttons.forEach(item => {
+            item.style.cssText = `border: none; color: #2a2b3f7c`
+        });
+
         btn.style.cssText = `border-bottom: 2px solid #000; color: #000;`;
-    })
-})
 
+        try {
+            const res = await fetch("https://codebyte-backend-ibyq.onrender.com/posts");
+            const posts = await res.json();
+
+            postsDiv.innerHTML = "";
+            posts.reverse().forEach(p => {
+                if (index === 0 && p.category[0] === "JavaScript") {
+                    const div = document.createElement("div");
+                    div.classList.add("lesson-card")
+                    div.innerHTML = `
+                                <img src="https://codebyte-backend-ibyq.onrender.com/uploads/${p.courseCover}" alt="Post şəkli">
+                                <div class="card-text">
+                                    <h3>${p.text || ""}</h3>
+                                    <span>${p.username}</span>
+                                </div>
+                            `;
+
+                    div.addEventListener("click", () => {
+                        localStorage.setItem("selectedPost", JSON.stringify(p));
+                        window.location.href = "./document/video.html";
+                    });
+
+                    postsDiv.appendChild(div);
+                } else if (index === 1 && p.category[0] === "C++") {
+                    const div = document.createElement("div");
+                    div.classList.add("lesson-card")
+                    div.innerHTML = `
+                                <img src="https://codebyte-backend-ibyq.onrender.com/uploads/${p.courseCover}" alt="Post şəkli">
+                                <div class="card-text">
+                                    <h3>${p.text || ""}</h3>
+                                    <span>${p.username}</span>
+                                </div>
+                            `;
+
+                    div.addEventListener("click", () => {
+                        localStorage.setItem("selectedPost", JSON.stringify(p));
+                        window.location.href = "./document/video.html";
+                    });
+
+                    postsDiv.appendChild(div);
+                } else if (index === 2 && p.category[0] === "React JS") {
+                    const div = document.createElement("div");
+                    div.classList.add("lesson-card")
+                    div.innerHTML = `
+                                <img src="https://codebyte-backend-ibyq.onrender.com/uploads/${p.courseCover}" alt="Post şəkli">
+                                <div class="card-text">
+                                    <h3>${p.text || ""}</h3>
+                                    <span>${p.username}</span>
+                                </div>
+                            `;
+
+                    div.addEventListener("click", () => {
+                        localStorage.setItem("selectedPost", JSON.stringify(p));
+                        window.location.href = "./document/video.html";
+                    });
+
+                    postsDiv.appendChild(div);
+                } else if (index === 3 && p.category[0] === "Python") {
+                    const div = document.createElement("div");
+                    div.classList.add("lesson-card")
+                    div.innerHTML = `
+                                <img src="https://codebyte-backend-ibyq.onrender.com/uploads/${p.courseCover}" alt="Post şəkli">
+                                <div class="card-text">
+                                    <h3>${p.text || ""}</h3>
+                                    <span>${p.username}</span>
+                                </div>
+                            `;
+
+                    div.addEventListener("click", () => {
+                        localStorage.setItem("selectedPost", JSON.stringify(p));
+                        window.location.href = "./document/video.html";
+                    });
+
+                    postsDiv.appendChild(div);
+                } else if (index === 4 && p.category[0] === "Canva") {
+                    const div = document.createElement("div");
+                    div.classList.add("lesson-card")
+                    div.innerHTML = `
+                                <img src="https://codebyte-backend-ibyq.onrender.com/uploads/${p.courseCover}" alt="Post şəkli">
+                                <div class="card-text">
+                                    <h3>${p.text || ""}</h3>
+                                    <span>${p.username}</span>
+                                </div>
+                            `;
+
+                    div.addEventListener("click", () => {
+                        localStorage.setItem("selectedPost", JSON.stringify(p));
+                        window.location.href = "./document/video.html";
+                    });
+
+                    postsDiv.appendChild(div);
+                } else if (index === 5 && p.category[0] === "Digər") {
+                    const div = document.createElement("div");
+                    div.classList.add("lesson-card")
+                    div.innerHTML = `
+                                <img src="https://codebyte-backend-ibyq.onrender.com/uploads/${p.courseCover}" alt="Post şəkli">
+                                <div class="card-text">
+                                    <h3>${p.text || ""}</h3>
+                                    <span>${p.username}</span>
+                                </div>
+                            `;
+
+                    div.addEventListener("click", () => {
+                        localStorage.setItem("selectedPost", JSON.stringify(p));
+                        window.location.href = "./document/video.html";
+                    });
+
+                    postsDiv.appendChild(div);
+                }
+            });
+        } catch (err) {
+            console.error("Postları yükləməkdə xəta:", err);
+        }
+    });
+});
