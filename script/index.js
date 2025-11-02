@@ -488,10 +488,10 @@ async function loadPosts() {
 
 
 
-            // div.addEventListener("click", () => {
-            //     localStorage.setItem("selectedPost", JSON.stringify(p));
-            //     window.location.href = "./document/video.html";
-            // });
+            div.addEventListener("click", () => {
+                localStorage.setItem("selectedPost", JSON.stringify(p));
+                window.location.href = "./document/video.html";
+            });
 
             postsDiv.appendChild(div);
 
