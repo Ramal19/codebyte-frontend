@@ -74,7 +74,7 @@ uploadCourseBtn.addEventListener("click", async () => {
     formData.append("category", category);
 
 
-    const res = await fetch("https://codebyte-backend-ibyq.onrender.com/posts", {
+    const res = await fetch("http://localhost:3000/posts", {
         method: "POST",
         headers: { "Authorization": "Bearer " + token },
         body: formData

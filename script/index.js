@@ -27,7 +27,7 @@ const registerBtn = document.getElementById("register");
 const courseCard = document.querySelector(".course-card")
 const regPart = document.querySelector(".registration-part")
 const conAll = document.querySelector(".conAll")
-
+const API_URL = "http://localhost:3000";
 // courseCard.addEventListener("click", () => {
 
 //     window.location.href = "../document/ders.html"
@@ -455,27 +455,66 @@ const btnDirection = document.querySelector(".btn-direction")
 
 async function loadPosts() {
     try {
-        const res = await fetch("https://codebyte-backend-ibyq.onrender.com/posts");
+        const res = await fetch(`${API_URL}/posts`);
         const posts = await res.json();
+
+        if (!posts || posts.length === 0) {
+            postsDiv.innerHTML = `
+            <p 
+                style="
+                    font-size: 20px; 
+                    color: gray; 
+                    text-align: center;
+                    padding: 30px 0;
+            ">
+                Hazırda heç bir kurs yoxdur.
+            </p>`;
+            return;
+        }
 
         postsDiv.innerHTML = "";
         posts.reverse().forEach(p => {
             const div = document.createElement("div");
             div.classList.add("lesson-card")
+
             div.innerHTML = `
-                <img src="https://codebyte-backend-ibyq.onrender.com/uploads/${p.courseCover}" alt="Post şəkli">
+                <img src="${API_URL}/uploads/${p.courseCover}" alt="Post şəkli">
                 <div class="card-text">
                     <h3>${p.text || ""}</h3>
                     <span>${p.username}</span>
+                    <button class="wish-btn" data-id="${p.id}">❤️ Wishlistə əlavə et</button>
                 </div>
           `;
 
-            div.addEventListener("click", () => {
-                localStorage.setItem("selectedPost", JSON.stringify(p));
-                window.location.href = "./document/video.html";
-            });
+
+
+            // div.addEventListener("click", () => {
+            //     localStorage.setItem("selectedPost", JSON.stringify(p));
+            //     window.location.href = "./document/video.html";
+            // });
 
             postsDiv.appendChild(div);
+
+            const wishBtn = div.querySelector(".wish-btn");
+            wishBtn.addEventListener("click", async (e) => {
+                e.stopPropagation(); // klik videoya yönəlməsin
+                const postId = wishBtn.dataset.id;
+                const token = localStorage.getItem("token");
+
+                if (!token) {
+                    alert("Əvvəlcə daxil olmalısan!");
+                    return;
+                }
+
+                const res = await fetch(`${API_URL}/wishlist/${postId}`, {
+                    method: "POST",
+                    headers: { Authorization: `Bearer ${token}` },
+                });
+
+                const data = await res.json();
+                alert(data.message);
+            });
+
 
             const lessonCard = document.querySelectorAll(".lesson-card")
 
@@ -555,16 +594,32 @@ buttons.forEach((btn, index) => {
         btn.style.cssText = `border-bottom: 2px solid #000; color: #000;`;
 
         try {
-            const res = await fetch("https://codebyte-backend-ibyq.onrender.com/posts");
+            const res = await fetch(`${API_URL}/posts`);
             const posts = await res.json();
+
+
+            if (!posts || posts.length === 0) {
+                postsDiv.innerHTML = `
+            <p 
+                style="
+                    font-size: 20px; 
+                    color: gray; 
+                    text-align: center;
+                    padding: 30px 0;
+            ">
+                Hazırda heç bir kurs yoxdur.
+            </p>`;
+                return;
+            }
 
             postsDiv.innerHTML = "";
             posts.reverse().forEach(p => {
                 if (index === 0 && p.category[0] === "JavaScript") {
+
                     const div = document.createElement("div");
                     div.classList.add("lesson-card")
                     div.innerHTML = `
-                                <img src="https://codebyte-backend-ibyq.onrender.com/uploads/${p.courseCover}" alt="Post şəkli">
+                                <img src="${API_URL}/uploads/${p.courseCover}" alt="Post şəkli">
                                 <div class="card-text">
                                     <h3>${p.text || ""}</h3>
                                     <span>${p.username}</span>
@@ -581,7 +636,7 @@ buttons.forEach((btn, index) => {
                     const div = document.createElement("div");
                     div.classList.add("lesson-card")
                     div.innerHTML = `
-                                <img src="https://codebyte-backend-ibyq.onrender.com/uploads/${p.courseCover}" alt="Post şəkli">
+                                <img src="${API_URL}/uploads/${p.courseCover}" alt="Post şəkli">
                                 <div class="card-text">
                                     <h3>${p.text || ""}</h3>
                                     <span>${p.username}</span>
@@ -598,7 +653,7 @@ buttons.forEach((btn, index) => {
                     const div = document.createElement("div");
                     div.classList.add("lesson-card")
                     div.innerHTML = `
-                                <img src="https://codebyte-backend-ibyq.onrender.com/uploads/${p.courseCover}" alt="Post şəkli">
+                                <img src="${API_URL}/uploads/${p.courseCover}" alt="Post şəkli">
                                 <div class="card-text">
                                     <h3>${p.text || ""}</h3>
                                     <span>${p.username}</span>
@@ -615,7 +670,7 @@ buttons.forEach((btn, index) => {
                     const div = document.createElement("div");
                     div.classList.add("lesson-card")
                     div.innerHTML = `
-                                <img src="https://codebyte-backend-ibyq.onrender.com/uploads/${p.courseCover}" alt="Post şəkli">
+                                <img src="${API_URL}/uploads/${p.courseCover}" alt="Post şəkli">
                                 <div class="card-text">
                                     <h3>${p.text || ""}</h3>
                                     <span>${p.username}</span>
@@ -632,7 +687,7 @@ buttons.forEach((btn, index) => {
                     const div = document.createElement("div");
                     div.classList.add("lesson-card")
                     div.innerHTML = `
-                                <img src="https://codebyte-backend-ibyq.onrender.com/uploads/${p.courseCover}" alt="Post şəkli">
+                                <img src="${API_URL}/uploads/${p.courseCover}" alt="Post şəkli">
                                 <div class="card-text">
                                     <h3>${p.text || ""}</h3>
                                     <span>${p.username}</span>
@@ -645,11 +700,11 @@ buttons.forEach((btn, index) => {
                     });
 
                     postsDiv.appendChild(div);
-                } else if (index === 5 && p.category[0] === "Digər") {
+                } else if (index === 5 && p.category[0] === "Other") {
                     const div = document.createElement("div");
                     div.classList.add("lesson-card")
                     div.innerHTML = `
-                                <img src="https://codebyte-backend-ibyq.onrender.com/uploads/${p.courseCover}" alt="Post şəkli">
+                                <img src="${API_URL}/uploads/${p.courseCover}" alt="Post şəkli">
                                 <div class="card-text">
                                     <h3>${p.text || ""}</h3>
                                     <span>${p.username}</span>
