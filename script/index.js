@@ -503,16 +503,16 @@ async function loadPosts() {
             wishBtn.addEventListener("click", async (e) => {
                 e.stopPropagation(); // klik videoya yönəlməsin
                 const postId = wishBtn.dataset.id;
-                const wishPost = localStorage.getItem("wishPost");
+                const token = localStorage.getItem("token");
 
-                if (!wishPost) {
+                if (!token) {
                     alert("Əvvəlcə daxil olmalısan!");
                     return;
                 }
 
                 const res = await fetch(`${API_URL}/wishlist/${postId}`, {
                     method: "POST",
-                    headers: { Authorization: `Bearer ${wishPost}` },
+                    headers: { Authorization: `Bearer ${token}` },
                 });
 
                 const data = await res.json();
