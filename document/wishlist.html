@@ -15,11 +15,11 @@
   <div id="wishlist"></div>
 
   <script>
-    const token = localStorage.getItem("token");
+    const wishPost = localStorage.getItem("wishPost");
 
     async function loadWishlist() {
       const res = await fetch("https://codebyte-backend-ibyq.onrender.com/wishlist", {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: { Authorization: `Bearer ${wishPost}` },
       });
       const data = await res.json();
 
@@ -48,7 +48,7 @@
     async function removeFromWishlist(postId) {
       await fetch(`https://codebyte-backend-ibyq.onrender.com/wishlist/${postId}`, {
         method: "DELETE",
-        headers: { Authorization: `Bearer ${token}` },
+        headers: { Authorization: `Bearer ${wishPost}` },
       });
       loadWishlist();
     }
