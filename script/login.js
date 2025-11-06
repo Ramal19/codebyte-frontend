@@ -2,6 +2,7 @@ const btn = document.getElementById("location")
 // btn.onclick = () => {
 //     window.location.href = "./index.html"
 // }
+const API_URL = "https://codebyte-backend-ibyq.onrender.com"
 
 const userInp = document.getElementById("username-inp")
 
@@ -12,7 +13,7 @@ form.addEventListener("submit", async (e) => {
         username: form.username.value,
         password: form.password.value
     };
-    const res = await fetch("http://localhost:3000/login", {
+    const res = await fetch(`${API_URL}/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data)

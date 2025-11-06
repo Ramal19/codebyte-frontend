@@ -1,3 +1,5 @@
+const API_URL = "https://codebyte-backend-ibyq.onrender.com";
+
 const token = localStorage.getItem("token");
 if (!token) {
     alert("Əvvəlcə login olmalısınız");
@@ -74,7 +76,7 @@ uploadCourseBtn.addEventListener("click", async () => {
     formData.append("category", category);
 
 
-    const res = await fetch("http://localhost:3000/posts", {
+    const res = await fetch(`${API_URL}/posts`, {
         method: "POST",
         headers: { "Authorization": "Bearer " + token },
         body: formData

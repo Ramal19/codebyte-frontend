@@ -27,7 +27,7 @@ const registerBtn = document.getElementById("register");
 const courseCard = document.querySelector(".course-card")
 const regPart = document.querySelector(".registration-part")
 const conAll = document.querySelector(".conAll")
-const API_URL = "http://localhost:3000";
+const API_URL = "https://codebyte-backend-ibyq.onrender.com";
 // courseCard.addEventListener("click", () => {
 
 //     window.location.href = "../document/ders.html"

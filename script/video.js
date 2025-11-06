@@ -1,3 +1,5 @@
+const API_URL = "https://codebyte-backend-ibyq.onrender.com";
+
 const post = JSON.parse(localStorage.getItem("selectedPost"));
 if (!post) {
     document.body.innerHTML = "<h3>Kurs tapılmadı</h3>";
@@ -8,7 +10,7 @@ if (!post) {
     const list = document.getElementById("video-list");
 
     if (post.videos.length > 0) {
-        video.src = `http://localhost:3000/uploads/${post.videos[0]}`;
+        video.src = `${API_URL}/uploads/${post.videos[0]}`;
     }
 
     post.videos.forEach((v, i) => {
@@ -18,7 +20,7 @@ if (!post) {
 
         div.innerHTML =
             `
-            <img class="img" src ="http://localhost:3000/uploads/${post.videoCovers[i] || post.courseCover}">
+            <img class="img" src ="${API_URL}/uploads/${post.videoCovers[i] || post.courseCover}">
             <h2>${post.text}</h2>
 
         `
@@ -36,7 +38,7 @@ if (!post) {
         `
 
         div.addEventListener("click", () => {
-            video.src = `http://localhost:3000/uploads/${v}`;
+            video.src = `${API_URL}/uploads/${v}`;
             video.play();
         });
         list.appendChild(div);
