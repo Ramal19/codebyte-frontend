@@ -18,7 +18,7 @@
 }
 
 
-.con > .circle {
+.con>.circle {
 
     position: absolute;
     top: 130px;
@@ -28,11 +28,11 @@
     height: 100px;
     border-radius: 9999px;
     background: #22C1C3;
-    background: linear-gradient(0deg,rgba(34, 193, 195, 1) 0%, rgba(45, 160, 253, 1) 100%);
+    background: linear-gradient(0deg, rgba(34, 193, 195, 1) 0%, rgba(45, 160, 253, 1) 100%);
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 
-.con > .form-box {
+.con>.form-box {
 
     width: 1000px;
     display: flex;
@@ -42,7 +42,7 @@
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 }
 
-.form-box > .box-left {
+.form-box>.box-left {
 
     width: 50%;
     display: flex;
@@ -52,12 +52,12 @@
     gap: 20px;
 }
 
-.box-left > .username {
+.box-left>.username {
 
     position: relative;
 }
 
-.username > .username-icon {
+.username>.username-icon {
 
     position: absolute;
     top: 8px;
@@ -66,7 +66,7 @@
     font-size: 18px;
 }
 
-.username > #username-inp {
+.username>#username-inp {
 
     width: 250px;
     outline: none;
@@ -76,12 +76,12 @@
     background-color: #77777742;
 }
 
-.box-left > .password {
+.box-left>.password {
 
     position: relative;
 }
 
-.password > .password-icon {
+.password>.password-icon {
 
     position: absolute;
     top: 8px;
@@ -90,7 +90,7 @@
     font-weight: 600;
 }
 
-.password > #password-inp {
+.password>#password-inp {
 
     width: 250px;
     outline: none;
@@ -100,7 +100,7 @@
     background-color: #77777742;
 }
 
-.box-left > .loginBtn {
+.box-left>.loginBtn {
 
     width: 150px;
     padding: 5px 0;
@@ -111,21 +111,21 @@
     color: #fff;
 }
 
-.box-left > .loginBtn:hover {
+.box-left>.loginBtn:hover {
 
     background-color: #22c0c3bd;
     transition: all 0.5s ease;
 
 }
 
-.box-left > .others-sign {
+.box-left>.others-sign {
 
     display: flex;
     flex-direction: column;
     gap: 10px;
 }
 
-.others-sign > .google-sign {
+.others-sign>.google-sign {
 
     width: 250px;
     display: flex;
@@ -133,12 +133,12 @@
     justify-content: center;
 }
 
-.google-sign > img {
+.google-sign>img {
 
     width: 30px;
 }
 
-.others-sign > .apple-sign {
+.others-sign>.apple-sign {
 
     width: 250px;
     display: flex;
@@ -146,27 +146,54 @@
     justify-content: center;
 }
 
-.apple-sign > img {
+.apple-sign>img {
 
     width: 25px;
 }
 
 /* RIGHT */
 
-.form-box > .box-right {
+.form-box>.box-right {
 
     width: 50%;
 }
 
-.box-right > .login-img {
+.box-right>.login-img {
 
     width: 100%;
 }
 
-.login-img > img {
+.login-img>img {
 
     width: 100%;
     border-top-right-radius: 15px;
     border-bottom-right-radius: 15px;
 }
 
+@media (max-width: 600px) {
+
+    .con {
+
+        height: auto;
+        display: flex;
+        padding: 50px 0;
+    }
+
+    .con>.circle{
+
+        display: none;
+    }
+
+    .con>.form-box {
+
+        width: 500px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        border-radius: 15px;
+        background-color: #fff;
+        padding: 50px 0;
+        box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    }
+
+}
