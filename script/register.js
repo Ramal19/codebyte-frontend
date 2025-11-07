@@ -1,9 +1,10 @@
-const logUser = localStorage.getItem("loginUser");
+const regUser = localStorage.getItem("registeredUser");
+const loginUser = localStorage.getItem("loginUser");
 
-if (logUser) {
+if (regUser || loginUser) {
     alert("Siz artiq qeydiyyatdan kecmisiniz!")
     window.location.href = "../index.html"
-} 
+}
 
 const API_URL = "https://codebyte-backend-ibyq.onrender.com"
 

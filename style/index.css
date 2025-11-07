@@ -743,12 +743,12 @@ li>a:hover {
   visibility: hidden;
 }
 
-.course-box:hover>.btn-direction{
+.course-box:hover>.btn-direction {
 
   visibility: visible;
 }
 
-.btn-direction>button{
+.btn-direction>button {
 
   width: 80px;
   height: 30px;
@@ -783,6 +783,7 @@ li>a:hover {
   padding: 30px 50px;
   /* background-color: #66666680; */
 }
+
 /* 
 .course-card-list>.btn-left {
   width: 50px;
@@ -1452,6 +1453,9 @@ li>a:hover {
 
 @media (max-width: 600px) {
 
+
+
+
   header>.navbar>ul {
 
     display: none;
@@ -1486,5 +1490,47 @@ li>a:hover {
     font-size: 32px;
   }
 
+  .container {
 
+    padding: 0 20px;
+    padding-top: 50px;
+  }
+
+  .main-section>.slide-box {
+
+    display: flex;
+    flex-direction: column;
+    position: static;
+  }
+
+  .slide-box>.img-text {
+
+    position: static;
+  }
+
+  .slide-box>.img-text-second{
+
+    position: static;
+  }
+
+  .scroller {
+
+    overflow-x: scroll;
+  }
+
+  .book-card>.button {
+    display: none;
+  }
+
+  .course-card-list>.lesson-card {
+
+    width: 209px;
+    height: 337px;
+  }
+
+  .lesson-card>img {
+
+    width: 177px;
+    height: 155px;
+  }
 }

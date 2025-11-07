@@ -1,6 +1,8 @@
 const regUser = localStorage.getItem("registeredUser");
+const loginUser = localStorage.getItem("loginUser");
 
-if (regUser) {
+
+if (regUser || loginUser) {
     alert("Siz artiq qeydiyyatdan kecmisiniz!")
     window.location.href = "../index.html"
 } 
@@ -48,6 +50,11 @@ form.addEventListener("submit", async (e) => {
         alert(json.message)
     }
 });
+
+if (logUser) {
+    alert("Siz artiq LOG qeydiyyatdan kecmisiniz!")
+    window.location.href = "../index.html"
+} 
 
 
 const inputs = document.querySelectorAll(".input");

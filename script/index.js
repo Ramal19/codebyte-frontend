@@ -635,8 +635,7 @@ buttons.forEach((btn, index) => {
 
             postsDiv.innerHTML = "";
             posts.reverse().forEach(p => {
-                if (index === 0 && p.category[0] === "JavaScript") {
-
+                if (index === 0) {
                     const div = document.createElement("div");
                     div.classList.add("lesson-card")
                     div.innerHTML = `
@@ -653,10 +652,12 @@ buttons.forEach((btn, index) => {
                     });
 
                     postsDiv.appendChild(div);
-                } else if (index === 1 && p.category[0] === "C++") {
-                    const div = document.createElement("div");
-                    div.classList.add("lesson-card")
-                    div.innerHTML = `
+                } else if (index === 1) {
+
+                    if (p.category[0] === "JavaScript") {
+                        const div = document.createElement("div");
+                        div.classList.add("lesson-card")
+                        div.innerHTML = `
                                 <img src="${API_URL}/uploads/${p.courseCover}" alt="Post şəkli">
                                 <div class="card-text">
                                     <h3>${p.text || ""}</h3>
@@ -664,16 +665,20 @@ buttons.forEach((btn, index) => {
                                 </div>
                             `;
 
-                    div.addEventListener("click", () => {
-                        localStorage.setItem("selectedPost", JSON.stringify(p));
-                        window.location.href = "./document/video.html";
-                    });
+                        div.addEventListener("click", () => {
+                            localStorage.setItem("selectedPost", JSON.stringify(p));
+                            window.location.href = "./document/video.html";
+                        });
 
-                    postsDiv.appendChild(div);
-                } else if (index === 2 && p.category[0] === "React JS") {
-                    const div = document.createElement("div");
-                    div.classList.add("lesson-card")
-                    div.innerHTML = `
+                        postsDiv.appendChild(div);
+                    } 
+
+                } else if (index === 2) {
+                    if (p.category[0] === "C++") {
+
+                        const div = document.createElement("div");
+                        div.classList.add("lesson-card")
+                        div.innerHTML = `
                                 <img src="${API_URL}/uploads/${p.courseCover}" alt="Post şəkli">
                                 <div class="card-text">
                                     <h3>${p.text || ""}</h3>
@@ -681,16 +686,33 @@ buttons.forEach((btn, index) => {
                                 </div>
                             `;
 
-                    div.addEventListener("click", () => {
-                        localStorage.setItem("selectedPost", JSON.stringify(p));
-                        window.location.href = "./document/video.html";
-                    });
+                        div.addEventListener("click", () => {
+                            localStorage.setItem("selectedPost", JSON.stringify(p));
+                            window.location.href = "./document/video.html";
+                        });
 
-                    postsDiv.appendChild(div);
-                } else if (index === 3 && p.category[0] === "Python") {
-                    const div = document.createElement("div");
-                    div.classList.add("lesson-card")
-                    div.innerHTML = `
+                        postsDiv.appendChild(div);
+                    } 
+
+                    // else {
+
+                    //     postsDiv.innerHTML = `
+                    //         <p 
+                    //             style="
+                    //                 font-size: 20px; 
+                    //                 color: gray; 
+                    //                 text-align: center;
+                    //                 padding: 30px 0;
+                    //         ">
+                    //             Hazırda heç bir kurs yoxdur.
+                    //         </p>`;
+                    // }
+
+                } else if (index === 3) {
+                    if (p.category[0] === "React JS") {
+                        const div = document.createElement("div");
+                        div.classList.add("lesson-card")
+                        div.innerHTML = `
                                 <img src="${API_URL}/uploads/${p.courseCover}" alt="Post şəkli">
                                 <div class="card-text">
                                     <h3>${p.text || ""}</h3>
@@ -698,16 +720,18 @@ buttons.forEach((btn, index) => {
                                 </div>
                             `;
 
-                    div.addEventListener("click", () => {
-                        localStorage.setItem("selectedPost", JSON.stringify(p));
-                        window.location.href = "./document/video.html";
-                    });
+                        div.addEventListener("click", () => {
+                            localStorage.setItem("selectedPost", JSON.stringify(p));
+                            window.location.href = "./document/video.html";
+                        });
 
-                    postsDiv.appendChild(div);
-                } else if (index === 4 && p.category[0] === "Canva") {
-                    const div = document.createElement("div");
-                    div.classList.add("lesson-card")
-                    div.innerHTML = `
+                        postsDiv.appendChild(div);
+                    }
+                } else if (index === 4) {
+                    if (p.category[0] === "Python") {
+                        const div = document.createElement("div");
+                        div.classList.add("lesson-card")
+                        div.innerHTML = `
                                 <img src="${API_URL}/uploads/${p.courseCover}" alt="Post şəkli">
                                 <div class="card-text">
                                     <h3>${p.text || ""}</h3>
@@ -715,16 +739,18 @@ buttons.forEach((btn, index) => {
                                 </div>
                             `;
 
-                    div.addEventListener("click", () => {
-                        localStorage.setItem("selectedPost", JSON.stringify(p));
-                        window.location.href = "./document/video.html";
-                    });
+                        div.addEventListener("click", () => {
+                            localStorage.setItem("selectedPost", JSON.stringify(p));
+                            window.location.href = "./document/video.html";
+                        });
 
-                    postsDiv.appendChild(div);
-                } else if (index === 5 && p.category[0] === "Other") {
-                    const div = document.createElement("div");
-                    div.classList.add("lesson-card")
-                    div.innerHTML = `
+                        postsDiv.appendChild(div);
+                    } 
+                } else if (index === 5) {
+                    if (p.category[0] === "Canva") {
+                        const div = document.createElement("div");
+                        div.classList.add("lesson-card")
+                        div.innerHTML = `
                                 <img src="${API_URL}/uploads/${p.courseCover}" alt="Post şəkli">
                                 <div class="card-text">
                                     <h3>${p.text || ""}</h3>
@@ -732,12 +758,32 @@ buttons.forEach((btn, index) => {
                                 </div>
                             `;
 
-                    div.addEventListener("click", () => {
-                        localStorage.setItem("selectedPost", JSON.stringify(p));
-                        window.location.href = "./document/video.html";
-                    });
+                        div.addEventListener("click", () => {
+                            localStorage.setItem("selectedPost", JSON.stringify(p));
+                            window.location.href = "./document/video.html";
+                        });
 
-                    postsDiv.appendChild(div);
+                        postsDiv.appendChild(div);
+                    } 
+                } else if (index === 6) {
+                    if (p.category[0] === "Other") {
+                        const div = document.createElement("div");
+                        div.classList.add("lesson-card")
+                        div.innerHTML = `
+                                <img src="${API_URL}/uploads/${p.courseCover}" alt="Post şəkli">
+                                <div class="card-text">
+                                    <h3>${p.text || ""}</h3>
+                                    <span>${p.username}</span>
+                                </div>
+                            `;
+
+                        div.addEventListener("click", () => {
+                            localStorage.setItem("selectedPost", JSON.stringify(p));
+                            window.location.href = "./document/video.html";
+                        });
+
+                        postsDiv.appendChild(div);
+                    } 
                 }
             });
         } catch (err) {
