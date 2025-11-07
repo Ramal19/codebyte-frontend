@@ -244,7 +244,7 @@ li>a:hover {
   align-items: center;
 }
 
-.user-div>#logOut {
+.user-div>button {
 
   width: 100%;
   border: none;
@@ -255,7 +255,7 @@ li>a:hover {
   border-radius: 7px;
 }
 
-.user-div>#logOut:hover {
+.user-div>button:hover {
 
   background-color: #f0f0f0;
 }

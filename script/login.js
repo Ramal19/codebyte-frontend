@@ -1,7 +1,10 @@
-const btn = document.getElementById("location")
-// btn.onclick = () => {
-//     window.location.href = "./index.html"
-// }
+const regUser = localStorage.getItem("registeredUser");
+
+if (regUser) {
+    alert("Siz artiq qeydiyyatdan kecmisiniz!")
+    window.location.href = "../index.html"
+} 
+
 const API_URL = "https://codebyte-backend-ibyq.onrender.com"
 
 const userInp = document.getElementById("username-inp")
@@ -27,9 +30,18 @@ form.addEventListener("submit", async (e) => {
         }));
 
         // document.getElementById("msg").innerText = "Giriş uğurludur!";
-        alert("Giris ugurludur")
-        window.location.href = "../index.html"
 
+        Swal.fire({
+            title: "Giriş uğurludur!",
+            icon: "success",
+        }).then((result) => {
+            if (result.isConfirmed || result.dismiss === Swal.DismissReason.backdrop) {
+
+                console.log("İstifadəçi OK düyməsini kliklədi");
+
+                window.location.href = "../index.html";
+            }
+        });
 
     } else {
         // document.getElementById("msg").innerText = json.message;

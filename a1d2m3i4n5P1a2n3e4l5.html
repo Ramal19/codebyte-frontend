@@ -22,7 +22,8 @@
       background-color: #f2f2f2;
     }
 
-    #search, #roleFilter {
+    #search,
+    #roleFilter {
       width: 80%;
       margin: 10px auto;
       display: block;
@@ -72,12 +73,12 @@
   </table>
 
   <script>
-    const API_URL = "http://localhost:3000/users";
+    const API_URL = "https://codebyte-backend-ibyq.onrender.com/users"
     const tableBody = document.querySelector("#users-table tbody");
     const searchInput = document.querySelector("#search");
     const roleFilter = document.querySelector("#roleFilter");
 
-    let allUsers = []; 
+    let allUsers = [];
 
     async function fetchUsers() {
       try {

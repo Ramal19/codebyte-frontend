@@ -284,6 +284,7 @@ if (userData) {
     //   `;
     const userInfo = document.createElement("div");
     const postAdd = document.createElement("button");
+    const postManage = document.createElement("button");
     userInfo.id = "userInfo";
     userInfo.innerHTML =
         `
@@ -294,8 +295,12 @@ if (userData) {
     postAdd.textContent = "Post Add";
     postAdd.id = "postAdd";
 
+    postManage.textContent = "Post Manage";
+    postManage.id = "postManage"
+
     regPart.appendChild(userInfo)
     regPart.appendChild(postAdd)
+    regPart.appendChild(postManage)
     postAdd.addEventListener("click", () => {
 
         window.location.href = "./document/post-add.html"
@@ -364,15 +369,16 @@ if (userData) {
 
 const logData = localStorage.getItem("loginUser");
 
+
 if (logData) {
 
     const user = JSON.parse(logData);
 
     registerBtn.style.display = "none";
     loginBtn.style.display = "none";
-
     const userInfo = document.createElement("div");
-    const postAdd = document.createElement("button");
+
+
     userInfo.id = "userInfo";
     userInfo.innerHTML =
         `
@@ -380,15 +386,9 @@ if (logData) {
         </div>
     `
 
-    postAdd.textContent = "Post Add";
-    postAdd.id = "postAdd";
 
     regPart.appendChild(userInfo)
-    regPart.appendChild(postAdd)
-    postAdd.addEventListener("click", () => {
 
-        window.location.href = "./document/post-add.html"
-    })
     let userDiv = document.createElement("div");
     userDiv.classList.add("user-div");
     userDiv.innerHTML =
@@ -401,9 +401,26 @@ if (logData) {
                 <p>${user.email}</p>
             </div>
         </div>
+        <button id="postAdd"><i class="bi bi-plus-square"></i> Post add</button>
+        <button id="postManage"><i class="bi bi-view-list"></i> Post Manage</button>
         <button id="logOut"><i class="bi bi-box-arrow-right"></i> Log Out</button>
     `
+
     regPart.appendChild(userDiv);
+
+    const postAdd = document.getElementById("postAdd");
+    const postManage = document.createElement("postManage");
+
+
+    postAdd.addEventListener("click", () => {
+
+        window.location.href = "./document/post-add.html"
+    })
+
+    postManage.addEventListener("click", () => {
+
+        window.location.href = "./document/post-manage.html"
+    })
 
     const profilImg = document.querySelectorAll(".profil-img")
 

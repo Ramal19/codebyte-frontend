@@ -1,6 +1,9 @@
-// const reg = document.getElementById("reg");
+const logUser = localStorage.getItem("loginUser");
 
-// reg.onclick = () => { window.location.href = "./login.html" }
+if (logUser) {
+    alert("Siz artiq qeydiyyatdan kecmisiniz!")
+    window.location.href = "../index.html"
+} 
 
 const API_URL = "https://codebyte-backend-ibyq.onrender.com"
 
