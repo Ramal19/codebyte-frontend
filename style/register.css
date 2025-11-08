@@ -15,7 +15,7 @@
   position: relative;
 }
 
-.con > .circle {
+.con>.circle {
   position: absolute;
   top: 130px;
   left: 400px;
@@ -23,15 +23,13 @@
   width: 100px;
   height: 100px;
   border-radius: 9999px;
-  background: linear-gradient(
-    0deg,
-    rgba(34, 193, 195, 1) 0%,
-    rgba(45, 160, 253, 1) 100%
-  );
+  background: linear-gradient(0deg,
+      rgba(34, 193, 195, 1) 0%,
+      rgba(45, 160, 253, 1) 100%);
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 
-.con > .form-box {
+.con>.form-box {
   width: 1000px;
   display: flex;
   border-radius: 15px;
@@ -41,7 +39,7 @@
 }
 
 /* LEFT SIDE */
-.form-box > .box-left {
+.form-box>.box-left {
   width: 50%;
   display: flex;
   flex-direction: column;
@@ -50,9 +48,9 @@
   gap: 20px;
 }
 
-.box-left > .username,
-.box-left > .email,
-.box-left > .password {
+.box-left>.username,
+.box-left>.email,
+.box-left>.password {
   position: relative;
 }
 
@@ -72,9 +70,9 @@
   font-size: 18px;
 }
 
-.username > .username-icon,
-.email > .email-icon,
-.password > .password-icon {
+.username>.username-icon,
+.email>.email-icon,
+.password>.password-icon {
   position: absolute;
   top: 8px;
   left: 8px;
@@ -82,9 +80,9 @@
   font-size: 18px;
 }
 
-.username > #reg-username,
-.email > #reg-email,
-.password > #reg-password {
+.username>#reg-username,
+.email>#reg-email,
+.password>#reg-password {
   width: 250px;
   outline: none;
   border-radius: 7px;
@@ -93,7 +91,7 @@
   background-color: #77777742;
 }
 
-  .box-left > .registerBtn {
+.box-left>.registerBtn {
   width: 180px;
   padding: 7px 0;
   font-size: 18px;
@@ -105,26 +103,53 @@
   transition: 0.3s;
 }
 
-.box-left > .registerBtn:hover {
+.box-left>.registerBtn:hover {
   background-color: #22c1c3;
 }
 
-.box-left > p {
+.box-left>p {
   font-size: 14px;
 }
 
 /* RIGHT SIDE */
-.form-box > .box-right {
+.form-box>.box-right {
   width: 50%;
 }
 
-.box-right > .login-img {
+.box-right>.login-img {
   width: 100%;
 }
 
-.login-img > img {
+.login-img>img {
   width: 100%;
   border-top-right-radius: 15px;
   border-bottom-right-radius: 15px;
 }
 
+@media (max-width: 600px) {
+
+  .con {
+
+    height: auto;
+    display: flex;
+    padding: 50px 0;
+  }
+
+  .con>.circle {
+
+    display: none;
+  }
+
+  .con>.form-box {
+
+    width: 500px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 15px;
+    background-color: #fff;
+    padding: 50px 0;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  }
+
+}

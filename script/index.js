@@ -457,6 +457,17 @@ menuBtn.addEventListener("click", () => {
         let loginWithMenu = document.getElementById("loginWithMenu");
         let regWithMenu = document.getElementById("regWithMenu");
 
+        loginWithMenu.addEventListener("click",()=>{
+
+            window.location.href = "./document/login.html"
+        })
+
+        
+        regWithMenu.addEventListener("click",()=>{
+
+            window.location.href = "./document/register.html"
+        })
+
         if (logData) {
 
             const user = JSON.parse(logData);
@@ -483,6 +494,14 @@ menuBtn.addEventListener("click", () => {
                 <button id="logOutMenu"><i class="bi bi-box-arrow-right"></i> Çıxış et</button>
             </div>
         `
+
+            const logOutMenu = document.getElementById("logOutMenu");
+
+            logOutMenu.addEventListener("click", () => {
+
+                localStorage.removeItem('loginUser');
+                window.location.reload();
+            })
         }
 
     } else {
