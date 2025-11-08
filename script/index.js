@@ -165,38 +165,10 @@ setInterval(() => {
 let books = document.getElementById("booksHtmlSwitch");
 
 books.addEventListener("click", () => {
-    window.location.href = "books.html";
+    window.location.href = "./document/books.html";
 })
 
-let normalBtn = document.querySelector(".normal");
-let specialBtn = document.querySelector(".special");
 
-let offersForNormal = document.querySelector(".offers-for-normal");
-let offersForSpecial = document.querySelector(".offers-for-special");
-
-
-normalBtn.addEventListener("click", () => {
-    normalBtn.style.backgroundColor = "#2da0fd";
-    normalBtn.style.color = "#fff";
-
-    specialBtn.style.backgroundColor = "transparent";
-    specialBtn.style.color = "#000";
-
-    offersForNormal.style.display = "flex";
-    offersForSpecial.style.display = "none";
-});
-
-specialBtn.addEventListener("click", () => {
-    specialBtn.style.backgroundColor = "#2da0fd";
-    specialBtn.style.color = "#fff";
-    specialBtn.style.borderRadius = "9999px";
-
-    normalBtn.style.backgroundColor = "transparent";
-    normalBtn.style.color = "#000";
-
-    offersForNormal.style.display = "none";
-    offersForSpecial.style.display = "flex";
-});
 
 // ANSWER BOX JS
 let questionBox = document.querySelectorAll(".faq-card > h3");
