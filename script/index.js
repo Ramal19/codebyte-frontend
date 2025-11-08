@@ -457,13 +457,13 @@ menuBtn.addEventListener("click", () => {
         let loginWithMenu = document.getElementById("loginWithMenu");
         let regWithMenu = document.getElementById("regWithMenu");
 
-        loginWithMenu.addEventListener("click",()=>{
+        loginWithMenu.addEventListener("click", () => {
 
             window.location.href = "./document/login.html"
         })
 
-        
-        regWithMenu.addEventListener("click",()=>{
+
+        regWithMenu.addEventListener("click", () => {
 
             window.location.href = "./document/register.html"
         })
@@ -501,6 +501,14 @@ menuBtn.addEventListener("click", () => {
 
                 localStorage.removeItem('loginUser');
                 window.location.reload();
+            })
+
+            const postAddMenu = document.getElementById("postAddMenu");
+
+
+            postAddMenu.addEventListener("click", () => {
+
+                window.location.href = "./document/post-add.html";
             })
         }
 
