@@ -28,6 +28,11 @@ header>.navbar {
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
 }
 
+.navbar>.menu {
+
+  display: none;
+}
+
 .navbar>.logo {
 
   width: 200px;
@@ -1454,7 +1459,15 @@ li>a:hover {
 @media (max-width: 600px) {
 
 
+  .navbar>.menu {
 
+    display: block;
+  }
+
+  .menu>.bi-list {
+
+    font-size: 24px;
+  }
 
   header>.navbar>ul {
 
@@ -1472,11 +1485,6 @@ li>a:hover {
     display: none;
   }
 
-  header>.navbar>.menu>.bi-list {
-
-    font-size: 32px;
-  }
-
   header>.navbar>.responsive {
 
     display: flex;
@@ -1484,10 +1492,9 @@ li>a:hover {
   }
 
   header>.navbar>.responsive>.bi-search,
-  .bi-cart,
-  .bi-heart {
+  .bi-cart {
 
-    font-size: 32px;
+    font-size: 20px;
   }
 
   .container {
@@ -1498,6 +1505,7 @@ li>a:hover {
 
   .main-section>.slide-box {
 
+    width: 100%;
     display: flex;
     flex-direction: column;
     position: static;
@@ -1505,12 +1513,25 @@ li>a:hover {
 
   .slide-box>.img-text {
 
+    width: 100%;
     position: static;
   }
 
-  .slide-box>.img-text-second{
+  .img-text>h1 {
 
+    font-size: 24px;
+  }
+
+  .slide-box>.img-text-second {
+
+    width: 100%;
     position: static;
+  }
+
+
+  .img-text-second>h1 {
+
+    font-size: 24px;
   }
 
   .scroller {
@@ -1520,6 +1541,11 @@ li>a:hover {
 
   .book-card>.button {
     display: none;
+  }
+
+  .course-card-list {
+
+    padding: 20px 0;
   }
 
   .course-card-list>.lesson-card {
