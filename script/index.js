@@ -27,11 +27,13 @@ const registerBtn = document.getElementById("register");
 const courseCard = document.querySelector(".course-card")
 const regPart = document.querySelector(".registration-part")
 const conAll = document.querySelector(".conAll")
-const API_URL = "https://codebyte-backend-ibyq.onrender.com";
-// courseCard.addEventListener("click", () => {
 
-//     window.location.href = "../document/ders.html"
-// })
+const API_URL = "https://codebyte-backend-ibyq.onrender.com";
+
+const menuBtn = document.querySelector(".menu");
+let menuDiv = null;
+
+
 
 
 loginBtn.onclick = () => {
@@ -219,28 +221,6 @@ cartIcon.addEventListener("mouseout", () => {
     cartIcon.classList.replace("bi-cart-fill", "bi-cart");
 })
 
-
-document.querySelectorAll("#wishlist-btn").forEach(btn => {
-    btn.addEventListener("click", () => {
-        let card = btn.closest(".course-card");
-
-        let course = {
-            id: card.dataset.id,
-            title: card.dataset.title,
-            price: card.dataset.price
-        };
-
-        let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
-
-        if (!wishlist.some(item => item.id === course.id)) {
-            wishlist.push(course);
-            localStorage.setItem("wishlist", JSON.stringify(wishlist));
-            alert(`${course.title} sevimlilərə əlavə olundu!`);
-        } else {
-            alert(`${course.title} artıq sevimlilərdədir!`);
-        }
-    });
-});
 
 const userData = localStorage.getItem("registeredUser");
 
@@ -438,6 +418,44 @@ if (logData) {
 
     })
 }
+
+
+menuBtn.addEventListener("click", () => {
+
+    if (menuDiv === null) {
+        menuDiv = document.createElement("div");
+
+        menuDiv.classList.add("menu-div");
+        menuDiv.classList.add("forClose")
+
+        menuDiv.innerHTML =
+            `
+            <div class="menu-item">
+                <span id="closeMenu" class="forClose"><i class="bi bi-x"></i></span>
+                
+            </div>
+        `
+
+        conAll.appendChild(menuDiv);
+
+        let closeBtnMenu = document.querySelectorAll(".forClose");
+
+        closeBtnMenu.forEach(btn => {
+
+            btn.addEventListener("click", () => {
+
+                conAll.removeChild(menuDiv)
+                menuDiv = null
+            })
+        })
+
+    } else {
+
+        conAll.removeChild(menuDiv)
+        menuDiv = null
+    }
+})
+
 
 const postsDiv = document.getElementById("posts");
 const btnDirection = document.querySelector(".btn-direction")
@@ -643,7 +661,7 @@ buttons.forEach((btn, index) => {
                         });
 
                         postsDiv.appendChild(div);
-                    } 
+                    }
 
                 } else if (index === 2) {
                     if (p.category[0] === "C++") {
@@ -664,7 +682,7 @@ buttons.forEach((btn, index) => {
                         });
 
                         postsDiv.appendChild(div);
-                    } 
+                    }
 
                     // else {
 
@@ -717,7 +735,7 @@ buttons.forEach((btn, index) => {
                         });
 
                         postsDiv.appendChild(div);
-                    } 
+                    }
                 } else if (index === 5) {
                     if (p.category[0] === "Canva") {
                         const div = document.createElement("div");
@@ -736,7 +754,7 @@ buttons.forEach((btn, index) => {
                         });
 
                         postsDiv.appendChild(div);
-                    } 
+                    }
                 } else if (index === 6) {
                     if (p.category[0] === "Other") {
                         const div = document.createElement("div");
@@ -755,7 +773,7 @@ buttons.forEach((btn, index) => {
                         });
 
                         postsDiv.appendChild(div);
-                    } 
+                    }
                 }
             });
         } catch (err) {
