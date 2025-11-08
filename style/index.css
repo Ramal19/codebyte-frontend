@@ -1289,6 +1289,7 @@ li>a:hover {
   .course-card-list {
 
     padding: 20px 0;
+    overflow-x: scroll;
   }
 
   .course-card-list>.lesson-card {

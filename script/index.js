@@ -644,7 +644,7 @@ buttons.forEach((btn, index) => {
                     postsDiv.appendChild(div);
                 } else if (index === 1) {
 
-                    if (p.category[0] === "JavaScript") {
+                    if (p.category === "JavaScript") {
                         const div = document.createElement("div");
                         div.classList.add("lesson-card")
                         div.innerHTML = `
@@ -664,7 +664,7 @@ buttons.forEach((btn, index) => {
                     }
 
                 } else if (index === 2) {
-                    if (p.category[0] === "C++") {
+                    if (p.category === "C++") {
 
                         const div = document.createElement("div");
                         div.classList.add("lesson-card")
@@ -699,7 +699,7 @@ buttons.forEach((btn, index) => {
                     // }
 
                 } else if (index === 3) {
-                    if (p.category[0] === "React JS") {
+                    if (p.category === "React JS") {
                         const div = document.createElement("div");
                         div.classList.add("lesson-card")
                         div.innerHTML = `
@@ -718,7 +718,7 @@ buttons.forEach((btn, index) => {
                         postsDiv.appendChild(div);
                     }
                 } else if (index === 4) {
-                    if (p.category[0] === "Python") {
+                    if (p.category === "Python") {
                         const div = document.createElement("div");
                         div.classList.add("lesson-card")
                         div.innerHTML = `
@@ -737,7 +737,7 @@ buttons.forEach((btn, index) => {
                         postsDiv.appendChild(div);
                     }
                 } else if (index === 5) {
-                    if (p.category[0] === "Canva") {
+                    if (p.category === "Canva") {
                         const div = document.createElement("div");
                         div.classList.add("lesson-card")
                         div.innerHTML = `
@@ -756,7 +756,7 @@ buttons.forEach((btn, index) => {
                         postsDiv.appendChild(div);
                     }
                 } else if (index === 6) {
-                    if (p.category[0] === "Other") {
+                    if (p.category === "Other") {
                         const div = document.createElement("div");
                         div.classList.add("lesson-card")
                         div.innerHTML = `

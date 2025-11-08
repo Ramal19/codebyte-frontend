@@ -51,10 +51,6 @@ form.addEventListener("submit", async (e) => {
     }
 });
 
-if (logUser) {
-    alert("Siz artiq LOG qeydiyyatdan kecmisiniz!")
-    window.location.href = "../index.html"
-} 
 
 
 const inputs = document.querySelectorAll(".input");
