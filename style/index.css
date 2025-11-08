@@ -5,14 +5,14 @@
   box-sizing: border-box;
 }
 
-.conAll {
+body {
 
   position: relative;
 }
 
-.conAll>.menu-div {
+body>.menu-div {
 
-  position: absolute;
+  position: fixed;
   top: 0;
   z-index: 10000;
   width: 100%;
@@ -20,17 +20,22 @@
   background: rgba(255, 255, 255, 0.6);
   backdrop-filter: blur(10px);
   box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
-.menu-div>.menu-item{
+.menu-div>.menu-item {
 
   width: 50%;
   height: 100%;
   background-color: #fff;
   position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px;
 }
 
-.menu-item>#closeMenu{
+.menu-item>#closeMenu {
 
   font-size: 18px;
   background-color: #fff;
@@ -41,6 +46,36 @@
   top: 20px;
   right: -60px;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.menu-item>button {
+
+  background-color: transparent;
+  border: none;
+  font-size: 18px;
+  color: #2da0fd;
+  font-weight: 700;
+  text-align: left;
+}
+
+.menu-item>.user-info-menu{
+
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.user-info-menu>.profil-img-menu{
+
+  width: 50px;
+  height: 50px;
+  background-color: #1c1d1f;
+  color: #fff;
+  font-size: 18px;
+  border-radius: 9999px;
   display: flex;
   justify-content: center;
   align-items: center;

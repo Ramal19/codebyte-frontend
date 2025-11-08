@@ -353,9 +353,9 @@ if (logData) {
                 <p>${user.email}</p>
             </div>
         </div>
-        <button id="postAdd"><i class="bi bi-plus-square"></i> Post add</button>
-        <button id="postManage"><i class="bi bi-view-list"></i> Post Manage</button>
-        <button id="logOut"><i class="bi bi-box-arrow-right"></i> Log Out</button>
+        <button id="postAdd"><i class="bi bi-plus-square"></i> Kurs Paylaş</button>
+        <button id="postManage"><i class="bi bi-view-list"></i> Ümumi Kurslar</button>
+        <button id="logOut"><i class="bi bi-box-arrow-right"></i> Çıxış et</button>
     `
 
     regPart.appendChild(userDiv);
@@ -432,11 +432,14 @@ menuBtn.addEventListener("click", () => {
             `
             <div class="menu-item">
                 <span id="closeMenu" class="forClose"><i class="bi bi-x"></i></span>
-                
+                <button id="loginWithMenu">Daxil olun</button>
+                <button id="regWithMenu">Qeydiyyat</button>
             </div>
         `
 
-        conAll.appendChild(menuDiv);
+        document.body.style.cssText = `overflow: hidden;`
+
+        document.body.appendChild(menuDiv);
 
         let closeBtnMenu = document.querySelectorAll(".forClose");
 
@@ -444,14 +447,47 @@ menuBtn.addEventListener("click", () => {
 
             btn.addEventListener("click", () => {
 
-                conAll.removeChild(menuDiv)
+                document.body.removeChild(menuDiv)
                 menuDiv = null
+                document.body.style.cssText = `overflow: scroll;`
+
             })
         })
 
+        let loginWithMenu = document.getElementById("loginWithMenu");
+        let regWithMenu = document.getElementById("regWithMenu");
+
+        if (logData) {
+
+            const user = JSON.parse(logData);
+
+
+            loginWithMenu.style.display = "none";
+            regWithMenu.style.display = "none";
+
+            menuDiv.innerHTML =
+                `
+            <div class="menu-item">
+                <span id="closeMenu" class="forClose"><i class="bi bi-x"></i></span>
+                <div class="user-info-menu">
+                    <div class="profil-img-menu">
+                        ${user.username[0]}
+                    </div>
+                    <div>
+                        <h3>${user.username}</h3>
+                        <p>${user.email}</p>
+                    </div>
+                </div>
+                <button id="postAddMenu"><i class="bi bi-plus-square"></i> Kurs Paylaş</button>
+                <button id="postManageMenu"><i class="bi bi-view-list"></i> Ümumi Kurslar</button>
+                <button id="logOutMenu"><i class="bi bi-box-arrow-right"></i> Çıxış et</button>
+            </div>
+        `
+        }
+
     } else {
 
-        conAll.removeChild(menuDiv)
+        document.body.removeChild(menuDiv)
         menuDiv = null
     }
 })
@@ -633,6 +669,7 @@ buttons.forEach((btn, index) => {
                                 <div class="card-text">
                                     <h3>${p.text || ""}</h3>
                                     <span>${p.username}</span>
+                                    <button class="wish-btn" data-id="${p.id}">❤️ Wishlistə əlavə et</button>
                                 </div>
                             `;
 
