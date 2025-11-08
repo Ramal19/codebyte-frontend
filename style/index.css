@@ -1469,6 +1469,18 @@ li>a:hover {
     font-size: 24px;
   }
 
+  header>.navbar{
+
+    display: flex;
+    justify-content: space-between;
+    padding: 0 20px;
+  }
+
+  .navbar>.logo{
+
+    margin-left: 30px;
+  }
+
   header>.navbar>ul {
 
     display: none;
