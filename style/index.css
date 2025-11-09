@@ -61,14 +61,14 @@ body>.menu-div {
   text-align: left;
 }
 
-.menu-item>.user-info-menu{
+.menu-item>.user-info-menu {
 
   display: flex;
   gap: 10px;
   align-items: center;
 }
 
-.user-info-menu>.profil-img-menu{
+.user-info-menu>.profil-img-menu {
 
   width: 50px;
   height: 50px;
@@ -1348,5 +1348,28 @@ li>a:hover {
   .faq-part {
 
     padding: 20px;
+  }
+
+
+  .timer-fade>.timer-modal {
+    position: absolute;
+    top: 100px;
+    left: 30px;
+    width: 480px;
+    height: 500px;
+    border-radius: 15px;
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 10px;
+  }
+
+  .timer-fade>#exitBtn {
+    position: absolute;
+    top: 100px;
+    right: 15px;
+    font-size: 32px;
+    color: #fff;
   }
 }
