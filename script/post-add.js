@@ -1,6 +1,4 @@
 const API_URL = "https://codebyte-backend-ibyq.onrender.com";
-const BASE_URL = `${API_URL}/uploads`;
-
 const token = localStorage.getItem("token");
 if (!token) {
   alert("Əvvəlcə login olmalısınız");
@@ -10,6 +8,8 @@ if (!token) {
 const addMoreVideoBtn = document.getElementById("addMoreVideo");
 const videosContainer = document.getElementById("videosContainer");
 const uploadCourseBtn = document.getElementById("uploadCourseBtn");
+const courseCoverInput = document.getElementById("courseCover");
+const courseCoverPreview = document.getElementById("courseCoverPreview");
 
 addMoreVideoBtn.addEventListener("click", () => {
   const div = document.createElement("div");
@@ -21,9 +21,6 @@ addMoreVideoBtn.addEventListener("click", () => {
   `;
   videosContainer.appendChild(div);
 });
-
-const courseCoverInput = document.getElementById("courseCover");
-const courseCoverPreview = document.getElementById("courseCoverPreview");
 
 courseCoverInput.addEventListener("change", () => {
   const file = courseCoverInput.files[0];
@@ -51,7 +48,6 @@ uploadCourseBtn.addEventListener("click", async () => {
     const videoFile = div.querySelector(".videoInput").files[0];
     const thumbFile = div.querySelector(".thumbInput").files[0];
     const videoTitle = div.querySelector(".videoTitle").value.trim();
-
     if (!videoFile || !thumbFile || !videoTitle) return;
     videos.push({ videoFile, thumbFile, videoTitle });
   });
@@ -66,17 +62,11 @@ uploadCourseBtn.addEventListener("click", async () => {
   formData.append("category", category);
   formData.append("courseCover", cover);
 
-  // videos.forEach(v => {
-  //   formData.append("videos", v.videoFile);
-  //   formData.append("videoCovers", v.thumbFile);
-  // });
-
   videos.forEach(v => {
     formData.append("videos", v.videoFile);
     formData.append("videoCovers", v.thumbFile);
-    formData.append("videoTitles", v.videoTitle); // ✅ Hər video üçün başlığı da əlavə et
+    formData.append("videoTitles", v.videoTitle); // başlıqlar
   });
-
 
   try {
     const res = await fetch(`${API_URL}/posts`, {
@@ -86,35 +76,14 @@ uploadCourseBtn.addEventListener("click", async () => {
     });
 
     if (!res.ok) {
-      let errText = "Kurs yüklənmədi";
-      try {
-        const err = await res.json();
-        if (err.message) errText = err.message;
-      } catch { }
-      alert("Xəta: " + errText);
+      const err = await res.json().catch(() => ({ message: "Kurs yüklənmədi" }));
+      alert("Xəta: " + err.message);
       return;
     }
 
-    let data = null;
-    try {
-      data = await res.json();
-    } catch {
-      data = null;
-    }
-
+    const data = await res.json();
     alert("Kurs uğurla əlavə olundu!");
-
-    if (data) {
-      if (data.courseCover)
-        console.log("Cover URL:", `${BASE_URL}/${data.courseCover}`);
-
-      if (Array.isArray(data.videos) && data.videos.length > 0)
-        console.log("Video URL:", `${BASE_URL}/${data.videos[0]}`);
-
-      if (Array.isArray(data.videoCovers) && data.videoCovers.length > 0)
-        console.log("Video cover URL:", `${BASE_URL}/${data.videoCovers[0]}`);
-    }
-
+    console.log("Yeni kurs:", data);
     window.location.href = "../index.html";
   } catch (error) {
     alert("Xəta baş verdi: " + error.message);

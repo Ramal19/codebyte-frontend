@@ -1,148 +1,5 @@
-<!-- <!DOCTYPE html>
-<html>
-
-<head>
-    <meta charset="UTF-8">
-    <title>Paylaşımlar</title>
-    <link rel="stylesheet" href="../style/post-add.css">
-</head>
-
-<body>
-    <header>
-        <nav class="navbar">
-            <div class="logo">
-                <img src="../image/codebyteLogoMa.png" alt="LOGO">
-            </div>
-
-            <ul>
-                <li>
-                    <a href="../document/index.html">
-                        Ana Səhifə
-                    </a>
-                </li>
-                <li>
-                    <a href="./kurs.html">
-                        Kurslar
-                    </a>
-                </li>
-                <li>
-                    <a href="./telimciler.html">
-                        Təlimçilər
-                    </a>
-                </li>
-                <li>
-                    <a href="">
-                        Yol xəritəsi
-                    </a>
-                </li>
-                <li>
-                    <a href="./contact.html">
-                        Əlaqə
-                    </a>
-                </li>
-            </ul>
-
-            <div class="search-bar">
-                <button id="search-icon" class="search-button">
-                    <i class="bi bi-search"></i>
-                </button>
-                <input id="search-inp" type="text" placeholder="Axtar...">
-            </div>
-
-            <div class="add">
-                <span class="wishlist-add">
-                    <i class="bi bi-heart"></i>
-                    <i class="bi bi-cart"></i>
-                </span>
-            </div>
-
-
-            <div class="registration-part">
-                <button id="login" class="login-button">
-                    Daxil olun
-                </button>
-                <button id="register" class="register-button">
-                    Qeydiyyat
-                </button>
-            </div>
-        </nav>
-    </header>
-
-    <div id="authActions">
-        <h2>Paylaşım əlavə etmək</h2>
-         <label for="videoInput">
-            Yükləyəcəyiniz videonu seçin:
-             <input type="file" id="videoInput" accept="video/*"> 
-        </label> --
-
-        <div class="container">
-
-            <div class="folder">
-                <div class="front-side">
-                    <div class="tip"></div>
-                    <div class="cover"></div>
-                </div>
-                <div class="back-side cover"></div>
-            </div>
-
-            <label class="custom-file-upload">
-                <input class="title" type="file" id="videoInput" accept="video/*" />
-                Yükləyəcəyiniz videonu seçin:
-
-            </label>
-        </div>
-        <br>
-        <video id="videoPreview" style="visibility: hidden; width:300px; margin-top:10px;" controls></video>
-
-        <div class="container">
-
-            <div class="folder">
-                <div class="front-side">
-                    <div class="tip"></div>
-                    <div class="cover"></div>
-                </div>
-                <div class="back-side cover"></div>
-            </div>
-
-            <label class="custom-file-upload">
-                <input class="title" type="file" id="coverInput" accept="image/*" />
-                Video üçün qapaq fotosunu seçin
-            </label>
-        </div>
-
-
-        <br>
-        <img id="coverPreview" style="visibility:hidden; width:200px; margin-top:10px;">
-
-        <input type="text" id="textInput" placeholder="Yazını daxil et">
-        <select name="" id="">
-            <option value="" hidden></option>
-            <option value="">JavaScript</option>
-            <option value="">Canva</option>
-            <option value="">C++</option>
-            <option value="">React JS</option>
-            <option value="">Python</option>
-            <option value="">Other</option>
-        </select>
-        <button id="uploadBtn">Paylaş</button>
-    </div>
-
-    <h1>Paylaşımlar</h1>
-
-    <div id="posts">
-
-    </div>
-
-    <script src="../script/post-add.js">
-        
-    </script>
-</body>
-
-</html> -->
-
-
 <!DOCTYPE html>
-<html>
+<html lang="az">
 
 <head>
     <meta charset="UTF-8">
@@ -168,7 +25,7 @@
     <div id="authActions">
         <h2>Yeni Kurs Əlavə Et</h2>
 
-        <!-- Ümumi kurs qapaq şəkli -->
+        <!-- Kurs qapağı -->
         <label class="custom-file-upload">
             <input type="file" id="courseCover" accept="image/*">
             Kurs üçün ümumi qapaq şəkli seçin
@@ -204,7 +61,105 @@
         <button id="uploadCourseBtn">Kursu paylaş</button>
     </div>
 
-    <script src="../script/post-add.js"></script>
+    <script>
+        const API_URL = "https://codebyte-backend-ibyq.onrender.com";
+        const token = localStorage.getItem("token");
+        if (!token) {
+            alert("Əvvəlcə login olmalısınız");
+            window.location.href = "login.html";
+        }
+
+        const addMoreVideoBtn = document.getElementById("addMoreVideo");
+        const videosContainer = document.getElementById("videosContainer");
+        const uploadCourseBtn = document.getElementById("uploadCourseBtn");
+        const courseCoverInput = document.getElementById("courseCover");
+        const courseCoverPreview = document.getElementById("courseCoverPreview");
+
+        // Əlavə video bölməsi
+        addMoreVideoBtn.addEventListener("click", () => {
+            const div = document.createElement("div");
+            div.className = "video-item";
+            div.innerHTML = `
+                <input type="file" class="videoInput" accept="video/*">
+                <input type="file" class="thumbInput" accept="image/*">
+                <input type="text" class="videoTitle" placeholder="Videonun başlığı">
+            `;
+            videosContainer.appendChild(div);
+        });
+
+        // Qapaq şəkli önizləmə
+        courseCoverInput.addEventListener("change", () => {
+            const file = courseCoverInput.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = e => {
+                courseCoverPreview.src = e.target.result;
+                courseCoverPreview.style.visibility = "visible";
+            };
+            reader.readAsDataURL(file);
+        });
+
+        // Kurs yükləmə
+        uploadCourseBtn.addEventListener("click", async () => {
+            const title = document.getElementById("courseTitle").value.trim();
+            const category = document.getElementById("categorySelect").value;
+            const cover = courseCoverInput.files[0];
+
+            if (!title || !category || !cover) {
+                alert("Bütün məlumatları doldurun!");
+                return;
+            }
+
+            const videos = [];
+            document.querySelectorAll(".video-item").forEach(div => {
+                const videoFile = div.querySelector(".videoInput").files[0];
+                const thumbFile = div.querySelector(".thumbInput").files[0];
+                const videoTitle = div.querySelector(".videoTitle").value.trim();
+                if (!videoFile || !thumbFile || !videoTitle) return;
+                videos.push({ videoFile, thumbFile, videoTitle });
+            });
+
+            if (videos.length === 0) {
+                alert("Ən azı bir video əlavə edin!");
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append("text", title);
+            formData.append("category", category);
+            formData.append("courseCover", cover);
+
+            videos.forEach(v => {
+                formData.append("videos", v.videoFile);
+                formData.append("videoCovers", v.thumbFile);
+            });
+
+            // ✅ Video başlıqları JSON kimi göndərilir
+            formData.append("videoTitles", JSON.stringify(videos.map(v => v.videoTitle)));
+
+            try {
+                const res = await fetch(`${API_URL}/posts`, {
+                    method: "POST",
+                    headers: { Authorization: "Bearer " + token },
+                    body: formData
+                });
+
+                if (!res.ok) {
+                    const err = await res.json().catch(() => ({ message: "Kurs yüklənmədi" }));
+                    alert("Xəta: " + err.message);
+                    return;
+                }
+
+                const data = await res.json();
+                alert("Kurs uğurla əlavə olundu!");
+                console.log("Yeni kurs:", data);
+                window.location.href = "../index.html";
+            } catch (error) {
+                alert("Xəta baş verdi: " + error.message);
+                console.error(error);
+            }
+        });
+    </script>
 </body>
 
 </html>

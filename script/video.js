@@ -21,7 +21,7 @@ if (!post) {
         div.innerHTML =
             `
             <img class="img" src ="${API_URL}/uploads/${post.videoCovers[i] || post.courseCover}">
-            <h2>${post.text}</h2>
+            <h2>${post.videoTitles}</h2>
 
         `
 
