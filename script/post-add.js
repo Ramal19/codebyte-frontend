@@ -66,10 +66,17 @@ uploadCourseBtn.addEventListener("click", async () => {
   formData.append("category", category);
   formData.append("courseCover", cover);
 
+  // videos.forEach(v => {
+  //   formData.append("videos", v.videoFile);
+  //   formData.append("videoCovers", v.thumbFile);
+  // });
+
   videos.forEach(v => {
     formData.append("videos", v.videoFile);
     formData.append("videoCovers", v.thumbFile);
+    formData.append("videoTitles", v.videoTitle); // ✅ Hər video üçün başlığı da əlavə et
   });
+
 
   try {
     const res = await fetch(`${API_URL}/posts`, {
@@ -83,7 +90,7 @@ uploadCourseBtn.addEventListener("click", async () => {
       try {
         const err = await res.json();
         if (err.message) errText = err.message;
-      } catch {}
+      } catch { }
       alert("Xəta: " + errText);
       return;
     }
