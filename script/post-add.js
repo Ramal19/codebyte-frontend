@@ -1,3 +1,4 @@
+
 const API_URL = "https://codebyte-backend-ibyq.onrender.com";
 const token = localStorage.getItem("token");
 if (!token) {
@@ -14,7 +15,8 @@ const courseCoverPreview = document.getElementById("courseCoverPreview");
 addMoreVideoBtn.addEventListener("click", () => {
   const div = document.createElement("div");
   div.className = "video-item";
-  div.innerHTML = `
+  div.innerHTML =
+   `
     <input type="file" class="videoInput" accept="video/*">
     <input type="file" class="thumbInput" accept="image/*">
     <input type="text" class="videoTitle" placeholder="Videonun başlığı">
@@ -57,6 +59,8 @@ uploadCourseBtn.addEventListener("click", async () => {
     return;
   }
 
+
+
   const formData = new FormData();
   formData.append("text", title);
   formData.append("category", category);
@@ -65,8 +69,13 @@ uploadCourseBtn.addEventListener("click", async () => {
   videos.forEach(v => {
     formData.append("videos", v.videoFile);
     formData.append("videoCovers", v.thumbFile);
-    formData.append("videoTitles", v.videoTitle); // başlıqlar
   });
+
+  formData.append("videoTitles", JSON.stringify(videos.map(v => v.videoTitle)));
+  console.log("formData-nın bütün elementləri:");
+  for (const pair of formData.entries()) {
+    console.log(pair[0], pair[1]);
+  }
 
   try {
     const res = await fetch(`${API_URL}/posts`, {

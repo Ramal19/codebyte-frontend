@@ -594,7 +594,7 @@ async function loadPosts() {
 
 
 
-            if (postsDiv.children.length > 6) {
+            if (postsDiv.children.length > 5) {
                 postsDiv.style.cssText =
                     `
                  overflow-X: scroll;
