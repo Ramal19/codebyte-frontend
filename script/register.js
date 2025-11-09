@@ -22,15 +22,29 @@ form.addEventListener("submit", async (e) => {
         body: JSON.stringify(data)
     });
     const json = await res.json();
-    document.getElementById("msg").innerText = json.message;
+    // document.getElementById("msg").innerText = json.message;
+
+    let iconType = "error";
+    if (json.message === "Qeydiyyat uğurla tamamlandı") {
+        iconType = "success";
+    }
+
+    Swal.fire({
+        title: json.message,
+        icon: iconType,
+    }).then((result) => {
+        if (iconType === "success" && result.isConfirmed || result.dismiss === Swal.DismissReason.backdrop) {
+            console.log("İstifadəçi OK düyməsini kliklədi");
+            window.location.href = "../index.html";
+        }
+    });
+
 
     if (json.message && json.message.toLowerCase().includes("uğur")) {
         localStorage.setItem("registeredUser", JSON.stringify({
             username: data.username,
             email: data.email
         }));
-
-        window.location.href = "../index.html";
     }
 
 });

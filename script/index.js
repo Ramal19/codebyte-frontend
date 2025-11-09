@@ -121,18 +121,22 @@ let slideBox = document.querySelector(".slide-box");
 
 let slideFirst = `
     <img id="slide-img" src="./image/slide-photo.png" alt="Error 404">
-    <div class="img-text">
-        <h1>Proqramlaşdırma öyrənmək heç vaxt bu qədər asan olmayıb!</h1>
-        <p>CodeByte ilə proqramlaşdırma biliklərinizi artırın və karyeranızı yeni zirvələrə daşıyın. İndi başlayın!</p>
-        <button class="begin-button">Başla</button>
+    <div class="slide-box-res">
+        <div class="img-text">
+            <h1>Proqramlaşdırma öyrənmək heç vaxt bu qədər asan olmayıb!</h1>
+            <p>CodeByte ilə proqramlaşdırma biliklərinizi artırın və karyeranızı yeni zirvələrə daşıyın. İndi başlayın!</p>
+            <button class="begin-button">Başla</button>
+        </div>
     </div>`;
 
 let slideSecond = `
     <img id="slide-img" src="./image/slide-photo-second.png" alt="Error 404">
-    <div class="img-text-second">
-        <h1>Texnologiya ilə gələcəyini qur!</h1>
-        <p>AI və proqramlaşdırma bacarıqları ilə karyerana yeni nəfəs ver. CodeByte ilə gələcəyə addım at!</p>
-        <button class="begin-button">Başla</button>
+    <div class="slide-box-res">
+        <div class="img-text-second">
+            <h1>Texnologiya ilə gələcəyini qur!</h1>
+            <p>AI və proqramlaşdırma bacarıqları ilə karyerana yeni nəfəs ver. CodeByte ilə gələcəyə addım at!</p>
+            <button class="begin-button">Başla</button>
+        </div>
     </div>`;
 
 let arr = [slideFirst, slideSecond];
@@ -230,10 +234,7 @@ if (userData) {
     registerBtn.style.display = "none";
     loginBtn.style.display = "none";
 
-    // userInfo.innerHTML = `
-    //     <div class="profil-img">
-    //     </div>
-    //   `;
+
     const userInfo = document.createElement("div");
     const postAdd = document.createElement("button");
     const postManage = document.createElement("button");
@@ -500,6 +501,49 @@ menuBtn.addEventListener("click", () => {
             logOutMenu.addEventListener("click", () => {
 
                 localStorage.removeItem('loginUser');
+                window.location.reload();
+            })
+
+            const postAddMenu = document.getElementById("postAddMenu");
+
+
+            postAddMenu.addEventListener("click", () => {
+
+                window.location.href = "./document/post-add.html";
+            })
+        }
+
+        if (userData) {
+            const user = JSON.parse(userData);
+
+
+            loginWithMenu.style.display = "none";
+            regWithMenu.style.display = "none";
+
+            menuDiv.innerHTML =
+                `
+            <div class="menu-item">
+                <span id="closeMenu" class="forClose"><i class="bi bi-x"></i></span>
+                <div class="user-info-menu">
+                    <div class="profil-img-menu">
+                        ${user.username[0]}
+                    </div>
+                    <div>
+                        <h3>${user.username}</h3>
+                        <p>${user.email}</p>
+                    </div>
+                </div>
+                <button id="postAddMenu"><i class="bi bi-plus-square"></i> Kurs Paylaş</button>
+                <button id="postManageMenu"><i class="bi bi-view-list"></i> Ümumi Kurslar</button>
+                <button id="logOutMenu"><i class="bi bi-box-arrow-right"></i> Çıxış et</button>
+            </div>
+        `
+
+            const logOutMenu = document.getElementById("logOutMenu");
+
+            logOutMenu.addEventListener("click", () => {
+
+                localStorage.removeItem('registeredUser');
                 window.location.reload();
             })
 

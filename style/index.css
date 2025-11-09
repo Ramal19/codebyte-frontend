@@ -575,7 +575,7 @@ li>a:hover {
   height: auto;
 }
 
-.slide-box>.img-text {
+.slide-box-res>.img-text {
 
   width: 550px;
   display: flex;
@@ -677,7 +677,7 @@ li>a:hover {
   transition: box-shadow 0.2s ease-in;
 }
 
-.slide-box>.img-text-second {
+.slide-box-res>.img-text-second {
 
   width: 550px;
   display: flex;
@@ -1289,7 +1289,13 @@ li>a:hover {
     position: static;
   }
 
-  .slide-box>.img-text {
+  .slide-box>.slide-box-res{
+
+    background-color: transparent;
+    height: 200px;
+  }
+
+  .slide-box-res>.img-text {
 
     width: 100%;
     position: static;
@@ -1300,7 +1306,7 @@ li>a:hover {
     font-size: 24px;
   }
 
-  .slide-box>.img-text-second {
+  .slide-box-res>.img-text-second {
 
     width: 100%;
     position: static;
