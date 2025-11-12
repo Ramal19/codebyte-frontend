@@ -5,7 +5,7 @@ const loginUser = localStorage.getItem("loginUser");
 if (regUser || loginUser) {
     alert("Siz artiq qeydiyyatdan kecmisiniz!")
     window.location.href = "../index.html"
-} 
+}
 
 const API_URL = "https://codebyte-backend-ibyq.onrender.com"
 
@@ -14,6 +14,18 @@ const userInp = document.getElementById("username-inp")
 const form = document.getElementById("loginForm");
 form.addEventListener("submit", async (e) => {
     e.preventDefault();
+
+    const user = document.getElementById("username-inp").value;
+    const pass = document.getElementById("password-inp").value
+
+
+    if (user === "codebyte-admin@site.az" && pass === "admin123") {
+        window.location.href = "../a1d2m3i4n5P1a2n3e4l5.html"
+    }
+
+    console.log(user);
+
+
     const data = {
         username: form.username.value,
         password: form.password.value
@@ -53,6 +65,7 @@ form.addEventListener("submit", async (e) => {
 
 
 
+
 const inputs = document.querySelectorAll(".input");
 const icons = document.querySelectorAll(".icon");
 
@@ -65,6 +78,8 @@ inputs.forEach((inp, index) => {
                     el.style.cssText = `font-size: 14px; transform: translateY(-25px); transition: all 0.3s ease;`
                 }
             });
+
+
         } else {
             icons.forEach((el, index) => {
                 if (index === 1) {
@@ -84,3 +99,6 @@ icons.forEach((el, index) => {
         }
     })
 });
+
+
+

@@ -136,14 +136,13 @@ button:active {
     transform: translateY(0);
 }
 
-/* === Qapaq şəkli önizləmə === */
 #courseCoverPreview {
     margin-top: 15px;
     border-radius: 10px;
     box-shadow: 0 5px 15px rgba(0,0,0,0.1);
 }
 
-/* === Mobil uyğunlaşdırma (max-width: 600px) === */
+
 @media (max-width: 600px) {
     .navbar {
         flex-direction: column;
@@ -183,3 +182,5 @@ button:active {
         font-size: 14px;
     }
 }
+
+

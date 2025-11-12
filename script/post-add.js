@@ -1,9 +1,3 @@
-const logo = document.querySelector(".logo")
-
-logo.addEventListener("click", ()=>{
-
-  window.location.href = "../index.html"
-})
 
 const API_URL = "https://codebyte-backend-ibyq.onrender.com";
 const token = localStorage.getItem("token");
@@ -11,6 +5,14 @@ if (!token) {
   alert("Əvvəlcə login olmalısınız");
   window.location.href = "login.html";
 }
+
+const logo = document.querySelector(".logo")
+
+logo.addEventListener("click", () => {
+
+  window.location.href = "../index.html"
+})
+
 
 const addMoreVideoBtn = document.getElementById("addMoreVideo");
 const videosContainer = document.getElementById("videosContainer");
@@ -22,7 +24,7 @@ addMoreVideoBtn.addEventListener("click", () => {
   const div = document.createElement("div");
   div.className = "video-item";
   div.innerHTML =
-   `
+    `
     <input type="file" class="videoInput" accept="video/*">
     <input type="file" class="thumbInput" accept="image/*">
     <input type="text" class="videoTitle" placeholder="Videonun başlığı">
@@ -53,6 +55,15 @@ uploadCourseBtn.addEventListener("click", async () => {
 
   const videos = [];
   document.querySelectorAll(".video-item").forEach(div => {
+
+    Swal.fire({
+      title: "Yüklənir...",
+      html: "Sorğunuzu emal edərkən bir az gözləyin.",
+      allowOutsideClick: false, 
+      allowEscapeKey: false,   
+      showConfirmButton: false
+    });
+
     const videoFile = div.querySelector(".videoInput").files[0];
     const thumbFile = div.querySelector(".thumbInput").files[0];
     const videoTitle = div.querySelector(".videoTitle").value.trim();
@@ -97,8 +108,10 @@ uploadCourseBtn.addEventListener("click", async () => {
     }
 
     const data = await res.json();
+
     alert("Kurs uğurla əlavə olundu!");
-    console.log("Yeni kurs:", data);
+
+    // console.log("Yeni kurs:", data);
     window.location.href = "../index.html";
   } catch (error) {
     alert("Xəta baş verdi: " + error.message);
