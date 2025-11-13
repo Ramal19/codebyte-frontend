@@ -553,6 +553,7 @@ li>a:hover {
   font-weight: 700;
   position: fixed;
   transition: 0.3s ease;
+  z-index: 10000;
 }
 
 .main-section {
@@ -967,8 +968,6 @@ li>a:hover {
 } */
 
 /* BOOK */
-
-
 
 .books {
   display: flex;

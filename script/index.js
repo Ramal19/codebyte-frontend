@@ -16,8 +16,6 @@
 
 
 
-let searchInp = document.getElementById("search-inp");
-let searchIcon = document.getElementById("search-icon");
 let scrollBtn = document.getElementById("scrollBtn");
 const exitBtn = document.getElementById("exitBtn")
 const timerModal = document.querySelector(".timer-fade")
@@ -107,16 +105,7 @@ scrollBtn.addEventListener("click", () => {
     });
 })
 
-searchInp.addEventListener("input", () => {
 
-    if (searchInp.value != "") {
-
-        searchIcon.style.display = "inline-block";
-    } else {
-
-        searchIcon.style.display = "none";
-    }
-})
 let slideBox = document.querySelector(".slide-box");
 
 let slideFirst = `
@@ -761,14 +750,39 @@ async function loadPosts() {
             const lessonCard = document.querySelectorAll(".lesson-card")
 
 
-            lessonCard.forEach(card => {
-                card.addEventListener("click", () => {
+            let searchInp = document.getElementById("search-inp");
+            let searchIcon = document.getElementById("search-icon");
+
+            searchInp.addEventListener("input", () => {
+
+                if (searchInp.value == "") {
+
+                    lessonCard.forEach(element => {
+                        element.style.display = "flex";
+                    });
+                }
+
+                if (searchInp.value != "") {
+
+                    searchIcon.style.display = "inline-block";
+                } else {
+
+                    searchIcon.style.display = "none";
+                }
+            })
+
+            searchIcon.addEventListener("click", () => {
 
 
-                })
-            });
+                if (searchInp.value.trim() !== "") {
+                    localStorage.setItem("searchValue", searchInp.value);
+                    window.location.href = "./document/search.html"
+                }
+            })
 
-            if (postsDiv.children.length > 5) {
+
+
+            if (postsDiv.children.length > 4) {
                 postsDiv.style.cssText =
                     `
                  overflow-X: scroll;
@@ -809,16 +823,8 @@ async function loadPosts() {
                     })
                 })
 
-                // btnLeft.innerHTML = `<i class="bi bi-arrow-left"></i>`
-                // btnRight.innerHTML = `<i class="bi bi-arrow-right"></i>`
-
-                // btnLeft.classList.add("btn-left");
-                // btnRight.classList.add("btn-right");
-
                 btnDirection.appendChild(btnLeft);
                 btnDirection.appendChild(btnRight);
-
-
 
             }
 
@@ -1019,3 +1025,7 @@ buttons.forEach((btn, index) => {
         }
     });
 });
+
+
+
+
