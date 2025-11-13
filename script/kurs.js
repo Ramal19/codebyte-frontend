@@ -1,5 +1,7 @@
 const loginBtn = document.getElementById("login");
 const registerBtn = document.getElementById("register");
+const logo = document.querySelector(".logo");
+
 
 loginBtn.onclick = () => {
     window.location.href = "../document/login.html"
@@ -11,6 +13,9 @@ registerBtn.onclick = () => {
 
 const API_URL = "https://codebyte-backend-ibyq.onrender.com";
 
+logo.addEventListener("click", () => {
+    window.location.href = "../index.html";
+});
 
 const postsDiv = document.getElementById("posts");
 const btnDirection = document.querySelector(".btn-direction")
