@@ -665,13 +665,13 @@ async function loadPosts() {
                             logForm = null
                         })
 
-                        let logformBlurDiv = document.querySelector(".logform-blurDiv");
+                        // let logformBlurDiv = document.querySelector(".logform-blurDiv");
 
-                        logformBlurDiv.addEventListener("click", () => {
+                        // logformBlurDiv.addEventListener("click", () => {
 
-                            document.body.removeChild(logForm)
-                            logForm = null
-                        })
+                        //     document.body.removeChild(logForm)
+                        //     logForm = null
+                        // })
 
                         const form = document.getElementById("loginForm");
                         form.addEventListener("submit", async (e) => {
