@@ -58,7 +58,7 @@ exitBtn.addEventListener("click", () => {
 
 locationCourse.onclick = () => {
 
-    window.location.href = "../document/kurs.html"
+    window.location.href = "./document/kurs.html"
     localStorage.setItem("locationCourse", "true");
 }
 
@@ -604,11 +604,135 @@ async function loadPosts() {
                 </div>
           `;
 
+            let logForm = null;
 
 
             div.addEventListener("click", () => {
-                localStorage.setItem("selectedPost", JSON.stringify(p));
-                window.location.href = "./document/video.html";
+
+
+                if (userData || logData) {
+                    // console.log("Qeydiyyatdan kecilib");
+                    localStorage.setItem("selectedPost", JSON.stringify(p));
+                    window.location.href = "./document/video.html";
+                } else {
+
+                    // console.log("Qeydiyyatdan kecilmiyib");
+
+
+                    if (logForm === null) {
+                        logForm = document.createElement("div");
+                        logForm.classList.add("logform-blurDiv");
+
+                        logForm.innerHTML =
+                            `
+                        <div class="container-logForm">
+                            <div class="content">
+                            <img src="./image/CodeByte.png"/>
+                              <form id="loginForm" class="content__form">
+                                <div class="content__inputs">
+                                  <label>
+                                    <input class="input" name="username" type="text" id="username-inp" required="">
+                                    <span>Username</span>
+                                  </label>
+                                  <label>
+                                    <input required="" class="input" name="password" type="password" id="password-inp">
+                                    <span>Password</span>
+                                  </label>
+                                </div>
+                                <button>Daxil ol</button>
+                              </form>
+                              <div class="content__or-text">
+                                <span></span>
+                                <span>Və ya</span>
+                                <span></span>
+                              </div>
+                              <div class="content__forgot-buttons">
+                                
+                                <button class="exit-logForm">Cancel</button>
+                              </div>
+                            </div>
+                        </div>
+                        `
+                        document.body.style.overflow = "hidden";
+
+                        document.body.appendChild(logForm)
+
+                        let exitLogForm = document.querySelector(".exit-logForm");
+
+                        exitLogForm.addEventListener("click", () => {
+
+                            document.body.removeChild(logForm)
+                            logForm = null
+                        })
+
+                        let logformBlurDiv = document.querySelector(".logform-blurDiv");
+
+                        logformBlurDiv.addEventListener("click", () => {
+
+                            document.body.removeChild(logForm)
+                            logForm = null
+                        })
+
+                        const form = document.getElementById("loginForm");
+                        form.addEventListener("submit", async (e) => {
+                            e.preventDefault();
+
+                            localStorage.setItem("selectedPost", JSON.stringify(p));
+
+
+                            const user = document.getElementById("username-inp").value;
+                            const pass = document.getElementById("password-inp").value
+
+
+                            if (user === "codebyte-admin@site.az" && pass === "admin123") {
+                                window.location.href = "../a1d2m3i4n5P1a2n3e4l5.html"
+                            }
+
+                            console.log(user);
+
+
+                            const data = {
+                                username: form.username.value,
+                                password: form.password.value
+                            };
+                            const res = await fetch(`${API_URL}/login`, {
+                                method: "POST",
+                                headers: { "Content-Type": "application/json" },
+                                body: JSON.stringify(data)
+                            });
+                            const json = await res.json();
+                            if (res.ok) {
+                                localStorage.setItem("token", json.token);
+                                localStorage.setItem("loginUser", JSON.stringify({
+                                    username: data.username,
+                                    // email: json.email
+                                }));
+
+                                // document.getElementById("msg").innerText = "Giriş uğurludur!";
+
+                                Swal.fire({
+                                    title: "Giriş uğurludur!",
+                                    icon: "success",
+                                }).then((result) => {
+                                    if (result.isConfirmed || result.dismiss === Swal.DismissReason.backdrop) {
+
+                                        console.log("İstifadəçi OK düyməsini kliklədi");
+
+                                        window.location.href = "./document/video.html";
+                                    }
+                                });
+
+                            } else {
+                                // document.getElementById("msg").innerText = json.message;
+                                alert(json.message)
+                            }
+                        });
+
+                    }
+
+
+
+                }
             });
 
             postsDiv.appendChild(div);
@@ -637,6 +761,12 @@ async function loadPosts() {
             const lessonCard = document.querySelectorAll(".lesson-card")
 
 
+            lessonCard.forEach(card => {
+                card.addEventListener("click", () => {
+
+
+                })
+            });
 
             if (postsDiv.children.length > 5) {
                 postsDiv.style.cssText =

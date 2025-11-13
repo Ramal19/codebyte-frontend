@@ -5,6 +5,81 @@
   box-sizing: border-box;
 }
 
+body {
+
+  position: relative;
+}
+
+body>.menu-div {
+
+  position: fixed;
+  top: 0;
+  z-index: 10000;
+  width: 100%;
+  height: 100vh;
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(10px);
+  box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.menu-div>.menu-item {
+
+  width: 50%;
+  height: 100%;
+  background-color: #fff;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px;
+}
+
+.menu-item>#closeMenu {
+
+  font-size: 18px;
+  background-color: #fff;
+  border-radius: 9999px;
+  width: 40px;
+  height: 40px;
+  position: absolute;
+  top: 20px;
+  right: -60px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.menu-item>button {
+
+  background-color: transparent;
+  border: none;
+  font-size: 18px;
+  color: #2da0fd;
+  font-weight: 700;
+  text-align: left;
+}
+
+.menu-item>.user-info-menu {
+
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.user-info-menu>.profil-img-menu {
+
+  width: 50px;
+  height: 50px;
+  background-color: #1c1d1f;
+  color: #fff;
+  font-size: 18px;
+  border-radius: 9999px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
 header {
 
@@ -121,7 +196,9 @@ li>a:hover {
   font-size: 24px;
 }
 
-
+.navbar>.responsive {
+  display: none;
+}
 
 .registration-part>.login-button {
   position: relative;
@@ -277,6 +354,11 @@ li>a:hover {
   transition: box-shadow 0.2s ease-in;
 }
 
+.navbar>.menu {
+
+  display: none;
+}
+
 .container {
 
   width: 100%;
@@ -359,7 +441,7 @@ li>a:hover {
   overflow: hidden;
   position: relative;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
+  /* -webkit-line-clamp: 2; */
   text-overflow: ellipsis;
 }
 
@@ -455,4 +537,58 @@ span:nth-child(4) {
 
   background-color: #2d9ffd1e;
 
+}
+
+@media (max-width: 600px) {
+
+
+  .navbar>.menu {
+
+    display: block;
+  }
+
+  .menu>.bi-list {
+
+    font-size: 24px;
+  }
+
+  header>.navbar {
+
+    display: flex;
+    justify-content: space-between;
+    padding: 0 20px;
+  }
+
+  .navbar>.logo {
+
+    margin-left: 30px;
+  }
+
+  header>.navbar>ul {
+
+    display: none;
+  }
+
+  header>.navbar>.registration-part {
+
+    display: none;
+  }
+
+  header>.navbar>.search-bar,
+  .add {
+
+    display: none;
+  }
+
+  header>.navbar>.responsive {
+
+    display: flex;
+    gap: 10px;
+  }
+
+  header>.navbar>.responsive>.bi-search,
+  .bi-cart {
+
+    font-size: 20px;
+  }
 }
