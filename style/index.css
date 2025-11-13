@@ -1222,7 +1222,8 @@ li>a:hover {
   cursor: pointer;
 }
 
-@media (min-width: 481px) and (max-width: 767px) {
+@media (max-width: 600px) {
+
 
   .navbar>.menu {
 
