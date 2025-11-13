@@ -1289,7 +1289,7 @@ li>a:hover {
     position: static;
   }
 
-  .slide-box>.slide-box-res{
+  .slide-box>.slide-box-res {
 
     background-color: transparent;
     height: 200px;
@@ -1377,5 +1377,28 @@ li>a:hover {
     right: 15px;
     font-size: 32px;
     color: #fff;
+  }
+
+  .timer-left>.timer-img-box>#timer-foto {
+
+    width: 91%;
+    height: 250px;
+  }
+
+  .timer-modal>.timer-right {
+
+    width: 100%;
+  }
+
+  .timer-modal>.timer-right>h1 {
+
+    font-size: 24px;
+  }
+
+  .timer-modal>.timer-right>#locationCourse {
+
+    width: 95%;
+    height: 50px;
+    padding: 0;
   }
 }

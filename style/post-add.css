@@ -47,7 +47,7 @@ body {
     margin: 50px auto;
     padding: 40px;
     border-radius: 15px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
     text-align: center;
 }
 
@@ -139,9 +139,8 @@ button:active {
 #courseCoverPreview {
     margin-top: 15px;
     border-radius: 10px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
-
 
 @media (max-width: 600px) {
     .navbar {
@@ -178,9 +177,8 @@ button:active {
         padding: 10px;
     }
 
-    input[type="text"], select {
+    input[type="text"],
+    select {
         font-size: 14px;
     }
 }
-
-

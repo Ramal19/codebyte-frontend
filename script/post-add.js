@@ -1,4 +1,3 @@
-
 const API_URL = "https://codebyte-backend-ibyq.onrender.com";
 const token = localStorage.getItem("token");
 if (!token) {
@@ -9,16 +8,39 @@ if (!token) {
 const logo = document.querySelector(".logo")
 
 logo.addEventListener("click", () => {
-
   window.location.href = "../index.html"
 })
-
 
 const addMoreVideoBtn = document.getElementById("addMoreVideo");
 const videosContainer = document.getElementById("videosContainer");
 const uploadCourseBtn = document.getElementById("uploadCourseBtn");
 const courseCoverInput = document.getElementById("courseCover");
 const courseCoverPreview = document.getElementById("courseCoverPreview");
+
+const MAX_VIDEO_SIZE = 100 * 1024 * 1024; // 100 MB
+const MAX_IMAGE_SIZE = 5 * 1024 * 1024;   // 5 MB
+
+courseCoverInput.addEventListener("change", () => {
+  const file = courseCoverInput.files[0];
+  if (!file) return;
+
+  if (file.size > MAX_IMAGE_SIZE) {
+    Swal.fire({
+      icon: "error",
+      title: "Şəkil çox böyükdür!",
+      text: "Maksimum ölçü 5 MB ola bilər.",
+    });
+    courseCoverInput.value = "";
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = e => {
+    courseCoverPreview.src = e.target.result;
+    courseCoverPreview.style.visibility = "visible";
+  };
+  reader.readAsDataURL(file);
+});
 
 addMoreVideoBtn.addEventListener("click", () => {
   const div = document.createElement("div");
@@ -30,17 +52,33 @@ addMoreVideoBtn.addEventListener("click", () => {
     <input type="text" class="videoTitle" placeholder="Videonun başlığı">
   `;
   videosContainer.appendChild(div);
-});
 
-courseCoverInput.addEventListener("change", () => {
-  const file = courseCoverInput.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = e => {
-    courseCoverPreview.src = e.target.result;
-    courseCoverPreview.style.visibility = "visible";
-  };
-  reader.readAsDataURL(file);
+  const videoInput = div.querySelector(".videoInput");
+  const thumbInput = div.querySelector(".thumbInput");
+
+  videoInput.addEventListener("change", () => {
+    const file = videoInput.files[0];
+    if (file && file.size > MAX_VIDEO_SIZE) {
+      Swal.fire({
+        icon: "warning",
+        title: "Video çox böyükdür!",
+        text: "Maksimum ölçü 100 MB ola bilər.",
+      });
+      videoInput.value = "";
+    }
+  });
+
+  thumbInput.addEventListener("change", () => {
+    const file = thumbInput.files[0];
+    if (file && file.size > MAX_IMAGE_SIZE) {
+      Swal.fire({
+        icon: "warning",
+        title: "Şəkil çox böyükdür!",
+        text: "Maksimum ölçü 5 MB ola bilər.",
+      });
+      thumbInput.value = "";
+    }
+  });
 });
 
 uploadCourseBtn.addEventListener("click", async () => {
@@ -59,15 +97,35 @@ uploadCourseBtn.addEventListener("click", async () => {
     Swal.fire({
       title: "Yüklənir...",
       html: "Sorğunuzu emal edərkən bir az gözləyin.",
-      allowOutsideClick: false, 
-      allowEscapeKey: false,   
+      allowOutsideClick: false,
+      allowEscapeKey: false,
       showConfirmButton: false
     });
 
     const videoFile = div.querySelector(".videoInput").files[0];
     const thumbFile = div.querySelector(".thumbInput").files[0];
     const videoTitle = div.querySelector(".videoTitle").value.trim();
+
     if (!videoFile || !thumbFile || !videoTitle) return;
+
+    if (videoFile.size > MAX_VIDEO_SIZE) {
+      Swal.fire({
+        icon: "error",
+        title: "Video çox böyükdür!",
+        text: "Maksimum ölçü 100 MB ola bilər.",
+      });
+      return;
+    }
+
+    if (thumbFile.size > MAX_IMAGE_SIZE) {
+      Swal.fire({
+        icon: "error",
+        title: "Şəkil çox böyükdür!",
+        text: "Maksimum ölçü 5 MB ola bilər.",
+      });
+      return;
+    }
+
     videos.push({ videoFile, thumbFile, videoTitle });
   });
 
@@ -75,8 +133,6 @@ uploadCourseBtn.addEventListener("click", async () => {
     alert("Ən azı bir video əlavə edin!");
     return;
   }
-
-
 
   const formData = new FormData();
   formData.append("text", title);
@@ -89,6 +145,7 @@ uploadCourseBtn.addEventListener("click", async () => {
   });
 
   formData.append("videoTitles", JSON.stringify(videos.map(v => v.videoTitle)));
+
   console.log("formData-nın bütün elementləri:");
   for (const pair of formData.entries()) {
     console.log(pair[0], pair[1]);
@@ -108,13 +165,22 @@ uploadCourseBtn.addEventListener("click", async () => {
     }
 
     const data = await res.json();
+    Swal.close();
+    Swal.fire({
+      icon: "success",
+      title: "Kurs uğurla əlavə olundu!",
+      showConfirmButton: false,
+      timer: 2000
+    });
 
-    alert("Kurs uğurla əlavə olundu!");
-
-    // console.log("Yeni kurs:", data);
     window.location.href = "../index.html";
   } catch (error) {
-    alert("Xəta baş verdi: " + error.message);
+    Swal.close();
+    Swal.fire({
+      icon: "error",
+      title: "Xəta baş verdi!",
+      text: error.message,
+    });
     console.error(error);
   }
 });
