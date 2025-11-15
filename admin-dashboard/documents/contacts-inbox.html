@@ -49,9 +49,7 @@
 
         .message-card.unread {
             border-left: 5px solid #dc3545;
-            /* Oxunmamış mesajlar üçün qırmızı xətt */
             background-color: #fff8f8;
-            /* Açıq qırmızı fon */
         }
 
         .message-card:hover {
@@ -87,6 +85,21 @@
             font-weight: 600;
             margin-right: 5px;
         }
+
+        /* Əlavə olunmuş email link stili */
+        .email-link {
+            color: #1a73e8;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .email-link:hover {
+            color: #0d47a1;
+            text-decoration: underline;
+        }
+
+        /* End Email Link Style */
 
         .message-content {
             margin-top: 15px;
@@ -152,7 +165,6 @@
             padding: 40px;
             color: #6c757d;
             grid-column: 1 / -1;
-            /* Bütün sütunları əhatə etsin */
         }
 
         .error {
@@ -174,6 +186,7 @@
 
     <script>
         const API_BASE_URL = "https://codebyte-backend-ibyq.onrender.com";
+        // 🚨 Düzəliş: Kontakt API URL-i serverdəki kimi /api/contact ilə təyin olundu.
         const CONTACTS_API_URL = `${API_BASE_URL}/api/contact`;
 
         const messagesList = document.getElementById("messages-list");
@@ -210,7 +223,7 @@
             } else if (!isRead) {
                 newReadMessages = readMessages.filter(msgId => msgId !== id);
             } else {
-                return; 
+                return;
             }
 
             localStorage.setItem(READ_MESSAGES_KEY, JSON.stringify(newReadMessages));
@@ -236,7 +249,8 @@
                     <h2>${contact.name} ${contact.surname} <span>${formattedDate}</span></h2>
                     
                     <div class="contact-info">
-                        <strong>Email:</strong> ${contact.email}<br>
+                        <strong>Email:</strong> 
+                        <a href="mailto:${contact.email}" class="email-link">${contact.email}</a><br> 
                         <strong>Telefon:</strong> 
                         <a href="tel:${contact.phone || 'N/A'}" class="phone-link">
                             ${contact.phone || 'N/A'}
@@ -264,6 +278,7 @@
 
         async function fetchContacts() {
             try {
+                // GET sorğusu düzgündür: /api/contact
                 const response = await fetch(CONTACTS_API_URL);
 
                 if (!response.ok) {
@@ -279,7 +294,7 @@
             } catch (error) {
                 console.error("Kontaktları yükləyərkən xəta:", error);
                 messagesList.innerHTML = `<div id="status-message" class="error">
-                    Mesajlar yüklənə bilmədi. ${error.message}. Serverdə '/contacts' GET marşrutunu yoxlayın.
+                    Mesajlar yüklənə bilmədi. ${error.message}. Serverdə '/api/contact' GET marşrutunu yoxlayın.
                 </div>`;
             }
         }
@@ -294,7 +309,8 @@
             }
 
             try {
-                const response = await fetch(`${API_BASE_URL}/contacts/${id}`, {
+                // 🚨 Düzəliş: İndi URL düzgündür: /api/contact/ID
+                const response = await fetch(`${CONTACTS_API_URL}/${id}`, {
                     method: 'DELETE',
                     headers: {
                         "Authorization": `Bearer ${token}`
@@ -327,7 +343,8 @@
             }
 
             try {
-                const response = await fetch(`${API_BASE_URL}/contacts/${id}/status`, {
+                // 🚨 Düzəliş: İndi URL düzgündür: /api/contact/ID/status
+                const response = await fetch(`${CONTACTS_API_URL}/${id}/status`, {
                     method: 'PATCH',
                     headers: {
                         "Content-Type": "application/json",
