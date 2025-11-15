@@ -1,69 +1,66 @@
 const regUser = localStorage.getItem("registeredUser");
 const loginUser = localStorage.getItem("loginUser");
 
-
 if (regUser || loginUser) {
-    alert("Siz artiq qeydiyyatdan kecmisiniz!")
-    window.location.href = "../index.html"
+    alert("Siz artıq daxil olmusunuz!");
+    window.location.href = "../index.html";
 }
 
 const API_URL = "https://codebyte-backend-ibyq.onrender.com"
 
-const userInp = document.getElementById("username-inp")
-
 const form = document.getElementById("loginForm");
+
 form.addEventListener("submit", async (e) => {
     e.preventDefault();
-
-    const user = document.getElementById("username-inp").value;
-    const pass = document.getElementById("password-inp").value
-
-
-    // if (user === "codebyte-admin@site.az" && pass === "admin123") {
-    //     window.location.href = "../admin-dashboard/documents/a1d2m3i4n5P1a2n3e4l5.html"
-    // }
-
-
 
     const data = {
         username: form.username.value,
         password: form.password.value
     };
-    const res = await fetch(`${API_URL}/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data)
-    });
-    const json = await res.json();
-    if (res.ok) {
-        localStorage.setItem("token", json.token);
-        localStorage.setItem("loginUser", JSON.stringify({
-            username: data.username,
-            // email: json.email
-        }));
 
-        // document.getElementById("msg").innerText = "Giriş uğurludur!";
-
-        Swal.fire({
-            title: "Giriş uğurludur!",
-            icon: "success",
-        }).then((result) => {
-            if (result.isConfirmed || result.dismiss === Swal.DismissReason.backdrop) {
-
-                console.log("İstifadəçi OK düyməsini kliklədi");
-
-                window.location.href = "../index.html";
-            }
+    try {
+        const res = await fetch(`${API_URL}/login`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data)
         });
 
-    } else {
-        // document.getElementById("msg").innerText = json.message;
-        alert(json.message)
+        const json = await res.json();
+
+        if (res.ok) {
+
+            localStorage.setItem("token", json.token);
+
+            localStorage.setItem("loginUser", JSON.stringify({
+                username: data.username,
+                role: json.role
+            }));
+
+            Swal.fire({
+                title: "Giriş uğurludur!",
+                icon: "success",
+            }).then((result) => {
+                if (result.isConfirmed || result.dismiss === Swal.DismissReason.backdrop) {
+
+                    if (json.role === "admin") {
+                        window.location.href = "../admin-dashboard/documents/a1d2m3i4n5P1a2n3e4l5.html";
+                    } else {
+                        window.location.href = "../index.html";
+                    }
+                }
+            });
+
+        } else {
+            // Giriş uğursuz olarsa, serverdən gələn xəta mesajını göstər
+            alert(json.message);
+        }
+    } catch (error) {
+        console.error("Giriş prosesində kritik xəta:", error);
+        alert("Server ilə əlaqə qurularkən xəta baş verdi.");
     }
 });
 
-
-
+// --- UI İdarəetmə Kodları ---
 
 const inputs = document.querySelectorAll(".input");
 const icons = document.querySelectorAll(".icon");
@@ -98,6 +95,3 @@ icons.forEach((el, index) => {
         }
     })
 });
-
-
-

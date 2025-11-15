@@ -1,3 +1,9 @@
+const token = localStorage.getItem("token");
+if (!token) {
+    alert("Əvvəlcə login olmalısınız");
+    window.location.href = "../../document/login.html";
+}
+
 const users = document.querySelector(".users")
 const contacts = document.querySelector(".contacts")
 
@@ -12,7 +18,7 @@ contacts.addEventListener("click", () => {
 const API_BASE_URL = "https://codebyte-backend-ibyq.onrender.com";
 const USERS_API_URL = `${API_BASE_URL}/users`;
 const CONTACTS_API_URL = `${API_BASE_URL}/api/contact`;
-const READ_MESSAGES_KEY = 'readContacts'; 
+const READ_MESSAGES_KEY = 'readContacts';
 
 let allUsers = [];
 let usersLength = document.getElementById("usersLength")

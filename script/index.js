@@ -1,21 +1,3 @@
-// // Data göndərmək (POST)
-// fetch("http://localhost:5000/api/users", {
-//     method: "POST",
-//     headers: {"Content-Type": "application/json"},
-//     body: JSON.stringify({name: "Ramil", age: 67})
-// })
-// .then(res => res.json())
-// .then(data => console.log(data));
-
-// fetch("http://localhost:5000/api/users")
-// .then(res => res.json())
-// .then(data => console.log(data));
-
-// Məsələn: sən about.html-də olsan
-// window.history.pushState({}, "", "/index");
-
-
-
 let scrollBtn = document.getElementById("scrollBtn");
 const exitBtn = document.getElementById("exitBtn")
 const timerModal = document.querySelector(".timer-fade")
@@ -131,11 +113,9 @@ let slideSecond = `
 let arr = [slideFirst, slideSecond];
 let index = 0;
 
-// Slaydı göstərmək və butona event bağlamaq üçün funksiya
 function showSlide(i) {
     slideBox.innerHTML = arr[i];
 
-    // Slayd yükləndikdən sonra butonu seçirik
     let beginButton = slideBox.querySelector(".begin-button");
     beginButton.addEventListener("click", () => {
         window.scrollTo({
@@ -145,10 +125,8 @@ function showSlide(i) {
     });
 }
 
-// İlk slaydı göstəririk
 showSlide(index);
 
-// Avtomatik dəyişmə
 setInterval(() => {
     index++;
     if (index > arr.length - 1) {
@@ -216,17 +194,102 @@ cartIcon.addEventListener("mouseout", () => {
 
 
 const userData = localStorage.getItem("registeredUser");
+const logData = localStorage.getItem("loginUser");
+
+// const API_URL = "https://codebyte-backend-ibyq.onrender.com";
+const USERS_API_URL = `${API_URL}/users`;
+
+
+let allUsers = [];
+let adminButtonCreated = false;
+
+async function fetchUsers() {
+    let currentUser = null;
+    if (logData) {
+        try {
+            currentUser = JSON.parse(logData);
+        } catch (e) {
+            console.error("Local Storage-da loginUser JSON formatında deyil:", e);
+        }
+    } else if (userData) {
+        try {
+            currentUser = JSON.parse(userData);
+        } catch (e) {
+            console.error("Local Storage-da registeredUser JSON formatında deyil:", e);
+        }
+    }
+
+    if (currentUser && currentUser.role === "admin") {
+
+        if (!adminButtonCreated) {
+
+            let button = document.createElement("button");
+            button.textContent = "Location";
+
+            button.addEventListener("click", () => {
+                window.location.href = "./admin-dashboard/documents/a1d2m3i4n5P1a2n3e4l5.html";
+            });
+
+            if (regPart) {
+                regPart.appendChild(button);
+                adminButtonCreated = true;
+            }
+        }
+        return;
+    }
+
+    try {
+        const response = await fetch(USERS_API_URL);
+
+        if (!response.ok) {
+            throw new Error(`HTTP xətası! Status: ${response.status}`);
+        }
+
+        allUsers = await response.json();
+
+        const isAdmin = allUsers.some(el => {
+            return (userData || logData) && el.username === currentUser?.username && el.role === "admin";
+        });
+
+        if (isAdmin && !adminButtonCreated) {
+            let button = document.createElement("button");
+            button.textContent = "Location";
+
+            button.addEventListener("click", () => {
+                window.location.href = "./admin-dashboard/documents/a1d2m3i4n5P1a2n3e4l5.html";
+            });
+
+            if (regPart) {
+                regPart.appendChild(button);
+                adminButtonCreated = true;
+            }
+        }
+
+    } catch (error) {
+        console.error("İstifadəçi məlumatları gətirilərkən xəta:", error);
+    }
+}
+
+fetchUsers();
+
 
 if (userData) {
+
     const user = JSON.parse(userData);
+
+    if (user.role === "admin") {
+        console.log("Bu hesab admine aiddir");
+
+    }
+
+    console.log(user.role);
+
 
     registerBtn.style.display = "none";
     loginBtn.style.display = "none";
-
-
     const userInfo = document.createElement("div");
-    const postAdd = document.createElement("button");
-    const postManage = document.createElement("button");
+
+
     userInfo.id = "userInfo";
     userInfo.innerHTML =
         `
@@ -234,19 +297,9 @@ if (userData) {
         </div>
     `
 
-    postAdd.textContent = "Post Add";
-    postAdd.id = "postAdd";
-
-    postManage.textContent = "Post Manage";
-    postManage.id = "postManage"
 
     regPart.appendChild(userInfo)
-    regPart.appendChild(postAdd)
-    regPart.appendChild(postManage)
-    postAdd.addEventListener("click", () => {
 
-        window.location.href = "./document/post-add.html"
-    })
     let userDiv = document.createElement("div");
     userDiv.classList.add("user-div");
     userDiv.innerHTML =
@@ -259,9 +312,26 @@ if (userData) {
                 <p>${user.email}</p>
             </div>
         </div>
-        <button id="logOut"><i class="bi bi-box-arrow-right"></i> Log Out</button>
+        <button id="postAdd"><i class="bi bi-plus-square"></i> Kurs Paylaş</button>
+        <button id="postManage"><i class="bi bi-view-list"></i> Ümumi Kurslar</button>
+        <button id="logOut"><i class="bi bi-box-arrow-right"></i> Çıxış et</button>
     `
+
     regPart.appendChild(userDiv);
+
+    const postAdd = document.getElementById("postAdd");
+    const postManage = document.createElement("postManage");
+
+
+    postAdd.addEventListener("click", () => {
+
+        window.location.href = "./document/post-add.html"
+    })
+
+    postManage.addEventListener("click", () => {
+
+        window.location.href = "./document/post-manage.html"
+    })
 
     const profilImg = document.querySelectorAll(".profil-img")
 
@@ -298,7 +368,6 @@ if (userData) {
         window.location.reload();
         userDiv.style.display = "none";
     })
-
 } else {
     registerBtn.addEventListener("click", () => {
         window.location.href = "./document/register.html";
@@ -309,12 +378,15 @@ if (userData) {
     })
 }
 
-const logData = localStorage.getItem("loginUser");
-
 
 if (logData) {
 
     const user = JSON.parse(logData);
+
+    const currentUser = user.username || "E-poct tapilmadi!";
+
+    // console.log(currentUser);
+
 
     registerBtn.style.display = "none";
     loginBtn.style.display = "none";
@@ -331,6 +403,42 @@ if (logData) {
 
     regPart.appendChild(userInfo)
 
+    let allUsers = [];
+    let userMail = null;
+
+    async function fetchUsers() {
+        try {
+            const response = await fetch(USERS_API_URL);
+
+
+            if (!response.ok) {
+                throw new Error(`HTTP xətası! Status: ${response.status}`);
+            }
+
+            allUsers = await response.json();
+
+
+            allUsers.forEach(el => {
+
+                if (logData) {
+                    if (user.username === currentUser) {
+                        userMail = el.email
+                    }
+                }
+            })
+
+        } catch (error) {
+            console.error("İstifadəçi məlumatları gətirilərkən xəta:", error);
+        }
+    }
+
+    fetchUsers();
+
+    console.log(user.role);
+    
+    console.log(userMail);
+    
+
     let userDiv = document.createElement("div");
     userDiv.classList.add("user-div");
     userDiv.innerHTML =
@@ -340,7 +448,7 @@ if (logData) {
             </div>
             <div>
                 <h3>${user.username}</h3>
-                <p>${user.email}</p>
+                <p>${userMail}</p>
             </div>
         </div>
         <button id="postAdd"><i class="bi bi-plus-square"></i> Kurs Paylaş</button>

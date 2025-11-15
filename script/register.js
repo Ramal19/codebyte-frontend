@@ -2,158 +2,120 @@ const regUser = localStorage.getItem("registeredUser");
 const loginUser = localStorage.getItem("loginUser");
 
 if (regUser || loginUser) {
-    alert("Siz artiq qeydiyyatdan kecmisiniz!")
-    window.location.href = "../index.html"
+    alert("Siz artıq qeydiyyatdan keçmisiniz!");
+    window.location.href = "../index.html";
 }
 
 const API_URL = "https://codebyte-backend-ibyq.onrender.com"
 
 const form = document.getElementById("regForm");
+
 form.addEventListener("submit", async (e) => {
     e.preventDefault();
+
     const data = {
         username: form.username.value,
         email: form.email.value,
         password: form.password.value
     };
-    const res = await fetch(`${API_URL}/register`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data)
-    });
-    const json = await res.json();
-    // document.getElementById("msg").innerText = json.message;
 
-    let iconType = "error";
-    if (json.message === "Qeydiyyat uğurla tamamlandı") {
-        iconType = "success";
-    }
+    try {
+        const res = await fetch(`${API_URL}/register`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data)
+        });
 
-    Swal.fire({
-        title: json.message,
-        icon: iconType,
-    }).then((result) => {
-        if (iconType === "success" && result.isConfirmed || result.dismiss === Swal.DismissReason.backdrop) {
-            console.log("İstifadəçi OK düyməsini kliklədi");
-            window.location.href = "../index.html";
+        const json = await res.json();
+
+        let iconType = "error";
+        const isSuccess = json.message && json.message.toLowerCase().includes("uğur");
+
+        if (isSuccess) {
+            iconType = "success";
+
+            localStorage.setItem("token", json.token);
+
+            localStorage.setItem("registeredUser", JSON.stringify({
+                username: data.username,
+                email: data.email,
+                role: data.role
+            }));
+
         }
-    });
 
+        Swal.fire({
+            title: json.message,
+            icon: iconType,
+        }).then((result) => {
+            if (isSuccess && (result.isConfirmed || result.dismiss === Swal.DismissReason.backdrop)) {
+                console.log("Qeydiyyat uğurlu oldu, ana səhifəyə yönləndirilir.");
+                window.location.href = "../index.html";
+            }
+        });
 
-    if (json.message && json.message.toLowerCase().includes("uğur")) {
-        localStorage.setItem("registeredUser", JSON.stringify({
-            username: data.username,
-            email: data.email
-        }));
+    } catch (error) {
+        console.error("Qeydiyyat prosesində kritik xəta:", error);
+        Swal.fire({
+            title: "Xəta!",
+            text: "Server ilə əlaqə qurularkən xəta baş verdi.",
+            icon: "error"
+        });
     }
-
 });
 
-// FRONTEND
 
 const inputs = document.querySelectorAll(".input");
 const icons = document.querySelectorAll(".icon");
 
-inputs.forEach((inp, index) => {
 
+inputs.forEach((inp, index) => {
     inp.addEventListener("click", () => {
-        if (index === 0) {
-            icons.forEach((el, index) => {
-                if (index === 0) {
-                    el.style.cssText = `font-size: 14px; transform: translateY(-25px); transition: all 0.3s ease;`
-                }
-            });
-        } else if (index === 1) {
-            icons.forEach((el, index) => {
-                if (index === 1) {
-                    el.style.cssText = `font-size: 14px; transform: translateY(-25px); transition: all 0.3s ease;`
-                }
-            });
-        } else {
-            icons.forEach((el, index) => {
-                if (index === 2) {
-                    el.style.cssText = `font-size: 14px; transform: translateY(-25px); transition: all 0.3s ease;`
-                }
-            });
+        if (icons[index]) {
+            icons[index].style.cssText = `font-size: 14px; transform: translateY(-25px); transition: all 0.3s ease;`;
         }
-    })
+    });
+
+    inp.addEventListener("focus", () => {
+        if (icons[index]) {
+            icons[index].style.cssText = `font-size: 14px; transform: translateY(-25px); transition: all 0.3s ease;`;
+        }
+    });
 });
 
 icons.forEach((el, index) => {
     el.addEventListener("click", () => {
-        if (index === 0) {
-            el.style.cssText = `font-size: 14px; transform: translateY(-25px); transition: all 0.3s ease;`
-            inputs.forEach((el, index) => {
-                if (index === 0) {
-                    el.focus()
-                }
-            })
-        } else {
-            el.style.cssText = `font-size: 14px; transform: translateY(-25px); transition: all 0.3s ease;`
-            inputs.forEach((el, index) => {
-                if (index === 1) {
-                    el.focus()
-                }
-            })
+        el.style.cssText = `font-size: 14px; transform: translateY(-25px); transition: all 0.3s ease;`;
+        if (inputs[index]) {
+            inputs[index].focus();
         }
-    })
+    });
 });
+
+
 
 let eye = document.querySelector(".bi-eye-fill");
 let eyeClose = document.querySelector(".bi-eye-slash-fill")
+const passwordInput = inputs[2]; 
 
-eyeClose.style.display = "none";
+if (eyeClose) {
+    eyeClose.style.display = "none";
+}
 
-eye.addEventListener("click", () => {
+if (eye) {
+    eye.addEventListener("click", () => {
+        passwordInput.type = "text";
 
-    inputs.forEach((el, index) => {
+        eye.style.display = "none";
+        eyeClose.style.display = "inline-block";
+    });
+}
 
-        if (index === 2) {
-            if (el.type = "password") {
-                el.type = "text"
-                eye.style.display = "none"
-                eyeClose.style.display = "inline-block"
-            }
-        }
-    })
-})
+if (eyeClose) {
+    eyeClose.addEventListener("click", () => {
+        passwordInput.type = "password";
 
-eyeClose.addEventListener("click", () => {
-
-    inputs.forEach((el, index) => {
-        if (index === 2) {
-            if (el.type = "text") {
-                el.type = "password"
-                eye.style.display = "inline-block"
-                eyeClose.style.display = "none"
-            }
-        }
-    })
-})
-
-
-
-inputs.forEach((inp, index) => {
-
-    inp.addEventListener("focus", () => {
-        if (index === 0) {
-            icons.forEach((el, index) => {
-                if (index === 0) {
-                    el.style.cssText = `font-size: 14px; transform: translateY(-25px); transition: all 0.3s ease;`
-                }
-            });
-        } else if (index === 1) {
-            icons.forEach((el, index) => {
-                if (index === 1) {
-                    el.style.cssText = `font-size: 14px; transform: translateY(-25px); transition: all 0.3s ease;`
-                }
-            });
-        } else {
-            icons.forEach((el, index) => {
-                if (index === 2) {
-                    el.style.cssText = `font-size: 14px; transform: translateY(-25px); transition: all 0.3s ease;`
-                }
-            });
-        }
-    })
-});
+        eye.style.display = "inline-block";
+        eyeClose.style.display = "none";
+    });
+}
