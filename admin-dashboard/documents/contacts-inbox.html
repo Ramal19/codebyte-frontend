@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="az">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gələn Mesajlar Paneli</title>
+    <style>
+        /* --- Əsas Stiller --- */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #e9ecef;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #1a73e8;
+            margin-bottom: 40px;
+            font-weight: 600;
+        }
+
+        /* --- Mesaj Siyahısı Stilleri --- */
+        #messages-list {
+            display: grid;
+            gap: 25px;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        }
+
+        /* --- Mesaj Kartı Stili --- */
+        .message-card {
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 25px;
+            border-left: 5px solid #1a73e8;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+            position: relative;
+        }
+
+        .message-card.unread {
+            border-left: 5px solid #dc3545;
+            /* Oxunmamış mesajlar üçün qırmızı xətt */
+            background-color: #fff8f8;
+            /* Açıq qırmızı fon */
+        }
+
+        .message-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .message-card h2 {
+            margin: 0 0 10px 0;
+            font-size: 1.2em;
+            color: #333;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .message-card h2 span {
+            font-weight: 400;
+            font-size: 0.8em;
+            color: #6c757d;
+        }
+
+        .contact-info {
+            font-size: 0.9em;
+            color: #6c757d;
+            margin-bottom: 15px;
+            border-bottom: 1px dashed #eee;
+            padding-bottom: 10px;
+        }
+
+        .contact-info strong {
+            color: #1a73e8;
+            font-weight: 600;
+            margin-right: 5px;
+        }
+
+        .message-content {
+            margin-top: 15px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 6px;
+            white-space: pre-wrap;
+            border: 1px solid #dee2e6;
+            min-height: 80px;
+        }
+
+        .message-content p {
+            margin: 0;
+            font-size: 0.95em;
+        }
+
+        .card-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+            padding-top: 10px;
+            border-top: 1px solid #eee;
+        }
+
+        /* --- Düymə Stilleri --- */
+        .action-btn {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background-color 0.3s ease;
+        }
+
+        .delete-btn {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .delete-btn:hover {
+            background-color: #c82333;
+        }
+
+        .read-btn {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .read-btn.unread-status {
+            background-color: #ffc107;
+            color: #333;
+        }
+
+        .read-btn:hover {
+            opacity: 0.9;
+        }
+
+        /* --- Yüklənmə və Xəta Stilleri --- */
+        #status-message {
+            text-align: center;
+            font-size: 1.1em;
+            padding: 40px;
+            color: #6c757d;
+            grid-column: 1 / -1;
+            /* Bütün sütunları əhatə etsin */
+        }
+
+        .error {
+            color: #dc3545;
+            font-weight: 600;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>Gələn Mesajlar Qutusu</h1>
+
+        <div id="messages-list">
+            <div id="status-message">Məlumatlar yüklənir...</div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE_URL = "https://codebyte-backend-ibyq.onrender.com";
+        const CONTACTS_API_URL = `${API_BASE_URL}/api/contact`;
+
+        const messagesList = document.getElementById("messages-list");
+
+        const READ_MESSAGES_KEY = 'readContacts';
+
+        function formatDateTime(isoString) {
+            try {
+                const date = new Date(isoString);
+                const options = {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                };
+                return date.toLocaleDateString('az-AZ', options);
+            } catch (e) {
+                return "Tarix məlum deyil";
+            }
+        }
+
+        function isMessageRead(id) {
+            const readMessages = JSON.parse(localStorage.getItem(READ_MESSAGES_KEY) || '[]');
+            return readMessages.includes(id);
+        }
+
+        function updateReadStatusInLocalStorage(id, isRead) {
+            const readMessages = JSON.parse(localStorage.getItem(READ_MESSAGES_KEY) || '[]');
+            let newReadMessages;
+
+            if (isRead && !readMessages.includes(id)) {
+                newReadMessages = [...readMessages, id];
+            } else if (!isRead) {
+                newReadMessages = readMessages.filter(msgId => msgId !== id);
+            } else {
+                return; 
+            }
+
+            localStorage.setItem(READ_MESSAGES_KEY, JSON.stringify(newReadMessages));
+        }
+
+        function renderMessages(messages) {
+            if (messages.length === 0) {
+                messagesList.innerHTML = `<div id="status-message">Hələlik heç bir yeni mesaj yoxdur.</div>`;
+                return;
+            }
+
+            messagesList.innerHTML = '';
+
+            messages.forEach(contact => {
+                const card = document.createElement('div');
+
+                const isRead = contact.isRead || isMessageRead(contact.id);
+                card.className = `message-card ${isRead ? '' : 'unread'}`;
+
+                const formattedDate = formatDateTime(contact.createdAt);
+
+                card.innerHTML = `
+                    <h2>${contact.name} ${contact.surname} <span>${formattedDate}</span></h2>
+                    
+                    <div class="contact-info">
+                        <strong>Email:</strong> ${contact.email}<br>
+                        <strong>Telefon:</strong> 
+                        <a href="tel:${contact.phone || 'N/A'}" class="phone-link">
+                            ${contact.phone || 'N/A'}
+                        </a>
+                    </div>
+                    
+                    <div class="message-content">
+                        <p>${contact.message}</p>
+                    </div>
+                    
+                    <div class="card-actions">
+                        <button class="action-btn delete-btn" data-id="${contact.id}">Sil</button>
+                        <button class="action-btn read-btn ${isRead ? '' : 'unread-status'}" data-id="${contact.id}" data-is-read="${isRead}">
+                            ${isRead ? 'Oxunmuş' : 'Oxunmadı'}
+                        </button>
+                    </div>
+                `;
+
+                card.querySelector('.delete-btn').addEventListener('click', (e) => deleteContact(e.target.dataset.id));
+                card.querySelector('.read-btn').addEventListener('click', (e) => toggleReadStatus(e.target.dataset.id, e.target));
+
+                messagesList.appendChild(card);
+            });
+        }
+
+        async function fetchContacts() {
+            try {
+                const response = await fetch(CONTACTS_API_URL);
+
+                if (!response.ok) {
+                    throw new Error(`Serverdən HTTP xətası! Status: ${response.status}`);
+                }
+
+                const contacts = await response.json();
+
+                contacts.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+                renderMessages(contacts);
+
+            } catch (error) {
+                console.error("Kontaktları yükləyərkən xəta:", error);
+                messagesList.innerHTML = `<div id="status-message" class="error">
+                    Mesajlar yüklənə bilmədi. ${error.message}. Serverdə '/contacts' GET marşrutunu yoxlayın.
+                </div>`;
+            }
+        }
+
+        async function deleteContact(id) {
+            if (!confirm("Bu mesajı silmək istədiyinizə əminsiniz?")) return;
+
+            const token = localStorage.getItem('token');
+            if (!token) {
+                alert("Silmə əməliyyatı üçün giriş tokeni tələb olunur!");
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/contacts/${id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        "Authorization": `Bearer ${token}`
+                    }
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json().catch(() => ({ message: "Bilinməyən server xətası." }));
+                    throw new Error(errorData.message || "Silinmə uğursuz oldu!");
+                }
+
+                alert("Mesaj uğurla silindi!");
+                updateReadStatusInLocalStorage(id, false);
+                fetchContacts();
+
+            } catch (error) {
+                alert(`Mesaj silinə bilmədi: ${error.message}`);
+                console.error("Silmə xətası:", error);
+            }
+        }
+
+        async function toggleReadStatus(id, buttonElement) {
+            const currentStatus = buttonElement.dataset.isRead === 'true';
+            const newStatus = !currentStatus;
+
+            const token = localStorage.getItem('token');
+            if (!token) {
+                alert("Statusu dəyişmək üçün giriş tokeni tələb olunur!");
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/contacts/${id}/status`, {
+                    method: 'PATCH',
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ isRead: newStatus })
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json().catch(() => ({ message: "Bilinməyən server xətası." }));
+                    throw new Error(errorData.message || "Status yenilənmədi!");
+                }
+
+                updateReadStatusInLocalStorage(id, newStatus);
+
+                const card = buttonElement.closest('.message-card');
+                if (newStatus) {
+                    card.classList.remove('unread');
+                    buttonElement.textContent = 'Oxunmuş';
+                    buttonElement.classList.remove('unread-status');
+                } else {
+                    card.classList.add('unread');
+                    buttonElement.textContent = 'Oxunmadı';
+                    buttonElement.classList.add('unread-status');
+                }
+                buttonElement.dataset.isRead = newStatus;
+
+            } catch (error) {
+                alert(`Status dəyişmədi: ${error.message}`);
+                console.error("Status xətası:", error);
+            }
+        }
+
+        fetchContacts();
+    </script>
+</body>
+
+</html>

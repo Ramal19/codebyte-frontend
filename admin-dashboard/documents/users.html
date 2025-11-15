@@ -217,7 +217,7 @@
                 }
 
                 allUsers = await response.json();
-                applyFilters(); // Məlumat gələn kimi filterləri tətbiq et
+                applyFilters(); 
 
             } catch (error) {
                 console.error("Məlumat gətirilərkən xəta:", error);
@@ -230,6 +230,8 @@
         }
 
         function displayUsers(users) {
+            console.log(users.length);
+            
             tableBody.innerHTML = "";
 
             if (users.length === 0) {
@@ -245,7 +247,7 @@
                     user.username, 
                     user.email, 
                     user.role, 
-                    null // Əməliyyat üçün boş yer
+                    null 
                 ];
 
                 data.forEach((value, colIndex) => {
@@ -256,11 +258,11 @@
                         cell.textContent = value;
                     }
 
-                    if (colIndex === 3) { // Role sütunu
+                    if (colIndex === 3) {
                         cell.classList.add(getRoleClass(user.role));
                     }
 
-                    if (colIndex === 4) { // Əməliyyat sütunu (Sil düyməsi)
+                    if (colIndex === 4) { 
                         const deleteBtn = document.createElement("button");
                         deleteBtn.textContent = "Sil";
                         deleteBtn.classList.add("delete-btn");
@@ -324,11 +326,9 @@
             displayUsers(filteredUsers);
         }
 
-        // Event listenerləri
         searchInput.addEventListener("input", applyFilters);
         roleFilter.addEventListener("change", applyFilters);
 
-        // İstifadəçiləri yüklə
         fetchUsers();
     </script>
 </body>
