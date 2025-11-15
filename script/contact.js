@@ -66,7 +66,7 @@ document.getElementById("sendBtn").addEventListener("click", async () => {
     }
 
     try {
-        const res = await fetch("https://codebyte-backend-ibyq.onrender.com/contact", {
+        const res = await fetch("https://codebyte-backend-ibyq.onrender.com/contacts", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ name, surname, email, phone, message }),
