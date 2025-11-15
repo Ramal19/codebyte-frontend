@@ -20,7 +20,7 @@ form.addEventListener("submit", async (e) => {
 
 
     if (user === "codebyte-admin@site.az" && pass === "admin123") {
-        window.location.href = "./admin-dasboard/a1d2m3i4n5P1a2n3e4l5.html"
+        window.location.href = "./admin-dasboard/documents/a1d2m3i4n5P1a2n3e4l5.html"
     }
 
     console.log(user);
