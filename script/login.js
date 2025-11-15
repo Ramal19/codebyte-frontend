@@ -19,11 +19,10 @@ form.addEventListener("submit", async (e) => {
     const pass = document.getElementById("password-inp").value
 
 
-    if (user === "codebyte-admin@site.az" && pass === "admin123") {
-        window.location.href = "../admin-dashboard/documents/a1d2m3i4n5P1a2n3e4l5.html"
-    }
+    // if (user === "codebyte-admin@site.az" && pass === "admin123") {
+    //     window.location.href = "../admin-dashboard/documents/a1d2m3i4n5P1a2n3e4l5.html"
+    // }
 
-    console.log(user);
 
 
     const data = {

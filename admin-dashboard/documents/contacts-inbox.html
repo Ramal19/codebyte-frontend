@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gələn Mesajlar Paneli</title>
     <style>
-        /* --- Əsas Stiller --- */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
@@ -29,14 +28,12 @@
             font-weight: 600;
         }
 
-        /* --- Mesaj Siyahısı Stilleri --- */
         #messages-list {
             display: grid;
             gap: 25px;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
         }
 
-        /* --- Mesaj Kartı Stili --- */
         .message-card {
             background-color: #ffffff;
             border-radius: 10px;
@@ -86,7 +83,6 @@
             margin-right: 5px;
         }
 
-        /* Əlavə olunmuş email link stili */
         .email-link {
             color: #1a73e8;
             text-decoration: none;
@@ -98,8 +94,6 @@
             color: #0d47a1;
             text-decoration: underline;
         }
-
-        /* End Email Link Style */
 
         .message-content {
             margin-top: 15px;
@@ -125,7 +119,6 @@
             border-top: 1px solid #eee;
         }
 
-        /* --- Düymə Stilleri --- */
         .action-btn {
             padding: 8px 15px;
             border: none;
@@ -158,7 +151,6 @@
             opacity: 0.9;
         }
 
-        /* --- Yüklənmə və Xəta Stilleri --- */
         #status-message {
             text-align: center;
             font-size: 1.1em;
@@ -186,7 +178,6 @@
 
     <script>
         const API_BASE_URL = "https://codebyte-backend-ibyq.onrender.com";
-        // 🚨 Düzəliş: Kontakt API URL-i serverdəki kimi /api/contact ilə təyin olundu.
         const CONTACTS_API_URL = `${API_BASE_URL}/api/contact`;
 
         const messagesList = document.getElementById("messages-list");
@@ -278,7 +269,6 @@
 
         async function fetchContacts() {
             try {
-                // GET sorğusu düzgündür: /api/contact
                 const response = await fetch(CONTACTS_API_URL);
 
                 if (!response.ok) {
@@ -309,7 +299,6 @@
             }
 
             try {
-                // 🚨 Düzəliş: İndi URL düzgündür: /api/contact/ID
                 const response = await fetch(`${CONTACTS_API_URL}/${id}`, {
                     method: 'DELETE',
                     headers: {
@@ -343,7 +332,6 @@
             }
 
             try {
-                // 🚨 Düzəliş: İndi URL düzgündür: /api/contact/ID/status
                 const response = await fetch(`${CONTACTS_API_URL}/${id}/status`, {
                     method: 'PATCH',
                     headers: {
