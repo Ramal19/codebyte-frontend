@@ -52,7 +52,7 @@ async function loadPosts() {
 loadPosts();
 
 
-let unreadMessagesLength = document.querySelector(".contacts")
+let unreadMessagesLength = document.getElementById("unreadMessagesLength")
 
 function isMessageRead(id) {
     const readMessages = JSON.parse(localStorage.getItem(READ_MESSAGES_KEY) || '[]');
