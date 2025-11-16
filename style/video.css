@@ -62,3 +62,25 @@ header>.navbar {
     height: 720px;
     background-color: #000;
 }
+
+.thumbs {
+
+    width: calc(100% - 1280px);
+    background-color: red;
+    margin-top: 60px;
+}
+
+.thumbs>div{
+
+    width: 100%;
+    display: flex;
+    background-color: #fff;
+    border-bottom: 1px solid #f0f0ff;
+    padding: 5px;
+}
+
+.thumbs>div>img {
+
+    width: 100px;
+    border-radius: 7px;
+}

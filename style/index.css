@@ -971,6 +971,7 @@ li>a:hover {
   border-radius: 7px;
   border: 1px solid #ccc;
   padding: 10px 20px;
+  line-height: 0;
 
 }
 
@@ -994,11 +995,12 @@ li>a:hover {
   flex-direction: column;
   align-items: left;
   gap: 5px;
+  /* margin-top: -20px; */
   /* background-color: #f0c040; */
+  line-height: 8px;
 }
 
 .card-text>h2 {
-
   width: 100%;
   min-height: 70px;
 }
@@ -1280,6 +1282,7 @@ li>a:hover {
   align-items: center;
   background: rgba(255, 255, 255, 0.6);
   backdrop-filter: blur(10px);
+  line-height: 0;
 }
 
 .content i {

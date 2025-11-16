@@ -1,6 +1,13 @@
+
 const API_URL = "https://codebyte-backend-ibyq.onrender.com";
 
 const post = JSON.parse(localStorage.getItem("selectedPost"));
+
+
+console.log(post.videos[0].duration);
+
+
+
 if (!post) {
     document.body.innerHTML = "<h3>Kurs tapılmadı</h3>";
 } else {
@@ -14,24 +21,22 @@ if (!post) {
     }
 
     post.videos.forEach((v, i) => {
+
+        
+        
         const div = document.createElement("div");
+
+        const coverUrl = post.videoCovers[i] || post.courseCover;
+
+        const titleText = post.videoTitles[i] || "Başlıq yoxdur";
 
         div.innerHTML =
             `
-            // DÜZƏLİŞ: Artıq tam URL gəlir
-            <img class="img" src ="${post.videoCovers[i] || post.courseCover}">
-            <h2>${post.videoTitles[i]}</h2> 
-        `
+            <img class="img" src ="${coverUrl}">
+            <h2>${titleText}</h2> 
+            
+          `;
 
-        div.style.cssText =
-            `
-            margin-top: 60px;
-            width: 300px;
-            height: 150px;
-            background-color: red;
-            display: flex;
-            gap:10px;
-        `
 
         div.addEventListener("click", () => {
             video.src = v;
@@ -48,6 +53,6 @@ logo.addEventListener("click", () => {
     window.location.href = "../index.html"
 })
 
-window.addEventListener("beforeunload", () => {
-    localStorage.removeItem("selectedPost");
-});
+// window.addEventListener("beforeunload", () => {
+//     localStorage.removeItem("selectedPost");
+// });

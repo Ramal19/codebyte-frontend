@@ -18,7 +18,7 @@ const courseCoverInput = document.getElementById("courseCover");
 const courseCoverPreview = document.getElementById("courseCoverPreview");
 
 const MAX_VIDEO_SIZE = 100 * 1024 * 1024; // 100 MB
-const MAX_IMAGE_SIZE = 5 * 1024 * 1024;   // 5 MB
+const MAX_IMAGE_SIZE = 5 * 1024 * 1024;   // 5 MB
 
 courseCoverInput.addEventListener("change", () => {
   const file = courseCoverInput.files[0];
@@ -47,10 +47,10 @@ addMoreVideoBtn.addEventListener("click", () => {
   div.className = "video-item";
   div.innerHTML =
     `
-    <input type="file" class="videoInput" accept="video/*">
-    <input type="file" class="thumbInput" accept="image/*">
-    <input type="text" class="videoTitle" placeholder="Videonun başlığı">
-  `;
+    <input type="file" class="videoInput" accept="video/*">
+    <input type="file" class="thumbInput" accept="image/*">
+    <input type="text" class="videoTitle" placeholder="Videonun başlığı">
+  `;
   videosContainer.appendChild(div);
 
   const videoInput = div.querySelector(".videoInput");
@@ -87,52 +87,70 @@ uploadCourseBtn.addEventListener("click", async () => {
   const cover = courseCoverInput.files[0];
 
   if (!title || !category || !cover) {
-    alert("Bütün məlumatları doldurun!");
+    Swal.fire({ icon: "warning", title: "Diqqət", text: "Kurs başlığı, kateqoriya və əsas şəkil mütləqdir!" });
     return;
   }
 
   const videos = [];
+  let allValid = true; // Bütün videoların düzgün doldurulduğunu yoxlamaq üçün bayraq
+
   document.querySelectorAll(".video-item").forEach(div => {
-
-    Swal.fire({
-      title: "Yüklənir...",
-      html: "Sorğunuzu emal edərkən bir az gözləyin.",
-      allowOutsideClick: false,
-      allowEscapeKey: false,
-      showConfirmButton: false
-    });
-
     const videoFile = div.querySelector(".videoInput").files[0];
     const thumbFile = div.querySelector(".thumbInput").files[0];
     const videoTitle = div.querySelector(".videoTitle").value.trim();
 
-    if (!videoFile || !thumbFile || !videoTitle) return;
+    // Yoxlama: Əgər video elementləri yaranıbsa, mütləq doldurulmalıdır
+    if (!videoFile || !thumbFile || !videoTitle) {
+      // Bu hissəni doldurmaq mütləqdirsə
+      if (div.querySelector(".videoInput").value || div.querySelector(".thumbInput").value || videoTitle) {
+        Swal.fire({
+          icon: "error",
+          title: "Doldurulmamış sahə!",
+          text: "Əlavə etdiyiniz bütün videoların faylları (video və şəkil) və başlıqları olmalıdır."
+        });
+        allValid = false;
+        return; // Yalnız bu forEach iterasiyasını atlayır
+      }
+      return; // Tamamilə boş elementləri atlayır
+    }
 
+    // Ölçü yoxlamaları (əvvəlki kimi)
     if (videoFile.size > MAX_VIDEO_SIZE) {
-      Swal.fire({
-        icon: "error",
-        title: "Video çox böyükdür!",
-        text: "Maksimum ölçü 100 MB ola bilər.",
-      });
+      Swal.fire({ icon: "error", title: "Video çox böyükdür!", text: "Maksimum ölçü 100 MB ola bilər." });
+      allValid = false;
       return;
     }
 
     if (thumbFile.size > MAX_IMAGE_SIZE) {
-      Swal.fire({
-        icon: "error",
-        title: "Şəkil çox böyükdür!",
-        text: "Maksimum ölçü 5 MB ola bilər.",
-      });
+      Swal.fire({ icon: "error", title: "Şəkil çox böyükdür!", text: "Maksimum ölçü 5 MB ola bilər." });
+      allValid = false;
       return;
     }
 
     videos.push({ videoFile, thumbFile, videoTitle });
   });
 
-  if (videos.length === 0) {
-    alert("Ən azı bir video əlavə edin!");
+  // Əgər hər hansı bir video yoxlanışdan keçmədisə, funksiyanı dayandır
+  if (!allValid) {
     return;
   }
+
+  if (videos.length === 0) {
+    Swal.fire({ icon: "warning", title: "Diqqət", text: "Ən azı bir video əlavə edin!" });
+    return;
+  }
+
+  // 💡 DÜZƏLİŞ: Yüklənmə pəncərəsini datanı topladıqdan sonra açırıq
+  Swal.fire({
+    title: "Yüklənir...",
+    html: "Fayllar Firebase Storage-ə yüklənir. Bir az gözləyin.",
+    allowOutsideClick: false,
+    allowEscapeKey: false,
+    showConfirmButton: false,
+    willOpen: () => {
+      Swal.showLoading();
+    }
+  });
 
   const formData = new FormData();
   formData.append("text", title);
@@ -148,7 +166,8 @@ uploadCourseBtn.addEventListener("click", async () => {
 
   console.log("formData-nın bütün elementləri:");
   for (const pair of formData.entries()) {
-    console.log(pair[0], pair[1]);
+    // Faylları console.log etmək düzgün deyil, əvəzinə fayl adını göstərək
+    console.log(pair[0], (pair[1] instanceof File) ? pair[1].name : pair[1]);
   }
 
   try {
@@ -158,14 +177,20 @@ uploadCourseBtn.addEventListener("click", async () => {
       body: formData
     });
 
+    Swal.close(); // Yüklənmə bitdi, pəncərəni bağla
+
     if (!res.ok) {
-      const err = await res.json().catch(() => ({ message: "Kurs yüklənmədi" }));
-      alert("Xəta: " + err.message);
+      const err = await res.json().catch(() => ({ message: "Bilinməyən Server Xətası" }));
+      Swal.fire({
+        icon: "error",
+        title: "Xəta!",
+        text: "Kurs yüklənmədi: " + err.message
+      });
       return;
     }
 
     const data = await res.json();
-    Swal.close();
+
     Swal.fire({
       icon: "success",
       title: "Kurs uğurla əlavə olundu!",
@@ -178,9 +203,9 @@ uploadCourseBtn.addEventListener("click", async () => {
     Swal.close();
     Swal.fire({
       icon: "error",
-      title: "Xəta baş verdi!",
-      text: error.message,
+      title: "Əlaqə xətası!",
+      text: "Serverə qoşularkən xəta baş verdi: " + error.message,
     });
-    console.error(error);
+    console.error("Əlaqə xətası:", error);
   }
 });
