@@ -66,46 +66,71 @@ li>a:hover {
     color: #2da0fd;
 }
 
-.navbar>.search-bar {
-
-    width: 350px;
-    height: 38px;
-    display: flex;
-    gap: 10px;
+.ui-input-container {
+    position: relative;
+    width: 400px;
 }
 
-.search-bar>.search-button {
-
-    display: none;
-    border: none;
-    background-color: transparent;
-    cursor: pointer;
-    padding: 0px 10px;
-    border-radius: 7px;
-    background-color: #2da0fd;
-}
-
-.search-bar>.search-button>.bi-search {
-
-    font-size: 20px;
-    color: #fff;
-}
-
-.search-bar>input {
-
+.ui-input {
     width: 100%;
-    height: 100%;
-    border: 2px solid #ccc;
-    border-radius: 7px;
+    padding: 10px 10px 10px 40px;
+    font-size: 1em;
+    border: none;
+    border-bottom: 2px solid #ccc;
     outline: none;
-    padding-left: 10px;
-    font-size: 16px;
+    background-color: transparent;
+    transition: border-color 0.3s;
 }
 
-.search-bar>input::placeholder {
+.ui-input:focus {
+    border-color: #2da0fd;
+}
 
-    color: #ccc;
-    font-weight: 500;
+.ui-input-underline {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 2px;
+    width: 100%;
+    background-color: #2da0fd;
+    transform: scaleX(0);
+    transition: transform 0.3s;
+}
+
+.ui-input:focus+.ui-input-underline {
+    transform: scaleX(1);
+}
+
+.ui-input-highlight {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 100%;
+    width: 0;
+    background-color: #2d9ffd19;
+    transition: width 0.3s;
+}
+
+.ui-input:focus~.ui-input-highlight {
+    width: 100%;
+}
+
+.ui-input-icon {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #999;
+    transition: color 0.3s;
+}
+
+.ui-input:focus~.ui-input-icon {
+    color: #2da0fd;
+}
+
+.ui-input-icon svg {
+    width: 20px;
+    height: 20px;
 }
 
 .registration-part>.login-button {

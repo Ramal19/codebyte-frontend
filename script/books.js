@@ -38,10 +38,26 @@ searchBtn.addEventListener("click", () => {
 
 searchInp.addEventListener("input", () => {
 
-    if (searchInp.value == "" ) {
-        
+    if (searchInp.value == "") {
+
         bookCard.forEach(element => {
             element.style.display = "flex";
         });
+    }
+})
+
+
+let searchIcon = document.getElementById("search-icon");
+let searchInpNavbar = document.getElementById("search-inp");
+
+
+searchIcon.addEventListener("click", () => {
+
+
+    if (searchInpNavbar.value.trim() !== "") {
+        localStorage.setItem("searchValue", searchInpNavbar.value);
+        window.location.href = "./search.html"
+        console.log("Input bos deyil");
+
     }
 })

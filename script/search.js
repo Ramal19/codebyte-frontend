@@ -11,7 +11,7 @@ const API_URL = "https://codebyte-backend-ibyq.onrender.com";
 
 searchInp.value = localStorage.getItem("searchValue") || "";
 
-searchBtn.style.display = searchInp.value !== "" ? "block" : "none";
+// searchBtn.style.display = searchInp.value !== "" ? "block" : "none";
 
 function showUserPanel(user, storageKey) {
     registerBtn.style.display = "none";
@@ -116,7 +116,7 @@ function searchCard() {
 searchInp.addEventListener("input", () => {
     const query = searchInp.value.trim();
     localStorage.setItem("searchValue", query);
-    searchBtn.style.display = query ? "inline-block" : "none";
+    // searchBtn.style.display = query ? "inline-block" : "none";
 });
 
 searchBtn.addEventListener("click", () => {
@@ -217,6 +217,7 @@ function showLoginModal(p) {
     <div class="container-logForm">
       <div class="content">
         <img src="../image/CodeByte.png"/>
+        <h2 style="margin-bottom: 20px;">İzləmək üçün qeydiyyatdan keçməlisiniz!</h2>
         <form id="loginForm" class="content__form">
           <div class="content__inputs">
             <label><input class="input" name="username" type="text" id="username-inp" required><span>Username</span></label>
@@ -225,6 +226,7 @@ function showLoginModal(p) {
           <button>Daxil ol</button>
         </form>
         <div class="content__forgot-buttons">
+          <span>Hesabınız yoxdurmu ? <a href="./register.html">Qeydiyyatdan keçin.</a></span>
           <button class="exit-logForm">Cancel</button>
         </div>
       </div>

@@ -196,7 +196,6 @@ cartIcon.addEventListener("mouseout", () => {
 const userData = localStorage.getItem("registeredUser");
 const logData = localStorage.getItem("loginUser");
 
-// const API_URL = "https://codebyte-backend-ibyq.onrender.com";
 const USERS_API_URL = `${API_URL}/users`;
 
 
@@ -435,9 +434,9 @@ if (logData) {
     fetchUsers();
 
     console.log(user.role);
-    
+
     console.log(userMail);
-    
+
 
     let userDiv = document.createElement("div");
     userDiv.classList.add("user-div");
@@ -532,6 +531,7 @@ menuBtn.addEventListener("click", () => {
                 <span id="closeMenu" class="forClose"><i class="bi bi-x"></i></span>
                 <button id="loginWithMenu">Daxil olun</button>
                 <button id="regWithMenu">Qeydiyyat</button>
+                <button id="toContact"><i class="bi bi-chat-left-text"></i> Əlaqə</button>
             </div>
         `
 
@@ -554,6 +554,7 @@ menuBtn.addEventListener("click", () => {
 
         let loginWithMenu = document.getElementById("loginWithMenu");
         let regWithMenu = document.getElementById("regWithMenu");
+        let toContact = document.getElementById("toContact")
 
         loginWithMenu.addEventListener("click", () => {
 
@@ -566,6 +567,11 @@ menuBtn.addEventListener("click", () => {
             window.location.href = "./document/register.html"
         })
 
+        toContact.addEventListener("click", () => {
+
+            window.location.href = "./document/contact.html"
+        })
+
         if (logData) {
 
             const user = JSON.parse(logData);
@@ -573,6 +579,16 @@ menuBtn.addEventListener("click", () => {
 
             loginWithMenu.style.display = "none";
             regWithMenu.style.display = "none";
+
+            let shortUsername;
+
+            if (user.username.length > 15) {
+                shortUsername = user.username.slice(0, 15) + "...";
+
+            } else {
+
+                shortUsername = user.username;
+            }
 
             menuDiv.innerHTML =
                 `
@@ -583,13 +599,14 @@ menuBtn.addEventListener("click", () => {
                         ${user.username[0]}
                     </div>
                     <div>
-                        <h3>${user.username}</h3>
+                        <h3>${shortUsername}</h3>
                         <p>${user.email}</p>
                     </div>
                 </div>
                 <button id="postAddMenu"><i class="bi bi-plus-square"></i> Kurs Paylaş</button>
                 <button id="postManageMenu"><i class="bi bi-view-list"></i> Ümumi Kurslar</button>
                 <button id="logOutMenu"><i class="bi bi-box-arrow-right"></i> Çıxış et</button>
+                <button id="toContact"><i class="bi bi-chat-left-text"></i> Əlaqə</button>
             </div>
         `
 
@@ -608,6 +625,13 @@ menuBtn.addEventListener("click", () => {
 
                 window.location.href = "./document/post-add.html";
             })
+
+            toContact.addEventListener("click", () => {
+
+                window.location.href = "./document/contact.html"
+            })
+
+            
         }
 
         if (userData) {
@@ -845,6 +869,11 @@ async function loadPosts() {
                     return;
                 }
 
+                if (!logData) {
+                    alert("Əvvəlcə daxil olmalısan!");
+                    return;
+                }
+
                 const res = await fetch(`${API_URL}/wishlist/${postId}`, {
                     method: "POST",
                     headers: { Authorization: `Bearer ${token}` },
@@ -858,26 +887,9 @@ async function loadPosts() {
             const lessonCard = document.querySelectorAll(".lesson-card")
 
 
-            let searchInp = document.getElementById("search-inp");
             let searchIcon = document.getElementById("search-icon");
 
-            searchInp.addEventListener("input", () => {
-
-                if (searchInp.value == "") {
-
-                    lessonCard.forEach(element => {
-                        element.style.display = "flex";
-                    });
-                }
-
-                if (searchInp.value != "") {
-
-                    searchIcon.style.display = "inline-block";
-                } else {
-
-                    searchIcon.style.display = "none";
-                }
-            })
+            
 
             searchIcon.addEventListener("click", () => {
 
