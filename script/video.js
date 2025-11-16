@@ -10,35 +10,31 @@ if (!post) {
     const list = document.getElementById("video-list");
 
     if (post.videos.length > 0) {
-        video.src = `${API_URL}/uploads/${post.videos[0]}`;
+        video.src = post.videos[0];
     }
 
     post.videos.forEach((v, i) => {
-        // const img = document.createElement("img");
-        // img.src = `http://localhost:3000/uploads/${post.videoCovers[i] || post.courseCover}`;
         const div = document.createElement("div");
 
         div.innerHTML =
             `
-            <img class="img" src ="${API_URL}/uploads/${post.videoCovers[i] || post.courseCover}">
-            <h2>${post.videoTitles}</h2>
-
-        `
-
-        // const img = document.querySelectorAll(".img");
+            // DÜZƏLİŞ: Artıq tam URL gəlir
+            <img class="img" src ="${post.videoCovers[i] || post.courseCover}">
+            <h2>${post.videoTitles[i]}</h2> 
+        `
 
         div.style.cssText =
             `
-            margin-top: 60px;
-            width: 300px;
-            height: 150px;
-            background-color: red;
-            display: flex;
-            gap:10px;
-        `
+            margin-top: 60px;
+            width: 300px;
+            height: 150px;
+            background-color: red;
+            display: flex;
+            gap:10px;
+        `
 
         div.addEventListener("click", () => {
-            video.src = `${API_URL}/uploads/${v}`;
+            video.src = v;
             video.play();
         });
         list.appendChild(div);
