@@ -56,3 +56,15 @@ logo.addEventListener("click", () => {
 // window.addEventListener("beforeunload", () => {
 //     localStorage.removeItem("selectedPost");
 // });
+
+// document.addEventListener('contextmenu', (event) => {
+//   // Prevent the default browser context menu from appearing
+//   event.preventDefault();
+
+//   // Your custom logic for the right-click event goes here
+//   console.log("Right-click detected!");
+
+//   // You can also access information about the event, like mouse coordinates
+//   console.log("X-coordinate:", event.clientX);
+//   console.log("Y-coordinate:", event.clientY);
+// });

@@ -1612,3 +1612,188 @@ li>a:hover {
     padding: 0;
   }
 }
+
+@media only screen and (max-width: 1200px) {
+
+
+  .navbar>.menu {
+
+    display: block;
+  }
+
+  .menu>.bi-list {
+
+    font-size: 24px;
+  }
+
+  header>.navbar {
+
+    display: flex;
+    justify-content: space-between;
+    padding: 0 20px;
+  }
+
+  .navbar>.logo {
+
+    margin-left: 30px;
+  }
+
+  header>.navbar>ul {
+
+    display: none;
+  }
+
+  header>.navbar>.registration-part {
+
+    display: none;
+  }
+
+  header>.navbar>.search-bar,
+  .add {
+
+    display: none;
+  }
+
+  .ui-input-container {
+    display: none;
+  }
+
+  header>.navbar>.responsive {
+
+    display: flex;
+    gap: 10px;
+  }
+
+  header>.navbar>.responsive>.bi-search,
+  .bi-cart {
+
+    font-size: 20px;
+  }
+
+  .container {
+
+    padding: 0 20px;
+    padding-top: 50px;
+  }
+
+  .main-section>.slide-box {
+
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    position: static;
+  }
+
+  .slide-box>.slide-box-res {
+
+    background-color: transparent;
+    height: 200px;
+  }
+
+  .slide-box-res>.img-text {
+
+    width: 100%;
+    position: static;
+  }
+
+  .img-text>h1 {
+
+    font-size: 24px;
+  }
+
+  .slide-box-res>.img-text-second {
+
+    width: 100%;
+    position: static;
+  }
+
+
+  .img-text-second>h1 {
+
+    font-size: 24px;
+  }
+
+  .scroller {
+
+    overflow-x: scroll;
+  }
+
+  .book-card>.button {
+    display: none;
+  }
+
+  .course-card-list {
+
+    padding: 20px 0;
+    overflow-x: scroll;
+  }
+
+  .course-card-list>.lesson-card {
+
+    width: 209px;
+    height: 337px;
+  }
+
+  .course-list>button {
+
+    width: 100px;
+    font-size: 14px;
+  }
+
+  .lesson-card>img {
+
+    width: 177px;
+    height: 155px;
+  }
+
+  .faq-part {
+
+    padding: 20px;
+  }
+
+
+  .timer-fade>.timer-modal {
+    position: absolute;
+    top: 100px;
+    left: 30px;
+    width: 480px;
+    height: 500px;
+    border-radius: 15px;
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 10px;
+  }
+
+  .timer-fade>#exitBtn {
+    position: absolute;
+    top: 100px;
+    right: 15px;
+    font-size: 32px;
+    color: #fff;
+  }
+
+  .timer-left>.timer-img-box>#timer-foto {
+
+    width: 91%;
+    height: 250px;
+  }
+
+  .timer-modal>.timer-right {
+
+    width: 100%;
+  }
+
+  .timer-modal>.timer-right>h1 {
+
+    font-size: 24px;
+  }
+
+  .timer-modal>.timer-right>#locationCourse {
+
+    width: 95%;
+    height: 50px;
+    padding: 0;
+  }
+}

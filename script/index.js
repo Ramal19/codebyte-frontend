@@ -1067,18 +1067,6 @@ async function loadPosts() {
 
                             localStorage.setItem("selectedPost", JSON.stringify(p));
 
-
-                            const user = document.getElementById("username-inp").value;
-                            const pass = document.getElementById("password-inp").value
-
-
-                            if (user === "codebyte-admin@site.az" && pass === "admin123") {
-                                window.location.href = "../a1d2m3i4n5P1a2n3e4l5.html"
-                            }
-
-                            console.log(user);
-
-
                             const data = {
                                 username: form.username.value,
                                 password: form.password.value
@@ -1127,7 +1115,7 @@ async function loadPosts() {
 
             const wishBtn = div.querySelector(".wish-btn");
             wishBtn.addEventListener("click", async (e) => {
-                e.stopPropagation(); // klik videoya yönəlməsin
+                e.stopPropagation();
                 const postId = wishBtn.dataset.id;
                 const token = localStorage.getItem("token");
 
@@ -1253,19 +1241,25 @@ buttons.forEach((btn, index) => {
                 return;
             }
 
+
             postsDiv.innerHTML = "";
             posts.reverse().forEach(p => {
                 if (index === 0) {
                     const div = document.createElement("div");
                     div.classList.add("lesson-card")
+
+                    let tarix = p.createdAt.slice(0, 10);
+                    let tersTarix = tarix.split("-").reverse().join("-");
+
                     div.innerHTML = `
-                                <img src="${API_URL}/uploads/${p.courseCover}" alt="Post şəkli">
-                                <div class="card-text">
-                                    <h3>${p.text || ""}</h3>
-                                    <span>${p.username}</span>
-                                    <button class="wish-btn" data-id="${p.id}">❤️ Wishlistə əlavə et</button>
-                                </div>
-                            `;
+                            <img src="${p.courseCover}" alt="Post şəkli">                 
+                            <div class="card-text">
+                                <h3>${p.text || ""}</h3>
+                                <span>${p.username}</span>
+                                <span>${tersTarix}</span>
+                                <button class="wish-btn" data-id="${p.id}">❤️ Wishlistə əlavə et</button>
+                            </div>
+                            `;
 
                     div.addEventListener("click", () => {
                         localStorage.setItem("selectedPost", JSON.stringify(p));
@@ -1278,13 +1272,20 @@ buttons.forEach((btn, index) => {
                     if (p.category === "JavaScript") {
                         const div = document.createElement("div");
                         div.classList.add("lesson-card")
+
+                        let tarix = p.createdAt.slice(0, 10);
+                        let tersTarix = tarix.split("-").reverse().join("-");
+
                         div.innerHTML = `
-                                <img src="${API_URL}/uploads/${p.courseCover}" alt="Post şəkli">
-                                <div class="card-text">
-                                    <h3>${p.text || ""}</h3>
-                                    <span>${p.username}</span>
-                                </div>
-                            `;
+                            <img src="${p.courseCover}" alt="Post şəkli">                 
+                            <div class="card-text">
+                                <h3>${p.text || ""}</h3>
+                                <span>${p.username}</span>
+                                <span>${tersTarix}</span>
+                                <button class="wish-btn" data-id="${p.id}">❤️ Wishlistə əlavə et</button>
+                            </div>
+                            `;
+
 
                         div.addEventListener("click", () => {
                             localStorage.setItem("selectedPost", JSON.stringify(p));
@@ -1299,13 +1300,20 @@ buttons.forEach((btn, index) => {
 
                         const div = document.createElement("div");
                         div.classList.add("lesson-card")
+
+                        let tarix = p.createdAt.slice(0, 10);
+                        let tersTarix = tarix.split("-").reverse().join("-");
+
                         div.innerHTML = `
-                                <img src="${API_URL}/uploads/${p.courseCover}" alt="Post şəkli">
-                                <div class="card-text">
-                                    <h3>${p.text || ""}</h3>
-                                    <span>${p.username}</span>
-                                </div>
-                            `;
+                            <img src="${p.courseCover}" alt="Post şəkli">                 
+                            <div class="card-text">
+                                <h3>${p.text || ""}</h3>
+                                <span>${p.username}</span>
+                                <span>${tersTarix}</span>
+                                <button class="wish-btn" data-id="${p.id}">❤️ Wishlistə əlavə et</button>
+                            </div>
+                            `;
+
 
                         div.addEventListener("click", () => {
                             localStorage.setItem("selectedPost", JSON.stringify(p));
@@ -1333,13 +1341,20 @@ buttons.forEach((btn, index) => {
                     if (p.category === "React JS") {
                         const div = document.createElement("div");
                         div.classList.add("lesson-card")
+
+                        let tarix = p.createdAt.slice(0, 10);
+                        let tersTarix = tarix.split("-").reverse().join("-");
+
                         div.innerHTML = `
-                                <img src="${API_URL}/uploads/${p.courseCover}" alt="Post şəkli">
-                                <div class="card-text">
-                                    <h3>${p.text || ""}</h3>
-                                    <span>${p.username}</span>
-                                </div>
-                            `;
+                            <img src="${p.courseCover}" alt="Post şəkli">                 
+                            <div class="card-text">
+                                <h3>${p.text || ""}</h3>
+                                <span>${p.username}</span>
+                                <span>${tersTarix}</span>
+                                <button class="wish-btn" data-id="${p.id}">❤️ Wishlistə əlavə et</button>
+                            </div>
+                            `;
+
 
                         div.addEventListener("click", () => {
                             localStorage.setItem("selectedPost", JSON.stringify(p));
@@ -1352,13 +1367,20 @@ buttons.forEach((btn, index) => {
                     if (p.category === "Python") {
                         const div = document.createElement("div");
                         div.classList.add("lesson-card")
+
+                        let tarix = p.createdAt.slice(0, 10);
+                        let tersTarix = tarix.split("-").reverse().join("-");
+
                         div.innerHTML = `
-                                <img src="${API_URL}/uploads/${p.courseCover}" alt="Post şəkli">
-                                <div class="card-text">
-                                    <h3>${p.text || ""}</h3>
-                                    <span>${p.username}</span>
-                                </div>
-                            `;
+                            <img src="${p.courseCover}" alt="Post şəkli">                 
+                            <div class="card-text">
+                                <h3>${p.text || ""}</h3>
+                                <span>${p.username}</span>
+                                <span>${tersTarix}</span>
+                                <button class="wish-btn" data-id="${p.id}">❤️ Wishlistə əlavə et</button>
+                            </div>
+                            `;
+
 
                         div.addEventListener("click", () => {
                             localStorage.setItem("selectedPost", JSON.stringify(p));
@@ -1371,13 +1393,20 @@ buttons.forEach((btn, index) => {
                     if (p.category === "Canva") {
                         const div = document.createElement("div");
                         div.classList.add("lesson-card")
+
+                        let tarix = p.createdAt.slice(0, 10);
+                        let tersTarix = tarix.split("-").reverse().join("-");
+
                         div.innerHTML = `
-                                <img src="${API_URL}/uploads/${p.courseCover}" alt="Post şəkli">
-                                <div class="card-text">
-                                    <h3>${p.text || ""}</h3>
-                                    <span>${p.username}</span>
-                                </div>
-                            `;
+                            <img src="${p.courseCover}" alt="Post şəkli">                 
+                            <div class="card-text">
+                                <h3>${p.text || ""}</h3>
+                                <span>${p.username}</span>
+                                <span>${tersTarix}</span>
+                                <button class="wish-btn" data-id="${p.id}">❤️ Wishlistə əlavə et</button>
+                            </div>
+                            `;
+
 
                         div.addEventListener("click", () => {
                             localStorage.setItem("selectedPost", JSON.stringify(p));
@@ -1390,13 +1419,20 @@ buttons.forEach((btn, index) => {
                     if (p.category === "Other") {
                         const div = document.createElement("div");
                         div.classList.add("lesson-card")
+
+                        let tarix = p.createdAt.slice(0, 10);
+                        let tersTarix = tarix.split("-").reverse().join("-");
+
                         div.innerHTML = `
-                                <img src="${API_URL}/uploads/${p.courseCover}" alt="Post şəkli">
-                                <div class="card-text">
-                                    <h3>${p.text || ""}</h3>
-                                    <span>${p.username}</span>
-                                </div>
-                            `;
+                            <img src="${p.courseCover}" alt="Post şəkli">                 
+                            <div class="card-text">
+                                <h3>${p.text || ""}</h3>
+                                <span>${p.username}</span>
+                                <span>${tersTarix}</span>
+                                <button class="wish-btn" data-id="${p.id}">❤️ Wishlistə əlavə et</button>
+                            </div>
+                            `;
+
 
                         div.addEventListener("click", () => {
                             localStorage.setItem("selectedPost", JSON.stringify(p));
