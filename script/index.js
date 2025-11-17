@@ -716,14 +716,17 @@ async function loadPosts() {
 
             let tarix = p.createdAt.slice(0, 10);
             let tersTarix = tarix.split("-").reverse().join("-");
+            let price = p.price || "pulsuz"
+                                // <span>${price} AZN</span>
 
             div.innerHTML = `
-                <img src="${p.courseCover}" alt="Post şəkli">                 <div class="card-text">
-                    <h3>${p.text || ""}</h3>
-                    <span>${p.username}</span>
-                    <span>${tersTarix}</span>
-                    <button class="wish-btn" data-id="${p.id}">❤️ Wishlistə əlavə et</button>
-                </div>
+                <img src="${p.courseCover}" alt="Post şəkli">                 
+                            <div class="card-text">
+                                <h3>${p.text || ""}</h3>
+                                <span>${p.username}</span>
+                                <span>${tersTarix}</span>
+                                <button class="wish-btn" data-id="${p.id}">❤️ Wishlistə əlavə et</button>
+                            </div>
           `;
 
             let logForm = null;
@@ -953,7 +956,7 @@ buttons.forEach((btn, index) => {
             const posts = await res.json();
 
 
-            if (!posts || posts.length === 0) {     
+            if (!posts || posts.length === 0) {
                 postsDiv.innerHTML = `
             <p 
                 style="
@@ -977,11 +980,14 @@ buttons.forEach((btn, index) => {
                     let tarix = p.createdAt.slice(0, 10);
                     let tersTarix = tarix.split("-").reverse().join("-");
 
+                    let price = p.price || "pulsuz"
+
                     div.innerHTML = `
                             <img src="${p.courseCover}" alt="Post şəkli">                 
                             <div class="card-text">
                                 <h3>${p.text || ""}</h3>
                                 <span>${p.username}</span>
+                                <span>${price}</span>
                                 <span>${tersTarix}</span>
                                 <button class="wish-btn" data-id="${p.id}">❤️ Wishlistə əlavə et</button>
                             </div>
