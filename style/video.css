@@ -6,6 +6,38 @@
     font-family: Arial, Helvetica, sans-serif;
 }
 
+/* video.css faylına əlavə edin */
+
+.con {
+    position: relative;
+    /* Overlay üçün konteyner */
+}
+
+.video-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    display: none;
+    /* Başlanğıcda gizli saxla */
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    z-index: 5;
+}
+
+/* Videonun həmişə altda qalması üçün */
+#main-video {
+    position: relative;
+    z-index: 1;
+}
+
+body {
+
+    height: 100vh;
+}
 
 header {
     width: 100%;
@@ -37,7 +69,7 @@ header>.navbar {
 
 .left-side>.logo {
 
-    width: 200px;
+    width: 150px;
 }
 
 .logo>img {
@@ -48,11 +80,14 @@ header>.navbar {
 .left-side>.course-name {
 
     width: auto;
+    font-size: 16px;
+    font-weight: 300;
     min-width: 300px;
     margin-top: 6px;
     border-left: 2px solid #ccc;
     padding: 5px;
     padding-left: 10px;
+    color: #f0f0ff;
 }
 
 .con {
@@ -65,26 +100,129 @@ header>.navbar {
     width: 1280px;
     height: 720px;
     background-color: #000;
+    z-index: 0;
 }
 
 .thumbs {
 
     width: calc(100% - 1280px);
-    background-color: red;
     margin-top: 60px;
+    position: fixed;
+    top: 0;
+    right: 0;
+    background-color: red;
+    border-left: 1px solid #f0f0f0;
+z-index: 1;
 }
 
-.thumbs>div{
+.thumbs>div {
 
     width: 100%;
     display: flex;
     background-color: #fff;
     border-bottom: 1px solid #f0f0ff;
     padding: 5px;
+    align-items: center;
+    gap: 20px;
 }
 
 .thumbs>div>img {
 
     width: 100px;
     border-radius: 7px;
+}
+
+.scroll-video {
+
+    width: 1280px;
+    /* height: 500px; */
+    /* padding: 10px; */
+    /* overflow-y: scroll; */
+    display: flex;
+    flex-direction: column;
+    /* background-color: yellow; */
+}
+
+.scroll-video>.btns {
+
+    width: 100%;
+    padding: 0 20px;
+    display: flex;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.btns>button {
+
+    width: 200px;
+    background-color: transparent;
+    border: none;
+    font-size: 18px;
+    padding: 15px 10px;
+}
+
+.btns>button:nth-child(1) {
+
+    border-bottom: 1px solid #2da0fd;
+}
+
+.comments-section-container {
+
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    padding: 50px 0;
+}
+
+#comments-list{
+
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#comment-input>textarea{
+
+    width: 800px;
+    height: 100px;
+    resize: none;
+}
+
+.comment {
+
+    width: 800px;
+    /* background-color: lightblue; */
+    display: flex;
+    flex-direction: column;
+    border-bottom: 1px solid #D1D2E0 ;
+    padding: 20px;
+}
+
+.profil {
+
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    font-size: 18px;
+}
+
+.profil>span {
+
+    width: 50px;
+    height: 50px;
+    border-radius: 9999px;
+    background-color: #000;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    font-size: 18px;
+    justify-content: center;
+    text-transform: capitalize;
+}
+
+.comment-main {
+
+    margin-left: 70px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }

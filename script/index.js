@@ -953,7 +953,7 @@ buttons.forEach((btn, index) => {
             const posts = await res.json();
 
 
-            if (!posts || posts.length === 0) {
+            if (!posts || posts.length === 0) {     
                 postsDiv.innerHTML = `
             <p 
                 style="

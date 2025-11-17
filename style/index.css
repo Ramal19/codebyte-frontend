@@ -986,6 +986,7 @@ li>a:hover {
   height: 255px;
   border: 1px solid #cccccc32;
   border-radius: 7px;
+  /* line-height: 0; */
 }
 
 .lesson-card>.card-text {
@@ -997,12 +998,14 @@ li>a:hover {
   gap: 5px;
   /* margin-top: -20px; */
   /* background-color: #f0c040; */
-  line-height: 8px;
+  line-height: 5px;
 }
 
-.card-text>h2 {
+.card-text>h3 {
   width: 100%;
-  min-height: 70px;
+  height: 40px;
+  font-size: 14px;
+  line-height: 20px;
 }
 
 /* BOOK */
