@@ -2,57 +2,44 @@
 <html lang="az">
 
 <head>
-  <meta charset="UTF-8">
-  <title>Kursa bax</title>
-  <link rel="stylesheet" href="../style/video.css">
-</head>
+    <meta charset="UTF-8">
+    <title>Kursa bax</title>
+    <link rel="stylesheet" href="../style/video.css">
+    </head>
 
 <body>
 
-  <header>
-    <div class="navbar">
-      <div class="left-side">
-        <div class="logo">
-          <img src="../image/codebyteLogoMa.png" alt="Logo" id="logo">
-        </div>
-        <div class="course-name">
-          <h2 id="course-title"></h2>
-        </div>
-      </div>
+    <header>
+        <div class="navbar">
+            <div class="left-side">
+                <div class="logo">
+                    <img src="../image/codebyteLogoMa.png" alt="Logo" id="logo">
+                </div>
+                <div class="course-name">
+                    <h2 id="course-title"></h2>
+                </div>
+            </div>
 
-      <div class="right-side">
-        <div class="progress">
-
+            <div class="right-side">
+                </div>
         </div>
-        <div class="share">
+    </header>
 
-        </div>
-        <div class="menu">
-
-        </div>
-      </div>
+    <div class="con">
+        <video id="main-video" controlsList="nodownload" controls></video>
+        <div class="thumbs" id="video-list"></div>
     </div>
-  </header>
-
-  <div class="con">
-    <video id="main-video" controlsList="nodownload" controls></video>
-    <div class="thumbs" id="video-list"></div>
-
-  </div>
-
-  <div class="comments-section">
-    <h3>Şərhlər</h3>
-    <div id="comment-input">
-      <textarea id="comment-text" placeholder="Şərhinizi yazın..." rows="3"></textarea>
-      <button id="submit-comment">Göndər</button>
+    
+    <div class="comments-section-container">
+        <h3>Şərhlər</h3>
+        <div id="comment-input">
+            <textarea id="comment-text" placeholder="Şərhinizi yazın..." rows="3"></textarea>
+            <button id="submit-comment">Göndər</button>
+        </div>
+        <div id="comments-list">
+            </div>
     </div>
-    <div id="comments-list">
-    </div>
-  </div>
-
-  <script src="../script/video.js">
-
-  </script>
+    <script src="../script/video.js"></script>
 </body>
 
 </html>
