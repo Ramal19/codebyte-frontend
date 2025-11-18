@@ -6,6 +6,7 @@ if (!token) {
 
 const users = document.querySelector(".users")
 const contacts = document.querySelector(".contacts")
+const posts = document.querySelector(".posts")
 
 users.addEventListener("click", () => {
     window.location.href = "./users.html"
@@ -13,6 +14,11 @@ users.addEventListener("click", () => {
 
 contacts.addEventListener("click", () => {
     window.location.href = "./contacts-inbox.html"
+})
+
+posts.addEventListener("click", ()=>{
+
+    window.location.href = "./posts.html"
 })
 
 const API_BASE_URL = "https://codebyte-backend-ibyq.onrender.com";
