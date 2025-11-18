@@ -423,3 +423,9 @@ li>a:hover {
   height: 50px;
   font-size: 18px;
 }
+
+.book-card-info>a{
+
+  text-decoration: none;
+  color: #2da0fd;
+}

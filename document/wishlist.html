@@ -36,7 +36,7 @@
         const div = document.createElement("div");
         div.className = "post";
         div.innerHTML = `
-          <img class="cover" src="https://codebyte-backend-ibyq.onrender.com/uploads/${post.courseCover}" />
+          <img class="cover" src="https://codebyte-backend-ibyq.onrender.com/${post.courseCover}" />
           <h3>${post.text}</h3>
           <p><strong>Kateqoriya:</strong> ${post.category}</p>
           <button onclick="removeFromWishlist('${post.id}')">Sil</button>

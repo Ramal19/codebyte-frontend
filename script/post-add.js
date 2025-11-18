@@ -54,7 +54,6 @@ addMoreVideoBtn.addEventListener("click", () => {
         <input type="file" class="videoInput" accept="video/*">
         <input type="file" class="thumbInput" accept="image/*">
         <input type="text" class="videoTitle" placeholder="Videonun başlığı">
-        <input type="number" id="coursePrice" placeholder="Qiyməti daxil edin (0 - pulsuz)">
 
     `;
   videosContainer.appendChild(div);

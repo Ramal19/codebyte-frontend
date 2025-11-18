@@ -246,6 +246,8 @@ async function fetchUsers() {
 
         allUsers = await response.json();
 
+        
+
         const isAdmin = allUsers.some(el => {
             return (userData || logData) && el.username === currentUser?.username && el.role === "admin";
         });
