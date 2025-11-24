@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>İstifadəçilərin İdarəetmə Paneli</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -80,16 +82,41 @@
             background-color: #f9f9f9;
         }
 
-        #users-table thead tr:first-child th:first-child { border-top-left-radius: 8px; }
-        #users-table thead tr:first-child th:last-child { border-top-right-radius: 8px; }
-        #users-table tbody tr:last-child td:first-child { border-bottom-left-radius: 8px; }
-        #users-table tbody tr:last-child td:last-child { border-bottom-right-radius: 8px; }
-        #users-table tbody tr:last-child td { border-bottom: none; }
+        #users-table thead tr:first-child th:first-child {
+            border-top-left-radius: 8px;
+        }
+
+        #users-table thead tr:first-child th:last-child {
+            border-top-right-radius: 8px;
+        }
+
+        #users-table tbody tr:last-child td:first-child {
+            border-bottom-left-radius: 8px;
+        }
+
+        #users-table tbody tr:last-child td:last-child {
+            border-bottom-right-radius: 8px;
+        }
+
+        #users-table tbody tr:last-child td {
+            border-bottom: none;
+        }
 
 
-        .role-user { color: #28a745; font-weight: 600; }
-        .role-teacher { color: #ffc107; font-weight: 600; }
-        .role-admin { color: #dc3545; font-weight: 600; }
+        .role-user {
+            color: #28a745;
+            font-weight: 600;
+        }
+
+        .role-teacher {
+            color: #ffc107;
+            font-weight: 600;
+        }
+
+        .role-admin {
+            color: #dc3545;
+            font-weight: 600;
+        }
 
         button.delete-btn {
             background-color: #dc3545;
@@ -108,6 +135,15 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
 
+        /* Xəta/Məlumat Mesajları üçün Stil */
+        .info-message {
+            color: #dc3545;
+            text-align: center;
+            padding: 20px;
+            font-weight: 600;
+        }
+        
+        /* Media Query stilləri (dəyişmədi, amma tamlıq üçün saxlanıldı) */
         @media (max-width: 768px) {
             .container {
                 margin: 15px;
@@ -185,14 +221,14 @@
                 </tr>
             </thead>
             <tbody>
-                </tbody>
+            </tbody>
         </table>
     </div>
 
     <script>
         const API_BASE_URL = "https://codebyte-backend-ibyq.onrender.com";
         const USERS_API_URL = `${API_BASE_URL}/users`;
-        
+
         const tableBody = document.querySelector("#users-table tbody");
         const searchInput = document.querySelector("#search");
         const roleFilter = document.querySelector("#roleFilter");
@@ -201,20 +237,41 @@
         const columnLabels = ["ID", "İstifadəçi Adı", "Email", "Role", "Əməliyyat"];
 
         async function fetchUsers() {
-            tableBody.innerHTML = `<tr><td colspan="5" style="text-align: center; padding: 20px;">Məlumatlar yüklənir...</td></tr>`;
+            tableBody.innerHTML = `<tr><td colspan="5" class="info-message" style="color:#1a73e8;">Məlumatlar yüklənir...</td></tr>`;
+
+            const token = localStorage.getItem('token');
+
+            if (!token) {
+                tableBody.innerHTML = `<tr><td colspan="5" class="info-message">❌ **401 Unauthorized**: İstifadəçi məlumatlarını gətirmək üçün admin **giriş tokeni** (Authorization Token) tələb olunur. Zəhmət olmasa daxil olun.</td></tr>`;
+                return;
+            }
+
             try {
-                const response = await fetch(USERS_API_URL);
+                const response = await fetch(USERS_API_URL, {
+                    method: "GET",
+                    headers: {
+                        "Authorization": `Bearer ${token}`
+                    }
+                });
 
                 if (!response.ok) {
-                    throw new Error(`HTTP xətası! Status: ${response.status}`);
+                    let errorMessage = `HTTP xətası! Status: ${response.status}.`;
+
+                    if (response.status === 401) {
+                        errorMessage = "401 Unauthorized: Token etibarsızdır və ya müddəti bitib. Yenidən daxil olun.";
+                    } else if (response.status === 403) {
+                        errorMessage = "403 Forbidden: Bu əməliyyata icazəniz yoxdur.";
+                    }
+
+                    throw new Error(errorMessage);
                 }
 
                 allUsers = await response.json();
-                applyFilters(); 
+                applyFilters();
 
             } catch (error) {
                 console.error("Məlumat gətirilərkən xəta:", error);
-                tableBody.innerHTML = `<tr><td colspan="5" style="color:#dc3545; text-align: center; padding: 20px;">Məlumatlar yüklənə bilmədi. Serveri yoxlayın.</td></tr>`;
+                tableBody.innerHTML = `<tr><td colspan="5" class="info-message">Məlumatlar yüklənə bilmədi. Serveri yoxlayın. (Xəta: ${error.message || 'Bilinməyən server xətası'})</td></tr>`;
             }
         }
 
@@ -223,30 +280,30 @@
         }
 
         function displayUsers(users) {
-            
+
             tableBody.innerHTML = "";
 
             if (users.length === 0) {
-                 tableBody.innerHTML = `<tr><td colspan="5" style="text-align: center; padding: 20px;">Heç bir istifadəçi tapılmadı.</td></tr>`;
-                 return;
+                tableBody.innerHTML = `<tr><td colspan="5" class="info-message" style="color:#555;">Heç bir istifadəçi tapılmadı.</td></tr>`;
+                return;
             }
 
             users.forEach((user, index) => {
-            
+
                 const row = tableBody.insertRow();
-                
+
                 const data = [
-                    index + 1, 
-                    user.username, 
-                    user.email, 
-                    user.role, 
-                    null 
+                    index + 1,
+                    user.username,
+                    user.email,
+                    user.role,
+                    null
                 ];
 
                 data.forEach((value, colIndex) => {
                     const cell = row.insertCell();
                     cell.setAttribute('data-label', columnLabels[colIndex]);
-                    
+
                     if (value !== null) {
                         cell.textContent = value;
                     }
@@ -255,7 +312,7 @@
                         cell.classList.add(getRoleClass(user.role));
                     }
 
-                    if (colIndex === 4) { 
+                    if (colIndex === 4) {
                         const deleteBtn = document.createElement("button");
                         deleteBtn.textContent = "Sil";
                         deleteBtn.classList.add("delete-btn");
@@ -267,44 +324,61 @@
         }
 
         async function deleteUser(id) {
-            if (!confirm("Diqqət! Bu istifadəçini silmək istədiyinizə əminsiniz?")) return;
-            
-            const token = localStorage.getItem('token'); 
-            
+            const token = localStorage.getItem('token');
             if (!token) {
-                alert("Əməliyyat üçün giriş tokeni tələb olunur! Zəhmət olmasa admin hesabı ilə daxil olun.");
+                Swal.fire('Giriş Tələb Olunur', 'Əməliyyat üçün giriş tokeni tələb olunur! Zəhmət olmasa admin hesabı ilə daxil olun.', 'warning');
                 return;
             }
 
-            try {
-                const response = await fetch(`${USERS_API_URL}/${id}`, {
-                    method: "DELETE",
-                    headers: { 
-                        "Authorization": `Bearer ${token}` 
+            Swal.fire({
+                title: 'İstifadəçini Silmək?',
+                text: "Bu istifadəçini silmək istədiyinizə əminsiniz? Bu, geri qaytarılmaz bir əməliyyatdır.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#ef4444',
+                cancelButtonColor: '#6b7280',
+                confirmButtonText: 'Bəli, Sil!',
+                cancelButtonText: 'Ləğv et'
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    try {
+                        const response = await fetch(`${USERS_API_URL}/${id}`, {
+                            method: "DELETE",
+                            headers: {
+                                "Authorization": `Bearer ${token}`
+                            },
+                        });
+
+                        let message = "Əməliyyat uğursuz oldu.";
+                        let icon = 'error';
+
+                        if (response.ok) {
+                            message = "İstifadəçi uğurla silindi.";
+                            icon = 'success';
+                            // Cədvəli yeniləyin
+                            allUsers = allUsers.filter(user => user.id !== id);
+                            applyFilters();
+                        } else if (response.status === 401) {
+                            message = "Giriş tokeni etibarsızdır. Yenidən daxil olun.";
+                        } else if (response.status === 403) {
+                            message = "Silməyə icazəniz yoxdur. Yalnız Administratorlar bu əməliyyatı edə bilər.";
+                        } else {
+                            const errorData = await response.json().catch(() => ({ message: "Bilinməyən server xətası." }));
+                            message = errorData.message || `Server xətası: Status ${response.status}`;
+                        }
+
+                        Swal.fire({
+                            title: response.ok ? 'Silindi!' : 'Xəta!',
+                            text: message,
+                            icon: icon
+                        });
+
+                    } catch (e) {
+                        Swal.fire('Xəta!', 'Serverlə əlaqə qurularkən xəta baş verdi.', 'error');
+                        console.error("Delete error:", e);
                     }
-                });
-
-                let message = "Əməliyyat uğursuz oldu.";
-                
-                if (response.ok) {
-                    message = "İstifadəçi uğurla silindi.";
-                    allUsers = allUsers.filter(user => user.id !== id);
-                    applyFilters();
-                } else if (response.status === 401) {
-                    message = "Giriş tokeni etibarsızdır. Yenidən daxil olun.";
-                } else if (response.status === 403) {
-                    message = "Silməyə icazəniz yoxdur. Yalnız Administratorlar bu əməliyyatı edə bilər.";
-                } else {
-                     const errorData = await response.json().catch(() => ({ message: "Bilinməyən server xətası." }));
-                     message = errorData.message || message;
                 }
-
-                alert(message);
-
-            } catch (error) {
-                alert(`Serverlə əlaqə qurularkən xəta baş verdi. Zəhmət olmasa yenidən cəhd edin.`);
-                console.error("Silmə xətası:", error);
-            }
+            });
         }
 
         function applyFilters() {

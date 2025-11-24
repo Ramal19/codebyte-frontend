@@ -16,9 +16,9 @@ contacts.addEventListener("click", () => {
     window.location.href = "./contacts-inbox.html"
 })
 
-posts.addEventListener("click", ()=>{
+posts.addEventListener("click", () => {
 
-    window.location.href = "./posts.html"
+    window.location.href = "./all-course.html"
 })
 
 const API_BASE_URL = "https://codebyte-backend-ibyq.onrender.com";
@@ -29,19 +29,36 @@ const READ_MESSAGES_KEY = 'readContacts';
 let allUsers = [];
 let usersLength = document.getElementById("usersLength")
 
+const columnLabels = ["ID", "İstifadəçi Adı", "Email", "Role", "Əməliyyat"];
+
 async function fetchUsers() {
+
     try {
-        const response = await fetch(USERS_API_URL);
+        const response = await fetch(USERS_API_URL, {
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+        });
 
         if (!response.ok) {
-            throw new Error(`HTTP xətası! Status: ${response.status}`);
+            let errorMessage = `HTTP xətası! Status: ${response.status}.`;
+
+            if (response.status === 401) {
+                errorMessage = "401 Unauthorized: Token etibarsızdır və ya müddəti bitib. Yenidən daxil olun.";
+            } else if (response.status === 403) {
+                errorMessage = "403 Forbidden: Bu əməliyyata icazəniz yoxdur.";
+            }
+
+            throw new Error(errorMessage);
         }
 
         allUsers = await response.json();
+
         usersLength.textContent = allUsers.length
 
     } catch (error) {
-        console.error("İstifadəçi məlumatları gətirilərkən xəta:", error);
+        console.error("Məlumat gətirilərkən xəta:", error);
     }
 }
 
@@ -107,7 +124,16 @@ loadUnreadMessagesCount();
 
 const logo = document.querySelector(".logo");
 
-logo.addEventListener("click", ()=>{
+logo.addEventListener("click", () => {
 
     window.location.href = "../../index.html"
 })
+
+const logoutBtn = document.getElementById("logoutBtn");
+
+logoutBtn.addEventListener('click', () => {
+    // localStorage.removeItem("token");
+    Swal.fire('Çıxış', 'Sistemdən çıxış edildi.', 'info').then(() => {
+        window.location.href = "../../index.html";
+    });
+});

@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="az">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bildirişlər</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #10b981;
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+
+        .back-link {
+            color: white;
+            text-decoration: none;
+            padding: 8px 15px;
+            border: 1px solid white;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        .back-link:hover {
+            background-color: #0d946d;
+        }
+
+        .notifications-container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 30px;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            color: #10b981;
+            margin-bottom: 30px;
+        }
+
+        .notification-item {
+            display: flex;
+            align-items: flex-start;
+            padding: 15px;
+            margin-bottom: 12px;
+            border-radius: 8px;
+            border-left: 5px solid #10b981;
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .notification-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .notification-item.unread {
+            background-color: #e0f2f1;
+            /* Açıq yaşıl fon yeni bildirişlər üçün */
+            border-color: #0d946d;
+            font-weight: 500;
+        }
+
+        .notification-item.unread:hover {
+            background-color: #c7e5e3;
+        }
+
+        .notification-item i {
+            font-size: 20px;
+            color: #10b981;
+            margin-right: 15px;
+            margin-top: 3px;
+        }
+
+        .notification-content {
+            flex-grow: 1;
+        }
+
+        .notification-content p {
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        .notification-date {
+            font-size: 0.75em;
+            color: #6b7280;
+            margin-top: 5px;
+            display: block;
+        }
+
+        #notificationsList {
+            min-height: 100px;
+        }
+
+        .loading-message,
+        .error-message,
+        #emptyMessage {
+            text-align: center;
+            padding: 20px;
+            color: #6b7280;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="logo">CODE BYTE</div>
+        <a href="../index.html" class="back-link">Ana Səhifəyə Qayıt</a>
+    </header>
+    <main class="notifications-container">
+        <h2>🔔 Bildirişləriniz</h2>
+        <div id="notificationsList">
+            <p class="loading-message">Bildirişlər yüklənir...</p>
+        </div>
+        <p id="emptyMessage" style="display: none;">Hələlik yeni bildirişiniz yoxdur.</p>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        // js/notifications.js
+
+        const notificationsList = document.getElementById('notificationsList');
+        const emptyMessage = document.getElementById('emptyMessage');
+        const API_URL = "https://codebyte-backend-ibyq.onrender.com"; // Serverinizin ünvanı
+
+        // JWT tokenini base64-dən decode edərək istifadəçi ID-sini alır
+        function getAuthToken() {
+            return localStorage.getItem("token");
+        }
+
+        async function loadNotifications() {
+            const token = getAuthToken();
+            notificationsList.innerHTML = '<p class="loading-message"><i class="fas fa-spinner fa-spin"></i> Bildirişlər yüklənir...</p>';
+
+            if (!token) {
+                notificationsList.innerHTML = '<p class="error-message">Bildirişləri görmək üçün <a href="login.html">daxil olmalısınız</a>.</p>';
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/notifications`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (response.status === 401 || response.status === 403) {
+                    notificationsList.innerHTML = '<p class="error-message">Sessiyanın vaxtı bitib. Zəhmət olmasa yenidən daxil olun.</p>';
+                    return;
+                }
+
+                if (!response.ok) {
+                    throw new Error('Server xətası: ' + response.statusText);
+                }
+
+                const notifications = await response.json();
+                renderNotifications(notifications);
+
+            } catch (error) {
+                console.error("Bildirişləri gətirmə xətası:", error);
+                notificationsList.innerHTML = `<p class="error-message">Bildirişlər gətirilərkən xəta baş verdi: ${error.message}</p>`;
+            }
+        }
+
+        function renderNotifications(notifications) {
+            if (notifications.length === 0) {
+                emptyMessage.style.display = 'block';
+                notificationsList.innerHTML = '';
+                return;
+            }
+
+            emptyMessage.style.display = 'none';
+            notificationsList.innerHTML = '';
+
+            notifications.forEach(notification => {
+                const item = document.createElement('div');
+                item.className = `notification-item ${notification.read ? '' : 'unread'}`;
+                item.dataset.id = notification.id;
+                item.addEventListener('click', () => markAsRead(notification.id));
+
+                // Tarix formatı
+                const date = notification.createdAt ?
+                    new Date(notification.createdAt._seconds * 1000).toLocaleString('az-AZ', {
+                        day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit'
+                    }) : 'Tarix yoxdur';
+
+                // Mesajdakı **bold** formatını HTML-ə çevirir
+                const messageHtml = notification.message
+                    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+
+                item.innerHTML = `
+            <i class="fas fa-bullhorn"></i>
+            <div class="notification-content">
+                <p>${messageHtml}</p>
+                <span class="notification-date">${date}</span>
+            </div>
+        `;
+
+                notificationsList.appendChild(item);
+            });
+        }
+
+        async function markAsRead(notificationId) {
+            const token = getAuthToken();
+            if (!token) return;
+
+            try {
+                const response = await fetch(`${API_URL}/notifications/${notificationId}/read`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (response.ok) {
+                    // Bildiriş uğurla oxunmuş kimi qeyd edildikdən sonra siyahını yenilə
+                    loadNotifications();
+                } else {
+                    Swal.fire('Xəta!', 'Bildiriş oxunmuş kimi qeyd edilərkən problem yarandı.', 'error');
+                }
+            } catch (error) {
+                console.error("Bildirişi oxunmuş kimi qeyd etmə xətası:", error);
+                Swal.fire('Server Xətası', 'Əlaqə xətası baş verdi.', 'error');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', loadNotifications);
+    </script>
+</body>
+
+</html>

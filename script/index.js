@@ -163,6 +163,12 @@ answerBox.forEach((element) => {
 
 let heartIcon = document.querySelector(".bi-heart");
 let cartIcon = document.querySelector(".bi-cart");
+let notIcon = document.querySelector(".bi-bell");
+
+notIcon.addEventListener("click", () => {
+
+    window.location.href = "./document/notifications.html"
+})
 
 heartIcon.onclick = () => {
 
@@ -246,7 +252,7 @@ async function fetchUsers() {
 
         allUsers = await response.json();
 
-        
+
 
         const isAdmin = allUsers.some(el => {
             return (userData || logData) && el.username === currentUser?.username && el.role === "admin";
@@ -406,26 +412,47 @@ if (logData) {
 
     let allUsers = [];
     let userMail = null;
+    const token = localStorage.getItem("token"); // Tokeni burada alırıq
 
     async function fetchUsers() {
+        // 1. Əgər token yoxdursa, davam etməyin (və ya xəta verin)
+        if (!token) {
+            console.error("İstifadəçi məlumatları gətirilə bilmədi: Autentifikasiya tokeni tapılmadı.");
+            // Gerekirse login səhifəsinə yönləndir
+            // window.location.href = "login.html"; 
+            return;
+        }
+
         try {
-            const response = await fetch(USERS_API_URL);
+            const response = await fetch(USERS_API_URL, {
+                // 2. Autentifikasiya başlığını əlavə edirik
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                    // Əksər API-lər Bearer token formatından istifadə edir
+                }
+            });
 
 
             if (!response.ok) {
+                // Xüsusilə 401 xətası üçün xüsusi bir məntiq əlavə edə bilərsiniz:
+                if (response.status === 401) {
+                    console.error("401 Unauthorized: Token etibarsızdır və ya müddəti bitib.");
+                    // Burada localStorage.removeItem("token") və loginə yönləndirmə əlavə edin
+                }
                 throw new Error(`HTTP xətası! Status: ${response.status}`);
             }
 
             allUsers = await response.json();
 
-
             allUsers.forEach(el => {
 
+
                 if (logData) {
-                    if (user.username === currentUser) {
+                    if (el.username === currentUser) {
                         userMail = el.email
                     }
                 }
+
             })
 
         } catch (error) {
@@ -505,6 +532,7 @@ if (logData) {
     logOut.addEventListener("click", () => {
 
         localStorage.removeItem('loginUser');
+        localStorage.removeItem('token');
         window.location.reload();
         userDiv.style.display = "none";
     })
@@ -518,10 +546,21 @@ if (logData) {
     })
 }
 
+let adminBtn = "null";
 
 menuBtn.addEventListener("click", () => {
 
     if (menuDiv === null) {
+
+        if (adminButtonCreated) {
+
+            adminBtn = `<button class="toLocation"> Admin</button>`;
+
+        } else {
+
+            console.log("admin deyilsiniz");
+        }
+
         menuDiv = document.createElement("div");
 
         menuDiv.classList.add("menu-div");
@@ -534,6 +573,7 @@ menuBtn.addEventListener("click", () => {
                 <button id="loginWithMenu">Daxil olun</button>
                 <button id="regWithMenu">Qeydiyyat</button>
                 <button id="toContact"><i class="bi bi-chat-left-text"></i> Əlaqə</button>
+                ${adminBtn}
             </div>
         `
 
@@ -609,6 +649,8 @@ menuBtn.addEventListener("click", () => {
                 <button id="postManageMenu"><i class="bi bi-view-list"></i> Ümumi Kurslar</button>
                 <button id="logOutMenu"><i class="bi bi-box-arrow-right"></i> Çıxış et</button>
                 <button id="toContact"><i class="bi bi-chat-left-text"></i> Əlaqə</button>
+                ${adminBtn}
+
             </div>
         `
 
@@ -633,7 +675,10 @@ menuBtn.addEventListener("click", () => {
                 window.location.href = "./document/contact.html"
             })
 
-
+            let location = document.querySelector(".toLocation")
+            location.addEventListener("click", () => {
+                window.location.href = "./admin-dashboard/documents/users.html"
+            })
         }
 
         if (userData) {
@@ -688,8 +733,291 @@ menuBtn.addEventListener("click", () => {
 
 
 
+// const postsDiv = document.getElementById("posts");
+// const btnDirection = document.querySelector(".btn-direction");
+
+
+// async function loadPosts() {
+//     try {
+//         const res = await fetch(`${API_URL}/posts`);
+//         const posts = await res.json();
+
+//         if (!posts || posts.length === 0) {
+//             postsDiv.innerHTML = `
+//             <p 
+//                 style="
+//                     font-size: 20px; 
+//                     color: gray; 
+//                     text-align: center;
+//                     padding: 30px 0;
+//             ">
+//                 Hazırda heç bir kurs yoxdur.
+//             </p>`;
+//             return;
+//         }
+
+//         postsDiv.innerHTML = "";
+//         posts.reverse().forEach(p => {
+//             const div = document.createElement("div");
+//             div.classList.add("lesson-card")
+
+//             let tarix = p.createdAt.slice(0, 10);
+//             let tersTarix = tarix.split("-").reverse().join("-");
+//             let price = p.price || "pulsuz"
+//             // <span>${price} AZN</span>
+
+//             div.innerHTML = `
+//                 <img src="${p.courseCover}" alt="Post şəkli">                 
+//                             <div class="card-text">
+//                                 <h3>${p.text || ""}</h3>
+//                                 <span>${p.username}</span>
+//                                 <span>${tersTarix}</span>
+//                                 <button class="wish-btn" data-id="${p.id}">❤️ Wishlistə əlavə et</button>
+//                             </div>
+//           `;
+
+//             let logForm = null;
+
+
+//             div.addEventListener("click", () => {
+
+
+//                 if (userData || logData) {
+//                     // console.log("Qeydiyyatdan kecilib");
+//                     localStorage.setItem("selectedPost", JSON.stringify(p));
+//                     window.location.href = "./document/video.html";
+//                 } else {
+
+//                     // console.log("Qeydiyyatdan kecilmiyib");
+
+
+//                     if (logForm === null) {
+//                         logForm = document.createElement("div");
+//                         logForm.classList.add("logform-blurDiv");
+
+//                         logForm.innerHTML =
+//                             `
+//                         <div class="container-logForm">
+//                             <div class="content">
+//                             <img src="./image/CodeByte.png"/>
+//                               <form id="loginForm" class="content__form">
+//                                 <div class="content__inputs">
+//                                   <label>
+//                                     <input class="input" name="username" type="text" id="username-inp" required="">
+//                                     <span>Username</span>
+//                                   </label>
+//                                   <label>
+//                                     <input required="" class="input" name="password" type="password" id="password-inp">
+//                                     <span>Password</span>
+//                                   </label>
+//                                 </div>
+//                                 <button>Daxil ol</button>
+//                               </form>
+//                               <div class="content__or-text">
+//                                 <span></span>
+//                                 <span>Və ya</span>
+//                                 <span></span>
+//                               </div>
+//                               <div class="content__forgot-buttons">
+//                                 
+//                                 <button class="exit-logForm">Cancel</button>
+//                               </div>
+//                             </div>
+//                         </div>
+//                         `
+//                         document.body.style.overflow = "hidden";
+
+//                         document.body.appendChild(logForm)
+
+//                         let exitLogForm = document.querySelector(".exit-logForm");
+
+//                         exitLogForm.addEventListener("click", () => {
+
+//                             document.body.removeChild(logForm)
+//                             logForm = null
+//                         })
+
+//                         const form = document.getElementById("loginForm");
+//                         form.addEventListener("submit", async (e) => {
+//                             e.preventDefault();
+
+//                             localStorage.setItem("selectedPost", JSON.stringify(p));
+
+//                             const data = {
+//                                 username: form.username.value,
+//                                 password: form.password.value
+//                             };
+//                             const res = await fetch(`${API_URL}/login`, {
+//                                 method: "POST",
+//                                 headers: { "Content-Type": "application/json" },
+//                                 body: JSON.stringify(data)
+//                             });
+//                             const json = await res.json();
+//                             if (res.ok) {
+//                                 localStorage.setItem("token", json.token);
+//                                 localStorage.setItem("loginUser", JSON.stringify({
+//                                     username: data.username,
+//                                     // email: json.email
+//                                 }));
+
+//                                 // document.getElementById("msg").innerText = "Giriş uğurludur!";
+
+//                                 Swal.fire({
+//                                     title: "Giriş uğurludur!",
+//                                     icon: "success",
+//                                 }).then((result) => {
+//                                     if (result.isConfirmed || result.dismiss === Swal.DismissReason.backdrop) {
+
+//                                         console.log("İstifadəçi OK düyməsini kliklədi");
+
+//                                         window.location.href = "./document/video.html";
+//                                     }
+//                                 });
+
+//                             } else {
+//                                 // document.getElementById("msg").innerText = json.message;
+//                                 alert(json.message)
+//                             }
+//                         });
+
+//                     }
+
+
+
+//                 }
+//             });
+
+//             postsDiv.appendChild(div);
+
+//             const wishBtn = div.querySelector(".wish-btn");
+//             wishBtn.addEventListener("click", async (e) => {
+//                 e.stopPropagation();
+//                 const postId = wishBtn.dataset.id;
+//                 const token = localStorage.getItem("token");
+
+//                 if (!token) {
+//                     alert("Əvvəlcə daxil olmalısan!");
+//                     return;
+//                 }
+
+//                 if (!logData) {
+//                     alert("Əvvəlcə daxil olmalısan!");
+//                     return;
+//                 }
+
+//                 const res = await fetch(`${API_URL}/wishlist/${postId}`, {
+//                     method: "POST",
+//                     headers: { Authorization: `Bearer ${token}` },
+//                 });
+
+//                 const data = await res.json();
+//                 alert(data.message);
+//             });
+
+
+//             const lessonCard = document.querySelectorAll(".lesson-card")
+
+
+//             let searchIcon = document.getElementById("search-icon");
+
+
+
+//             searchIcon.addEventListener("click", () => {
+
+
+//                 if (searchInp.value.trim() !== "") {
+//                     localStorage.setItem("searchValue", searchInp.value);
+//                     window.location.href = "./document/search.html"
+//                 }
+//             })
+
+
+
+//             if (postsDiv.children.length > 4) {
+//                 postsDiv.style.cssText =
+//                     `
+//                  overflow-X: scroll;
+//                  overflow-Y: hidden;
+//                 `
+
+//                 let btnLeft = document.querySelector(".btn-left");
+//                 let btnRight = document.querySelector(".btn-right");
+
+//                 if (!btnLeft) {
+//                     btnLeft = document.createElement("button");
+//                     btnLeft.classList.add("btn-left");
+//                     btnLeft.innerHTML = `<i class="bi bi-arrow-left"></i>`;
+//                     // btnDirection.appendChild(btnLeft);
+//                 }
+
+//                 if (!btnRight) {
+//                     btnRight = document.createElement("button");
+//                     btnRight.classList.add("btn-right");
+//                     btnRight.innerHTML = `<i class="bi bi-arrow-right"></i>`;
+//                     // btnDirection.appendChild(btnRight);
+//                 }
+
+
+//                 let step = 200;
+//                 btnLeft.addEventListener("click", () => {
+
+//                     postsDiv.scrollBy({
+//                         left: -step,
+//                         behavior: 'smooth'
+//                     })
+//                 })
+
+//                 btnRight.addEventListener("click", () => {
+//                     postsDiv.scrollBy({
+//                         left: step,
+//                         behavior: 'smooth'
+//                     })
+//                 })
+
+//                 btnDirection.appendChild(btnLeft);
+//                 btnDirection.appendChild(btnRight);
+
+//             }
+
+//         });
+//     } catch (err) {
+//         console.error("Postlar yüklənərkən xəta:", err);
+//     }
+// }
+
+// loadPosts();
+
+// ƏSAS API URL-nizi burada təyin edin
+
 const postsDiv = document.getElementById("posts");
 const btnDirection = document.querySelector(".btn-direction");
+const searchInp = document.getElementById("search-input"); // Əlavə olaraq lazım olan input
+
+
+// Ulduzların vizual renderi üçün köməkçi funksiya
+const renderStars = (score) => {
+    const roundedScore = Math.round(score);
+    let stars = '';
+    // Ulduzların rəngini təyin edin
+    for (let i = 1; i <= 5; i++) {
+        const color = i <= roundedScore ? 'gold' : 'lightgray';
+        stars += `<span style="color: ${color}; font-size: 18px;">★</span>`;
+    }
+    return stars;
+};
+
+// Mövcud orta reytinqi yükləyən funksiya
+async function getCourseRating(courseId) {
+    try {
+        const ratingRes = await fetch(`${API_URL}/course-rating/${courseId}`);
+        if (ratingRes.ok) {
+            return await ratingRes.json();
+        }
+    } catch (error) {
+        console.warn(`Reytinq yüklənərkən xəta (${courseId}):`, error);
+    }
+    return { averageRating: 0.0, count: 0 };
+}
 
 
 async function loadPosts() {
@@ -712,40 +1040,56 @@ async function loadPosts() {
         }
 
         postsDiv.innerHTML = "";
-        posts.reverse().forEach(p => {
+
+        // Bütün kursları eyni vaxtda reytinqləri ilə birlikdə yükləmək üçün Promise.all istifadə edin
+        const reversedPosts = posts.reverse();
+        const postPromises = reversedPosts.map(async p => {
+            const rating = await getCourseRating(p.id);
+            return { ...p, rating };
+        });
+
+        const postsWithRatings = await Promise.all(postPromises);
+
+
+        postsWithRatings.forEach(p => {
             const div = document.createElement("div");
             div.classList.add("lesson-card")
 
             let tarix = p.createdAt.slice(0, 10);
             let tersTarix = tarix.split("-").reverse().join("-");
-            let price = p.price || "pulsuz"
-                                // <span>${price} AZN</span>
+
+            // Reytinq HTML-i
+            const ratingHTML = `
+                <div class="course-rating" style="display: flex; align-items: center; gap: 5px; margin-bottom: 5px;">
+                    ${renderStars(p.rating.averageRating)}
+                    <span style="font-weight: bold; font-size: 14px;">
+                        ${p.rating.averageRating.toFixed(1)}
+                    </span>
+                    <span style="color: gray; font-size: 12px;">
+                        (${p.rating.count})
+                    </span>
+                </div>
+            `;
 
             div.innerHTML = `
                 <img src="${p.courseCover}" alt="Post şəkli">                 
-                            <div class="card-text">
-                                <h3>${p.text || ""}</h3>
-                                <span>${p.username}</span>
-                                <span>${tersTarix}</span>
-                                <button class="wish-btn" data-id="${p.id}">❤️ Wishlistə əlavə et</button>
-                            </div>
+                <div class="card-text">
+                    <h3>${p.text || ""}</h3>
+                    ${ratingHTML}                     <span>${p.username}</span>
+                    <span>${tersTarix}</span>
+                    <button class="wish-btn" data-id="${p.id}">❤️ Wishlistə əlavə et</button>
+                </div>
           `;
 
             let logForm = null;
 
-
             div.addEventListener("click", () => {
-
-
+                // ... (Logikalar dəyişmir) ...
                 if (userData || logData) {
-                    // console.log("Qeydiyyatdan kecilib");
                     localStorage.setItem("selectedPost", JSON.stringify(p));
                     window.location.href = "./document/video.html";
                 } else {
-
-                    // console.log("Qeydiyyatdan kecilmiyib");
-
-
+                    // Login Formu açma məntiqi
                     if (logForm === null) {
                         logForm = document.createElement("div");
                         logForm.classList.add("logform-blurDiv");
@@ -787,9 +1131,9 @@ async function loadPosts() {
                         let exitLogForm = document.querySelector(".exit-logForm");
 
                         exitLogForm.addEventListener("click", () => {
-
                             document.body.removeChild(logForm)
                             logForm = null
+                            document.body.style.overflow = "auto";
                         })
 
                         const form = document.getElementById("loginForm");
@@ -812,31 +1156,21 @@ async function loadPosts() {
                                 localStorage.setItem("token", json.token);
                                 localStorage.setItem("loginUser", JSON.stringify({
                                     username: data.username,
-                                    // email: json.email
                                 }));
-
-                                // document.getElementById("msg").innerText = "Giriş uğurludur!";
 
                                 Swal.fire({
                                     title: "Giriş uğurludur!",
                                     icon: "success",
-                                }).then((result) => {
-                                    if (result.isConfirmed || result.dismiss === Swal.DismissReason.backdrop) {
-
-                                        console.log("İstifadəçi OK düyməsini kliklədi");
-
-                                        window.location.href = "./document/video.html";
-                                    }
+                                }).then(() => {
+                                    window.location.href = "./document/video.html";
                                 });
 
                             } else {
-                                // document.getElementById("msg").innerText = json.message;
                                 alert(json.message)
                             }
                         });
 
                     }
-
 
 
                 }
@@ -850,12 +1184,7 @@ async function loadPosts() {
                 const postId = wishBtn.dataset.id;
                 const token = localStorage.getItem("token");
 
-                if (!token) {
-                    alert("Əvvəlcə daxil olmalısan!");
-                    return;
-                }
-
-                if (!logData) {
+                if (!token || !logData) {
                     alert("Əvvəlcə daxil olmalısan!");
                     return;
                 }
@@ -870,24 +1199,19 @@ async function loadPosts() {
             });
 
 
-            const lessonCard = document.querySelectorAll(".lesson-card")
+            // Search məntiqi (düzəldildi, artıq saniyədə bir dəfə əlavə olunmayacaq)
+            const searchIcon = document.getElementById("search-icon");
+            if (searchIcon && !searchIcon._hasListener) {
+                searchIcon.addEventListener("click", () => {
+                    if (searchInp.value.trim() !== "") {
+                        localStorage.setItem("searchValue", searchInp.value);
+                        window.location.href = "./document/search.html"
+                    }
+                })
+                searchIcon._hasListener = true;
+            }
 
-
-            let searchIcon = document.getElementById("search-icon");
-
-
-
-            searchIcon.addEventListener("click", () => {
-
-
-                if (searchInp.value.trim() !== "") {
-                    localStorage.setItem("searchValue", searchInp.value);
-                    window.location.href = "./document/search.html"
-                }
-            })
-
-
-
+            // Scroll naviqasiya məntiqi
             if (postsDiv.children.length > 4) {
                 postsDiv.style.cssText =
                     `
@@ -895,42 +1219,28 @@ async function loadPosts() {
                  overflow-Y: hidden;
                 `
 
-                let btnLeft = document.querySelector(".btn-left");
-                let btnRight = document.querySelector(".btn-right");
-
-                if (!btnLeft) {
-                    btnLeft = document.createElement("button");
+                // Yalnız bir dəfə buttonları əlavə etmək üçün yoxlanış
+                if (btnDirection && btnDirection.children.length === 0) {
+                    let btnLeft = document.createElement("button");
                     btnLeft.classList.add("btn-left");
                     btnLeft.innerHTML = `<i class="bi bi-arrow-left"></i>`;
-                    // btnDirection.appendChild(btnLeft);
-                }
 
-                if (!btnRight) {
-                    btnRight = document.createElement("button");
+                    let btnRight = document.createElement("button");
                     btnRight.classList.add("btn-right");
                     btnRight.innerHTML = `<i class="bi bi-arrow-right"></i>`;
-                    // btnDirection.appendChild(btnRight);
+
+                    let step = 200;
+                    btnLeft.addEventListener("click", () => {
+                        postsDiv.scrollBy({ left: -step, behavior: 'smooth' })
+                    })
+
+                    btnRight.addEventListener("click", () => {
+                        postsDiv.scrollBy({ left: step, behavior: 'smooth' })
+                    })
+
+                    btnDirection.appendChild(btnLeft);
+                    btnDirection.appendChild(btnRight);
                 }
-
-
-                let step = 200;
-                btnLeft.addEventListener("click", () => {
-
-                    postsDiv.scrollBy({
-                        left: -step,
-                        behavior: 'smooth'
-                    })
-                })
-
-                btnRight.addEventListener("click", () => {
-                    postsDiv.scrollBy({
-                        left: step,
-                        behavior: 'smooth'
-                    })
-                })
-
-                btnDirection.appendChild(btnLeft);
-                btnDirection.appendChild(btnRight);
 
             }
 
@@ -941,6 +1251,7 @@ async function loadPosts() {
 }
 
 loadPosts();
+
 
 const buttons = document.querySelectorAll(".btn-course");
 buttons.forEach((btn, index) => {

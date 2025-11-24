@@ -1,8 +1,7 @@
+
 const API_URL = "https://codebyte-backend-ibyq.onrender.com";
-// QEYD: API_URL dəyişəni serverinizin real URL ünvanı ilə əvəz olunmalıdır.
 
 const post = JSON.parse(localStorage.getItem("selectedPost"));
-
 
 if (!post) {
     document.body.innerHTML = "<h3>Kurs tapılmadı</h3>";
@@ -16,12 +15,157 @@ if (!post) {
     const commentsList = document.getElementById("comments-list");
     const commentTextarea = document.getElementById("comment-text");
     const submitButton = document.getElementById("submit-comment");
+    const commentsSection = document.getElementById("comments-section");
+    const ratingSection = document.getElementById("rating-section");
+
+    // Reytinq elementləri
+    const starRatingDiv = document.getElementById("star-rating");
+    const ratingMessage = document.getElementById("rating-message");
+    const stars = starRatingDiv.querySelectorAll('.star');
 
     let currentVideoIndex = 0;
+    let userHasRated = false; // İstifadəçinin bu kursa reytinq verib-vermədiyini yoxlayır
+    let userCurrentScore = 0; // İstifadəçinin verdiyi cari bal
+
+    // Köməkçi funksiya: Ulduzları rəngləmək
+    const renderStars = (score) => {
+        stars.forEach(star => {
+            const starScore = parseInt(star.dataset.score);
+            star.textContent = starScore <= score ? '★' : '☆';
+            star.style.color = starScore <= score ? 'gold' : 'gray';
+        });
+    };
+
+    // Reytinq: Serverə göndərilmə funksiyası
+    const handleStarClick = async (score) => {
+        const token = localStorage.getItem('token');
+
+        if (!token) {
+            Swal.fire("Daxil Olun", "Reytinq vermək üçün daxil olmalısınız.", "warning");
+            return;
+        }
+
+        // 🚨 Əsas yoxlama: İstifadəçi artıq reytinq veribsə, yeni reytinq göndərilmir
+        if (userHasRated) {
+            Swal.fire("Məlumat", "Siz artıq bu kursa reytinq vermisiniz.", "info");
+            return;
+        }
+
+        ratingMessage.textContent = "Reytinq göndərilir...";
+        renderStars(score); // Kliklənən balı vizual olaraq göstər
+
+        try {
+            const response = await fetch(`${API_URL}/rate-course`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`,
+                },
+                body: JSON.stringify({
+                    courseId: post.id,
+                    score: score,
+                }),
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                userHasRated = true; // Müvəffəqiyyətlə reytinq verildi
+                userCurrentScore = score;
+                Swal.fire("Uğurlu!", `Sizin ${score} ulduz reytinqiniz qeydə alındı. Təşəkkür edirik!`, "success");
+                loadUserRating(post.id); // Statusu yenidən yüklə
+            } else {
+                // Əgər artıq reytinq verilibsə (403), loadUserRating yenidən çağırılır
+                Swal.fire("Xəta", data.message || "Reytinq göndərilərkən xəta baş verdi.", "error");
+                loadUserRating(post.id); // Xəta zamanı əvvəlki statusu bərpa et
+            }
+        } catch (error) {
+            console.error("Reytinq göndərmə xətası:", error);
+            Swal.fire("Server Xətası", "Reytinq göndərilərkən gözlənilməz xəta baş verdi.", "error");
+            loadUserRating(post.id);
+        }
+    };
+
+    // Reytinq: İstifadəçinin əvvəlki reytinqini yükləmək
+    async function loadUserRating(courseId) {
+        const token = localStorage.getItem('token');
+
+        // Dəyişənləri sıfırlayırıq
+        userHasRated = false;
+        userCurrentScore = 0;
+        renderStars(0);
+
+        // 1. Kursun cari reytinqini çəkin
+        try {
+            const res = await fetch(`${API_URL}/course-rating/${courseId}`);
+            const data = await res.json();
+            // Orta balı göstərin
+            ratingMessage.textContent = `Kursun cari orta balı: ${data.averageRating.toFixed(1)} (${data.count} səs)`;
+        } catch (e) {
+            console.error("Orta Reytinq yüklənmədi:", e);
+            ratingMessage.textContent = "Orta Reytinq məlumatları yüklənmədi.";
+        }
+
+        if (!token) {
+            ratingMessage.textContent += " | Reytinq vermək üçün daxil olun.";
+            starRatingDiv.style.pointerEvents = 'auto';
+            return;
+        }
+
+        // 2. İstifadəçinin Şəxsi Reytinqini çəkmək (Əsas Düzəliş)
+        try {
+            // Serverinizdə bu endpointi yaratdığınızı fərz edirik!
+            const userRes = await fetch(`${API_URL}/user-rating/${courseId}`, {
+                headers: { "Authorization": `Bearer ${token}` },
+            });
+
+            if (!userRes.ok) throw new Error("Şəxsi reytinq çəkilmədi.");
+
+            const userData = await userRes.json();
+
+            userHasRated = userData.hasRated;
+            userCurrentScore = userData.score;
+
+            if (userHasRated) {
+                renderStars(userCurrentScore); // İstifadəçinin verdiyi balı göstər
+                ratingMessage.textContent += ` | Sizin balınız: ${userCurrentScore}. Artıq reytinq vermisiniz.`;
+                starRatingDiv.style.pointerEvents = 'none'; // Reytinq verilibsə klikləməni əngəllə
+            } else {
+                renderStars(0);
+                starRatingDiv.style.pointerEvents = 'auto'; // Reytinq verməyə icazə ver
+            }
+
+        } catch (e) {
+            console.error("Şəxsi Reytinq yüklənmədi:", e);
+            // Əgər xəta olarsa, istifadəçi reytinq verməyib kimi qəbul edirik
+            userHasRated = false;
+            renderStars(0);
+            starRatingDiv.style.pointerEvents = 'auto';
+        }
+    }
+
+    // Reytinq ulduzlarına klik event-lərini əlavə et
+    stars.forEach(star => {
+        star.addEventListener('click', () => {
+            const score = parseInt(star.dataset.score);
+            handleStarClick(score);
+        });
+        // Hover effekti: Hər hansı bir istifadəçi balını görməkdənsə, hover olunan balı göstəririk.
+        star.addEventListener('mouseover', () => renderStars(parseInt(star.dataset.score)));
+        star.addEventListener('mouseout', () => {
+            // Hover bitəndə, istifadəçinin öz balını (və ya 0) göstər
+            renderStars(userCurrentScore);
+        });
+    });
+    // Ilk yuklenmede ulduzlari sifirla
+    renderStars(0);
 
 
+    // Qalan Şərh funksiyaları (dəyişməz qalır)
     async function loadComments(postId, videoIndex) {
         commentsList.innerHTML = "Şərhlər yüklənir...";
+        commentsSection.style.display = "flex";
+        ratingSection.style.display = "block";
 
         try {
             const response = await fetch(`${API_URL}/comments/${postId}/${videoIndex}`);
@@ -54,15 +198,15 @@ if (!post) {
                 }
 
                 commentDiv.innerHTML = `
-                    <div class="profil">
-                        <span>${c.username[0]}</span>
-                        <strong>${c.username}</strong>
-                    </div>
-                    <div class="comment-main">
-                        <p> ${c.text}</p>
-                        <small>${date}</small>
-                    </div>
-                `;
+                    <div class="profil">
+                        <span>${c.username[0]}</span>
+                        <strong>${c.username}</strong>
+                    </div>
+                    <div class="comment-main">
+                        <p> ${c.text}</p>
+                        <small>${date}</small>
+                    </div>
+                `;
                 commentsList.appendChild(commentDiv);
             });
 
@@ -78,12 +222,12 @@ if (!post) {
         const text = commentTextarea.value.trim();
 
         if (!token) {
-            alert("Şərh yazmaq üçün daxil olmalısınız.");
+            Swal.fire("Daxil Olun", "Şərh yazmaq üçün daxil olmalısınız.", "warning");
             return;
         }
 
         if (text === "") {
-            alert("Şərh mətni boş ola bilməz.");
+            Swal.fire("Boş Mətn", "Şərh mətni boş ola bilməz.", "error");
             return;
         }
 
@@ -106,29 +250,31 @@ if (!post) {
             const data = await response.json();
 
             if (response.ok) {
-                alert(data.message);
+                Swal.fire("Uğurlu!", data.message, "success");
                 commentTextarea.value = "";
                 loadComments(post.id, currentVideoIndex);
             } else {
-                alert(`Şərh göndərilmədi: ${data.message}`);
+                Swal.fire("Xəta", `Şərh göndərilmədi: ${data.message}`, "error");
             }
         } catch (error) {
             console.error("Şərh göndərmə xətası:", error);
-            alert("Şərh göndərilərkən server xətası baş verdi.");
+            Swal.fire("Server Xətası", "Şərh göndərilərkən server xətası baş verdi.", "error");
         } finally {
             submitButton.disabled = false;
         }
     }
 
-
-    if (post.videos.length > 0) {
-        video.src = post.videos[0];
-        loadComments(post.id, 0);
+    // Ilk yüklənməni və ulduzları yükləyən funksiya
+    function loadInitialData() {
+        if (post.videos.length > 0) {
+            video.src = post.videos[0];
+            currentVideoIndex = 0;
+            loadComments(post.id, 0);
+            loadUserRating(post.id); // Reytinq məlumatlarını yüklə
+        }
     }
 
-    submitButton.addEventListener("click", submitComment);
-
-
+    // Video Playlisti və Event Listenerləri
     const videoThumbnails = [];
 
     post.videos.forEach((v, i) => {
@@ -139,18 +285,16 @@ if (!post) {
 
         div.innerHTML =
             `
-        <input type="checkbox" />
-        <img class="img" src ="${coverUrl}">
-        <span>${titleText}</span> 
-      `;
+        <input type="checkbox" />
+        <img class="img" src ="${coverUrl}">
+        <span>${titleText}</span> 
+      `;
 
-        // Yeni elementi massivə əlavə edirik
         videoThumbnails.push(div);
         list.appendChild(div);
 
-        // İlk video aktiv olaraq işarələnməlidir
         if (i === 0) {
-            div.style.backgroundColor = "#f0f0f0"; // Başlanğıc rəng
+            div.style.backgroundColor = "#f0f0f0";
         } else {
             div.style.backgroundColor = "#fff";
         }
@@ -162,139 +306,65 @@ if (!post) {
 
             loadComments(post.id, currentVideoIndex);
 
-            // --- ƏSAS HƏLL: Bütün aktivləri sıfırla və yenisini vurğula ---
+            // Video dəyişəndə reytinq məlumatını yeniləyirik
+            loadUserRating(post.id);
 
-            // Bütün elementlərin rəngini sıfırla (ağ et)
+            // Aktiv video vurgulamasını dəyiş
             videoThumbnails.forEach(item => {
                 item.style.backgroundColor = "#fff";
             });
-
-            // Yalnız kliklənən elementin rəngini dəyiş (boz et)
             div.style.backgroundColor = "#f0f0f0";
-
-            // ----------------------------------------------------------------
         });
     });
+
+    // Ilk yüklənməni başlat
+    loadInitialData();
+
+
+    submitButton.addEventListener("click", submitComment);
+
+    const logo = document.querySelector(".logo")
+
+    logo.addEventListener("click", () => {
+        window.location.href = "../index.html"
+    })
+
+    let buttons = document.querySelectorAll(".btn");
+    let comments = document.getElementById("comments-section");
+    let rating = document.getElementById("rating-section");
+
+
+    buttons.forEach((btn, i) => {
+
+        btn.addEventListener("click", () => {
+
+            buttons.forEach(item => {
+                item.style.cssText = `border: none; color: #2a2b3f7c`
+            });
+
+            btn.style.cssText = `border-bottom: 2px solid #2da0fd; color: #000;`;
+
+            // Bütün bölmələri gizlət
+            comments.style.display = "none";
+            rating.style.display = "none";
+
+            if (i === 0) {
+                // Search funksiyası (əlavə kod tələb olunur)
+                console.log("Search kliklendi");
+            } else if (i === 1) {
+                // Ümumi Baxış (Overview)
+                console.log("Ümumi baxış kliklendi");
+                // Buraya post.text və digər məlumatları göstərən məntiq əlavə edin
+
+            } else {
+                // Rəylər (Comments + Rating)
+                comments.style.display = "flex"
+                rating.style.display = "block"
+            }
+        })
+    })
+
+    document.getElementById("comments").click();
+
 }
 
-const logo = document.querySelector(".logo")
-
-logo.addEventListener("click", () => {
-    window.location.href = "../index.html"
-})
-
-let buttons = document.querySelectorAll(".btn");
-let comments = document.querySelector(".comments-section-container");
-let commentsDisplay = getComputedStyle(comments).display;
-
-
-buttons.forEach((btn, i) => {
-
-    buttons[i].addEventListener("click", () => {
-
-        buttons.forEach(item => {
-            item.style.cssText = `border: none; color: #2a2b3f7c`
-        });
-
-        btn.style.cssText = `border-bottom: 2px solid #2da0fd; color: #000;`;
-
-        if (i === 0) {
-            console.log("seacrh");
-        } else if (i === 1) {
-
-            console.log(post.text);
-
-        } else {
-            comments.style.display = "flex"
-
-
-        }
-    })
-})
-
-// window.addEventListener("beforeunload", () => {
-//     localStorage.removeItem("selectedPost");
-// });
-
-// document.addEventListener('contextmenu', (event) => {
-//   // Prevent the default browser context menu from appearing
-//   event.preventDefault();
-
-//   // Your custom logic for the right-click event goes here
-//   console.log("Right-click detected!");
-
-//   // You can also access information about the event, like mouse coordinates
-//   console.log("X-coordinate:", event.clientX);
-//   console.log("Y-coordinate:", event.clientY);
-// });
-
-// const currentUsername = "VasifB";
-// const currentUserID = "123456";
-
-// const mainVideo = document.getElementById("main-video");
-// const overlay = document.getElementById("video-overlay");
-// const overlayImage = document.getElementById("overlay-image");
-// const overlayText = document.getElementById("overlay-text");
-
-
-// function generateAndDownloadImage() {
-//     const canvas = document.createElement('canvas');
-//     canvas.width = 640;
-//     canvas.height = 360;
-//     const ctx = canvas.getContext('2d');
-
-//     ctx.fillStyle = '#FF0000';
-//     ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-//     ctx.fillStyle = 'white';
-//     ctx.font = '24px Arial';
-//     ctx.textAlign = 'center';
-
-//     const time = new Date().toLocaleString();
-
-//     ctx.fillText("QADAĞANDIR: Ekran Qeydi Aşkarlandı!", canvas.width / 2, 100);
-//     ctx.fillText(`İstifadəçi: ${currentUsername} | ID: ${currentUserID}`, canvas.width / 2, 150);
-//     ctx.fillText(`Vaxt: ${time}`, canvas.width / 2, 200);
-
-//     const dataURL = canvas.toDataURL('image/png');
-
-//     const link = document.createElement('a');
-//     link.href = dataURL;
-//     link.download = `Siz_Qeyd_Etdiniz_${currentUserID}_${Date.now()}.png`;
-
-//     document.body.appendChild(link);
-//     link.click();
-//     document.body.removeChild(link);
-
-//     console.warn("Ekran Qeydi Cəhdi Aşkarlandı. Şəxsi Məlumatlar Yükləndi.");
-// }
-
-
-// function handleVisibilityChange() {
-//     if (document.hidden) {
-//         mainVideo.pause();
-//         overlay.style.display = 'flex';
-//         overlayText.textContent = "Video dayandırıldı. Lütfən, bu pəncərəyə qayıdın.";
-
-
-//     } else {
-//         overlay.style.display = 'none';
-//         mainVideo.play();
-//     }
-// }
-
-// document.addEventListener('visibilitychange', handleVisibilityChange);
-
-// window.addEventListener('blur', () => {
-//     mainVideo.pause();
-//     overlay.style.display = 'flex';
-//     overlayText.textContent = "Diqqət: Video pəncərə aktivliyini itirdi!";
-// });
-
-// window.addEventListener('focus', () => {
-//     overlay.style.display = 'none';
-//     mainVideo.play();
-// });
-
-
-// mainVideo.addEventListener('contextmenu', (event) => event.preventDefault());

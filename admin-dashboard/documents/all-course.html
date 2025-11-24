@@ -4,289 +4,73 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel | Kurs Baxışı</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Admin Panel | Kurs Baxışı & Aktiv Kurslar</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f4f7f9;
-        }
-
-        .card-shadow {
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-        }
-
-        .btn-approve {
-            background-color: #10b981;
-            color: white;
-        }
-
-        .btn-approve:hover {
-            background-color: #059669;
-        }
-
-        .btn-delete {
-            background-color: #ef4444;
-            color: white;
-        }
-
-        .btn-delete:hover {
-            background-color: #dc2626;
-        }
-    </style>
+    <link rel="stylesheet" href="../styles/all-course.css">
 </head>
 
-<body class="min-h-screen">
+<body>
 
-    <header class="bg-white card-shadow sticky top-0 z-10">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-            <h1 class="text-3xl font-bold text-gray-900 cursor-pointer" onclick="window.location.href='../index.html'">
+    <header class="card-shadow">
+        <div class="container header-content">
+            <h1 class="title" onclick="window.location.href='../index.html'">
                 CodeByte Admin
             </h1>
-            <div class="flex items-center space-x-4">
-                <span id="adminRole"
-                    class="text-sm font-medium text-indigo-600 bg-indigo-100 px-3 py-1 rounded-full"></span>
-                <button id="logoutBtn"
-                    class="px-4 py-2 bg-red-500 text-white font-medium rounded-lg hover:bg-red-600 transition duration-150">
+            <div class="admin-info">
+                <span id="adminRole"></span>
+                <button id="logoutBtn">
                     <i class="fas fa-sign-out-alt"></i> Çıxış
                 </button>
             </div>
         </div>
     </header>
 
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <h2 class="text-2xl font-semibold text-gray-800 mb-6">Baxışda Olan Kurslar (<span id="pendingCount">0</span>)
+    <main class="container">
+        <h2>Baxışda Olan Kurslar (<span id="pendingCount">0</span>)
         </h2>
 
-        <div id="postsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <!-- Kurslar bura yüklənəcək -->
+        <div id="pendingPostsContainer" class="posts-grid">
         </div>
 
-        <div id="loadingIndicator" class="text-center py-10 text-gray-500 font-medium">
-            <i class="fas fa-spinner fa-spin text-2xl mb-2"></i>
-            <p>Kurslar yüklənir...</p>
+        <div id="pendingLoadingIndicator" class="indicator">
+            <i class="fas fa-spinner fa-spin"></i>
+            <p>Baxışda olan kurslar yüklənir...</p>
         </div>
 
-        <div id="emptyMessage" class="hidden text-center py-20 bg-white rounded-xl card-shadow mt-8">
-            <i class="fas fa-check-circle text-green-500 text-5xl mb-4"></i>
-            <p class="text-xl font-semibold text-gray-700">Təbriklər! Baxışda olan heç bir kurs yoxdur.</p>
+        <div id="pendingEmptyMessage" class="hidden message-box mb-12">
+            <i class="fas fa-check-circle"></i>
+            <p>Təbriklər! Baxışda olan heç bir kurs yoxdur.</p>
+        </div>
+
+        <hr>
+
+        <h2>
+            Aktiv Kurslar (<span id="activeCount">0</span>)
+        </h2>
+
+        <div class="search-area">
+            <input type="search" id="activeSearchInput">
+
+        </div>
+
+        <div id="activePostsContainer" class="posts-grid">
+        </div>
+
+        <div id="activeLoadingIndicator" class="indicator">
+            <i class="fas fa-spinner fa-spin"></i>
+            <p>Aktiv kurslar yüklənir...</p>
+        </div>
+
+        <div id="activeEmptyMessage" class="hidden message-box">
+            <i class="fas fa-info-circle"></i>
+            <p>Hazırda aktiv (yayımlanmış) kurs yoxdur.</p>
         </div>
 
     </main>
 
-    <script>
-        const API_URL = "https://codebyte-backend-ibyq.onrender.com";
-        const token = localStorage.getItem("token");
-        const postsContainer = document.getElementById("postsContainer");
-        const loadingIndicator = document.getElementById("loadingIndicator");
-        const emptyMessage = document.getElementById("emptyMessage");
-        const pendingCount = document.getElementById("pendingCount");
-        const adminRoleSpan = document.getElementById("adminRole");
-        const logoutBtn = document.getElementById("logoutBtn");
+    <script src="../scripts/all-course.js">
 
-        // Təhlükəsizlik və Rol Yoxlanışı
-        async function checkAuthAndRole() {
-            if (!token) {
-                Swal.fire('Giriş yoxdur', 'Əvvəlcə login olmalısınız.', 'warning').then(() => {
-                    window.location.href = "login.html";
-                });
-                return false;
-            }
-
-            try {
-                const res = await fetch(`${API_URL}/profile`, {
-                    headers: { Authorization: "Bearer " + token },
-                });
-
-                if (!res.ok) throw new Error("Token səhvdir");
-
-                const data = await res.json();
-
-                if (data.role !== "admin") {
-                    Swal.fire('İcazə yoxdur', 'Bu səhifəyə yalnız Administratorlar daxil ola bilər.', 'error').then(() => {
-                        window.location.href = "../index.html";
-                    });
-                    return false;
-                }
-                adminRoleSpan.textContent = `Rol: ${data.role.toUpperCase()}`;
-                return true;
-
-            } catch (e) {
-                Swal.fire('Xəta', 'Autentifikasiya uğursuz oldu.', 'error').then(() => {
-                    window.location.href = "login.html";
-                });
-                return false;
-            }
-        }
-
-        // Baxışda olan kursları yükləmək
-        async function fetchPendingPosts() {
-            postsContainer.innerHTML = '';
-            loadingIndicator.classList.remove('hidden');
-            emptyMessage.classList.add('hidden');
-
-            try {
-                const res = await fetch(`${API_URL}/admin/pending-posts`, {
-                    headers: { Authorization: "Bearer " + token },
-                });
-
-                if (!res.ok) {
-                    const err = await res.json().catch(() => ({ message: "Bilinməyən Server Xətası" }));
-                    Swal.fire('Xəta', 'Kurslar yüklənmədi: ' + err.message, 'error');
-                    return;
-                }
-
-                const posts = await res.json();
-                pendingCount.textContent = posts.length;
-
-                if (posts.length === 0) {
-                    emptyMessage.classList.remove('hidden');
-                } else {
-                    renderPosts(posts);
-                }
-
-            } catch (error) {
-                Swal.fire('Əlaqə xətası', 'Serverə qoşularkən xəta baş verdi: ' + error.message, 'error');
-                console.error("Fetch pending posts error:", error);
-            } finally {
-                loadingIndicator.classList.add('hidden');
-            }
-        }
-
-        // Kursları göstərmək
-        function renderPosts(posts) {
-            posts.forEach(post => {
-                const postElement = document.createElement('div');
-                postElement.id = `post-${post.id}`;
-                postElement.className = 'bg-white rounded-xl overflow-hidden card-shadow flex flex-col';
-
-                // Məlumatları çıxar
-                const videoCount = post.videos ? post.videos.length : 0;
-                const formattedDate = new Date(post.createdAt).toLocaleDateString('az-AZ', { day: 'numeric', month: 'short', year: 'numeric' });
-
-                postElement.innerHTML = `
-                    <div class="h-48 bg-gray-100 overflow-hidden">
-                        <img src="${post.courseCover}" alt="Kurs Şəkli" class="w-full h-full object-cover">
-                    </div>
-                    <div class="p-5 flex flex-col flex-grow">
-                        <div class="flex justify-between items-start mb-2">
-                            <h3 class="text-xl font-bold text-gray-900">${post.text}</h3>
-                            <span class="text-sm font-semibold text-yellow-600 bg-yellow-100 px-3 py-1 rounded-full">${post.category}</span>
-                        </div>
-                        <p class="text-gray-500 text-sm mb-3">Təqdim edən: <span class="font-medium text-gray-700">${post.username}</span></p>
-                        
-                        <div class="mt-auto space-y-2 pt-3 border-t border-gray-100">
-                            <p class="text-gray-600 text-sm"><i class="fas fa-video mr-2"></i> ${videoCount} Video</p>
-                            <p class="text-gray-600 text-sm"><i class="fas fa-calendar-alt mr-2"></i> Tarix: ${formattedDate}</p>
-                            <p class="text-green-600 text-lg font-bold"><i class="fas fa-tag mr-2"></i> ${post.price} ₼</p>
-                        </div>
-
-                        <div class="flex space-x-3 mt-4">
-                            <button data-id="${post.id}" class="approve-btn flex-1 px-4 py-2 rounded-lg font-semibold transition duration-150 btn-approve">
-                                <i class="fas fa-check mr-1"></i> Təsdiqlə
-                            </button>
-                            <button data-id="${post.id}" class="delete-btn flex-1 px-4 py-2 rounded-lg font-semibold transition duration-150 btn-delete">
-                                <i class="fas fa-trash-alt mr-1"></i> Sil
-                            </button>
-                        </div>
-                    </div>
-                `;
-                postsContainer.appendChild(postElement);
-            });
-
-            // Event listenerləri əlavə et
-            document.querySelectorAll('.approve-btn').forEach(btn => btn.addEventListener('click', handleApprove));
-            document.querySelectorAll('.delete-btn').forEach(btn => btn.addEventListener('click', handleDelete));
-        }
-
-        // Təsdiqləmə əməliyyatı
-        async function handleApprove(event) {
-            const postId = event.currentTarget.dataset.id;
-
-            Swal.fire({
-                title: 'Əminsiniz?',
-                text: "Bu kursu dərhal yayımlamaq istədiyinizə əminsiniz?",
-                icon: 'question',
-                showCancelButton: true,
-                confirmButtonColor: '#10b981',
-                cancelButtonColor: '#6b7280',
-                confirmButtonText: 'Bəli, Təsdiqlə!',
-                cancelButtonText: 'Ləğv et'
-            }).then(async (result) => {
-                if (result.isConfirmed) {
-                    try {
-                        const res = await fetch(`${API_URL}/posts/${postId}/approve`, {
-                            method: "PATCH",
-                            headers: {
-                                Authorization: "Bearer " + token,
-                                "Content-Type": "application/json"
-                            },
-                        });
-
-                        if (!res.ok) throw new Error("Təsdiqlənmə uğursuz oldu");
-
-                        Swal.fire('Təsdiqləndi!', 'Kurs uğurla yayımlandı.', 'success');
-                        fetchPendingPosts(); // Səhifəni yenilə
-                    } catch (e) {
-                        Swal.fire('Xəta!', 'Təsdiqləmə zamanı server xətası baş verdi.', 'error');
-                        console.error("Approve error:", e);
-                    }
-                }
-            });
-        }
-
-        // Silmə əməliyyatı
-        async function handleDelete(event) {
-            const postId = event.currentTarget.dataset.id;
-
-            Swal.fire({
-                title: 'Əminsiniz?',
-                text: "Bu kursu silmək istədiyinizə əminsiniz? Bu, geri qaytarılmaz bir əməliyyatdır.",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#ef4444',
-                cancelButtonColor: '#6b7280',
-                confirmButtonText: 'Bəli, Sil!',
-                cancelButtonText: 'Ləğv et'
-            }).then(async (result) => {
-                if (result.isConfirmed) {
-                    try {
-                        const res = await fetch(`${API_URL}/posts/${postId}`, {
-                            method: "DELETE",
-                            headers: { Authorization: "Bearer " + token },
-                        });
-
-                        if (!res.ok) throw new Error("Silinmə uğursuz oldu");
-
-                        Swal.fire('Silindi!', 'Kurs uğurla silindi.', 'success');
-                        fetchPendingPosts(); // Səhifəni yenilə
-                    } catch (e) {
-                        Swal.fire('Xəta!', 'Silinmə zamanı server xətası baş verdi.', 'error');
-                        console.error("Delete error:", e);
-                    }
-                }
-            });
-        }
-
-        // Çıxış funksiyası
-        logoutBtn.addEventListener('click', () => {
-            // localStorage.removeItem("token");
-            Swal.fire('Çıxış', 'Sistemdən çıxış edildi.', 'info').then(() => {
-                window.location.href = "./a1d2m3i4n5P1a2n3e4l5.html";
-            });
-        });
-
-        // Səhifə yüklənərkən
-        document.addEventListener('DOMContentLoaded', async () => {
-            const isAuth = await checkAuthAndRole();
-            if (isAuth) {
-                fetchPendingPosts();
-            }
-        });
     </script>
 </body>
 
