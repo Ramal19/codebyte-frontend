@@ -93,7 +93,6 @@ function searchCard() {
         }
     });
 
-    // Əgər heç bir nəticə tapılmayıbsa, yazını göstər
     const notFound = document.querySelector(".not-found");
     if (!found) {
         if (!notFound) {
@@ -117,6 +116,10 @@ searchInp.addEventListener("input", () => {
     const query = searchInp.value.trim();
     localStorage.setItem("searchValue", query);
     // searchBtn.style.display = query ? "inline-block" : "none";
+
+    if (searchInp.value.trim() === "") {
+        loadPosts()
+    }
 });
 
 searchBtn.addEventListener("click", () => {
@@ -148,12 +151,11 @@ async function loadPosts() {
             const tersTarix = tarix ? tarix.split("-").reverse().join("-") : "";
 
             div.innerHTML = `
-        <img src="${API_URL}/uploads/${p.courseCover}" alt="Post şəkli">
+        <img src="${p.courseCover}" alt="Post şəkli">
         <div class="card-text">
             <h3>${p.text || ""}</h3>
             <span>${p.username}</span>
             <span>${tersTarix}</span>
-            <button class="wish-btn" data-id="${p.id}">❤️ Wishlistə əlavə et</button>
         </div>
       `;
 
@@ -164,24 +166,24 @@ async function loadPosts() {
                 } else showLoginModal(p);
             });
 
-            const wishBtn = div.querySelector(".wish-btn");
-            wishBtn.addEventListener("click", async (e) => {
-                e.stopPropagation();
-                e.preventDefault();
+            // const wishBtn = div.querySelector(".wish-btn");
+            // wishBtn.addEventListener("click", async (e) => {
+            //     e.stopPropagation();
+            //     e.preventDefault();
 
-                const token = localStorage.getItem("token");
-                if (!token) {
-                    alert("Əvvəlcə daxil olmalısan!");
-                    return;
-                }
+            //     const token = localStorage.getItem("token");
+            //     if (!token) {
+            //         alert("Əvvəlcə daxil olmalısan!");
+            //         return;
+            //     }
 
-                const res = await fetch(`${API_URL}/wishlist/${p.id}`, {
-                    method: "POST",
-                    headers: { Authorization: `Bearer ${token}` },
-                });
-                const data = await res.json();
-                alert(data.message);
-            });
+            //     const res = await fetch(`${API_URL}/wishlist/${p.id}`, {
+            //         method: "POST",
+            //         headers: { Authorization: `Bearer ${token}` },
+            //     });
+            //     const data = await res.json();
+            //     alert(data.message);
+            // });
 
             postsDiv.appendChild(div);
         });

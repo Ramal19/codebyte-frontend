@@ -1606,7 +1606,7 @@ li>a:hover {
   .timer-fade>#exitBtn {
     position: absolute;
     top: 100px;
-    right: 15px;
+    right: 35px;
     font-size: 32px;
     color: #fff;
   }

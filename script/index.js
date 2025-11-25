@@ -143,7 +143,6 @@ books.addEventListener("click", () => {
 
 
 
-// ANSWER BOX JS
 let questionBox = document.querySelectorAll(".faq-card > h3");
 let answerBox = document.querySelectorAll(".faq-card > p");
 
@@ -284,14 +283,6 @@ if (userData) {
 
     const user = JSON.parse(userData);
 
-    if (user.role === "admin") {
-        console.log("Bu hesab admine aiddir");
-
-    }
-
-    console.log(user.role);
-
-
     registerBtn.style.display = "none";
     loginBtn.style.display = "none";
     const userInfo = document.createElement("div");
@@ -412,32 +403,25 @@ if (logData) {
 
     let allUsers = [];
     let userMail = null;
-    const token = localStorage.getItem("token"); // Tokeni burada alırıq
+    const token = localStorage.getItem("token");
 
     async function fetchUsers() {
-        // 1. Əgər token yoxdursa, davam etməyin (və ya xəta verin)
         if (!token) {
             console.error("İstifadəçi məlumatları gətirilə bilmədi: Autentifikasiya tokeni tapılmadı.");
-            // Gerekirse login səhifəsinə yönləndir
-            // window.location.href = "login.html"; 
             return;
         }
 
         try {
             const response = await fetch(USERS_API_URL, {
-                // 2. Autentifikasiya başlığını əlavə edirik
                 headers: {
                     'Authorization': `Bearer ${token}`
-                    // Əksər API-lər Bearer token formatından istifadə edir
                 }
             });
 
 
             if (!response.ok) {
-                // Xüsusilə 401 xətası üçün xüsusi bir məntiq əlavə edə bilərsiniz:
                 if (response.status === 401) {
                     console.error("401 Unauthorized: Token etibarsızdır və ya müddəti bitib.");
-                    // Burada localStorage.removeItem("token") və loginə yönləndirmə əlavə edin
                 }
                 throw new Error(`HTTP xətası! Status: ${response.status}`);
             }
@@ -462,9 +446,9 @@ if (logData) {
 
     fetchUsers();
 
-    console.log(user.role);
+    // console.log(user.role);
 
-    console.log(userMail);
+    // console.log(userMail);
 
 
     let userDiv = document.createElement("div");
@@ -481,6 +465,7 @@ if (logData) {
         </div>
         <button id="postAdd"><i class="bi bi-plus-square"></i> Kurs Paylaş</button>
         <button id="postManage"><i class="bi bi-view-list"></i> Ümumi Kurslar</button>
+        <button id="goToProfile"><i class="bi bi-person"></i> Profil</button>
         <button id="logOut"><i class="bi bi-box-arrow-right"></i> Çıxış et</button>
     `
 
@@ -488,6 +473,7 @@ if (logData) {
 
     const postAdd = document.getElementById("postAdd");
     const postManage = document.createElement("postManage");
+    const goToProfile = document.getElementById("goToProfile");
 
 
     postAdd.addEventListener("click", () => {
@@ -498,6 +484,11 @@ if (logData) {
     postManage.addEventListener("click", () => {
 
         window.location.href = "./document/post-manage.html"
+    })
+
+    goToProfile.addEventListener("click", ()=>{
+
+        window.location.href = "./document/profile.html";
     })
 
     const profilImg = document.querySelectorAll(".profil-img")
@@ -732,273 +723,14 @@ menuBtn.addEventListener("click", () => {
 })
 
 
-
-// const postsDiv = document.getElementById("posts");
-// const btnDirection = document.querySelector(".btn-direction");
-
-
-// async function loadPosts() {
-//     try {
-//         const res = await fetch(`${API_URL}/posts`);
-//         const posts = await res.json();
-
-//         if (!posts || posts.length === 0) {
-//             postsDiv.innerHTML = `
-//             <p 
-//                 style="
-//                     font-size: 20px; 
-//                     color: gray; 
-//                     text-align: center;
-//                     padding: 30px 0;
-//             ">
-//                 Hazırda heç bir kurs yoxdur.
-//             </p>`;
-//             return;
-//         }
-
-//         postsDiv.innerHTML = "";
-//         posts.reverse().forEach(p => {
-//             const div = document.createElement("div");
-//             div.classList.add("lesson-card")
-
-//             let tarix = p.createdAt.slice(0, 10);
-//             let tersTarix = tarix.split("-").reverse().join("-");
-//             let price = p.price || "pulsuz"
-//             // <span>${price} AZN</span>
-
-//             div.innerHTML = `
-//                 <img src="${p.courseCover}" alt="Post şəkli">                 
-//                             <div class="card-text">
-//                                 <h3>${p.text || ""}</h3>
-//                                 <span>${p.username}</span>
-//                                 <span>${tersTarix}</span>
-//                                 <button class="wish-btn" data-id="${p.id}">❤️ Wishlistə əlavə et</button>
-//                             </div>
-//           `;
-
-//             let logForm = null;
-
-
-//             div.addEventListener("click", () => {
-
-
-//                 if (userData || logData) {
-//                     // console.log("Qeydiyyatdan kecilib");
-//                     localStorage.setItem("selectedPost", JSON.stringify(p));
-//                     window.location.href = "./document/video.html";
-//                 } else {
-
-//                     // console.log("Qeydiyyatdan kecilmiyib");
-
-
-//                     if (logForm === null) {
-//                         logForm = document.createElement("div");
-//                         logForm.classList.add("logform-blurDiv");
-
-//                         logForm.innerHTML =
-//                             `
-//                         <div class="container-logForm">
-//                             <div class="content">
-//                             <img src="./image/CodeByte.png"/>
-//                               <form id="loginForm" class="content__form">
-//                                 <div class="content__inputs">
-//                                   <label>
-//                                     <input class="input" name="username" type="text" id="username-inp" required="">
-//                                     <span>Username</span>
-//                                   </label>
-//                                   <label>
-//                                     <input required="" class="input" name="password" type="password" id="password-inp">
-//                                     <span>Password</span>
-//                                   </label>
-//                                 </div>
-//                                 <button>Daxil ol</button>
-//                               </form>
-//                               <div class="content__or-text">
-//                                 <span></span>
-//                                 <span>Və ya</span>
-//                                 <span></span>
-//                               </div>
-//                               <div class="content__forgot-buttons">
-//                                 
-//                                 <button class="exit-logForm">Cancel</button>
-//                               </div>
-//                             </div>
-//                         </div>
-//                         `
-//                         document.body.style.overflow = "hidden";
-
-//                         document.body.appendChild(logForm)
-
-//                         let exitLogForm = document.querySelector(".exit-logForm");
-
-//                         exitLogForm.addEventListener("click", () => {
-
-//                             document.body.removeChild(logForm)
-//                             logForm = null
-//                         })
-
-//                         const form = document.getElementById("loginForm");
-//                         form.addEventListener("submit", async (e) => {
-//                             e.preventDefault();
-
-//                             localStorage.setItem("selectedPost", JSON.stringify(p));
-
-//                             const data = {
-//                                 username: form.username.value,
-//                                 password: form.password.value
-//                             };
-//                             const res = await fetch(`${API_URL}/login`, {
-//                                 method: "POST",
-//                                 headers: { "Content-Type": "application/json" },
-//                                 body: JSON.stringify(data)
-//                             });
-//                             const json = await res.json();
-//                             if (res.ok) {
-//                                 localStorage.setItem("token", json.token);
-//                                 localStorage.setItem("loginUser", JSON.stringify({
-//                                     username: data.username,
-//                                     // email: json.email
-//                                 }));
-
-//                                 // document.getElementById("msg").innerText = "Giriş uğurludur!";
-
-//                                 Swal.fire({
-//                                     title: "Giriş uğurludur!",
-//                                     icon: "success",
-//                                 }).then((result) => {
-//                                     if (result.isConfirmed || result.dismiss === Swal.DismissReason.backdrop) {
-
-//                                         console.log("İstifadəçi OK düyməsini kliklədi");
-
-//                                         window.location.href = "./document/video.html";
-//                                     }
-//                                 });
-
-//                             } else {
-//                                 // document.getElementById("msg").innerText = json.message;
-//                                 alert(json.message)
-//                             }
-//                         });
-
-//                     }
-
-
-
-//                 }
-//             });
-
-//             postsDiv.appendChild(div);
-
-//             const wishBtn = div.querySelector(".wish-btn");
-//             wishBtn.addEventListener("click", async (e) => {
-//                 e.stopPropagation();
-//                 const postId = wishBtn.dataset.id;
-//                 const token = localStorage.getItem("token");
-
-//                 if (!token) {
-//                     alert("Əvvəlcə daxil olmalısan!");
-//                     return;
-//                 }
-
-//                 if (!logData) {
-//                     alert("Əvvəlcə daxil olmalısan!");
-//                     return;
-//                 }
-
-//                 const res = await fetch(`${API_URL}/wishlist/${postId}`, {
-//                     method: "POST",
-//                     headers: { Authorization: `Bearer ${token}` },
-//                 });
-
-//                 const data = await res.json();
-//                 alert(data.message);
-//             });
-
-
-//             const lessonCard = document.querySelectorAll(".lesson-card")
-
-
-//             let searchIcon = document.getElementById("search-icon");
-
-
-
-//             searchIcon.addEventListener("click", () => {
-
-
-//                 if (searchInp.value.trim() !== "") {
-//                     localStorage.setItem("searchValue", searchInp.value);
-//                     window.location.href = "./document/search.html"
-//                 }
-//             })
-
-
-
-//             if (postsDiv.children.length > 4) {
-//                 postsDiv.style.cssText =
-//                     `
-//                  overflow-X: scroll;
-//                  overflow-Y: hidden;
-//                 `
-
-//                 let btnLeft = document.querySelector(".btn-left");
-//                 let btnRight = document.querySelector(".btn-right");
-
-//                 if (!btnLeft) {
-//                     btnLeft = document.createElement("button");
-//                     btnLeft.classList.add("btn-left");
-//                     btnLeft.innerHTML = `<i class="bi bi-arrow-left"></i>`;
-//                     // btnDirection.appendChild(btnLeft);
-//                 }
-
-//                 if (!btnRight) {
-//                     btnRight = document.createElement("button");
-//                     btnRight.classList.add("btn-right");
-//                     btnRight.innerHTML = `<i class="bi bi-arrow-right"></i>`;
-//                     // btnDirection.appendChild(btnRight);
-//                 }
-
-
-//                 let step = 200;
-//                 btnLeft.addEventListener("click", () => {
-
-//                     postsDiv.scrollBy({
-//                         left: -step,
-//                         behavior: 'smooth'
-//                     })
-//                 })
-
-//                 btnRight.addEventListener("click", () => {
-//                     postsDiv.scrollBy({
-//                         left: step,
-//                         behavior: 'smooth'
-//                     })
-//                 })
-
-//                 btnDirection.appendChild(btnLeft);
-//                 btnDirection.appendChild(btnRight);
-
-//             }
-
-//         });
-//     } catch (err) {
-//         console.error("Postlar yüklənərkən xəta:", err);
-//     }
-// }
-
-// loadPosts();
-
-// ƏSAS API URL-nizi burada təyin edin
-
 const postsDiv = document.getElementById("posts");
 const btnDirection = document.querySelector(".btn-direction");
-const searchInp = document.getElementById("search-input"); // Əlavə olaraq lazım olan input
+const searchInp = document.getElementById("search-input");
 
 
-// Ulduzların vizual renderi üçün köməkçi funksiya
 const renderStars = (score) => {
     const roundedScore = Math.round(score);
     let stars = '';
-    // Ulduzların rəngini təyin edin
     for (let i = 1; i <= 5; i++) {
         const color = i <= roundedScore ? 'gold' : 'lightgray';
         stars += `<span style="color: ${color}; font-size: 18px;">★</span>`;
@@ -1006,7 +738,6 @@ const renderStars = (score) => {
     return stars;
 };
 
-// Mövcud orta reytinqi yükləyən funksiya
 async function getCourseRating(courseId) {
     try {
         const ratingRes = await fetch(`${API_URL}/course-rating/${courseId}`);
@@ -1041,7 +772,6 @@ async function loadPosts() {
 
         postsDiv.innerHTML = "";
 
-        // Bütün kursları eyni vaxtda reytinqləri ilə birlikdə yükləmək üçün Promise.all istifadə edin
         const reversedPosts = posts.reverse();
         const postPromises = reversedPosts.map(async p => {
             const rating = await getCourseRating(p.id);
@@ -1058,7 +788,6 @@ async function loadPosts() {
             let tarix = p.createdAt.slice(0, 10);
             let tersTarix = tarix.split("-").reverse().join("-");
 
-            // Reytinq HTML-i
             const ratingHTML = `
                 <div class="course-rating" style="display: flex; align-items: center; gap: 5px; margin-bottom: 5px;">
                     ${renderStars(p.rating.averageRating)}
@@ -1075,7 +804,8 @@ async function loadPosts() {
                 <img src="${p.courseCover}" alt="Post şəkli">                 
                 <div class="card-text">
                     <h3>${p.text || ""}</h3>
-                    ${ratingHTML}                     <span>${p.username}</span>
+                    ${ratingHTML}                     
+                    <span>${p.username}</span>
                     <span>${tersTarix}</span>
                     <button class="wish-btn" data-id="${p.id}">❤️ Wishlistə əlavə et</button>
                 </div>
@@ -1084,12 +814,10 @@ async function loadPosts() {
             let logForm = null;
 
             div.addEventListener("click", () => {
-                // ... (Logikalar dəyişmir) ...
                 if (userData || logData) {
                     localStorage.setItem("selectedPost", JSON.stringify(p));
                     window.location.href = "./document/video.html";
                 } else {
-                    // Login Formu açma məntiqi
                     if (logForm === null) {
                         logForm = document.createElement("div");
                         logForm.classList.add("logform-blurDiv");
@@ -1172,7 +900,6 @@ async function loadPosts() {
 
                     }
 
-
                 }
             });
 
@@ -1199,7 +926,6 @@ async function loadPosts() {
             });
 
 
-            // Search məntiqi (düzəldildi, artıq saniyədə bir dəfə əlavə olunmayacaq)
             const searchIcon = document.getElementById("search-icon");
             if (searchIcon && !searchIcon._hasListener) {
                 searchIcon.addEventListener("click", () => {
@@ -1211,7 +937,6 @@ async function loadPosts() {
                 searchIcon._hasListener = true;
             }
 
-            // Scroll naviqasiya məntiqi
             if (postsDiv.children.length > 4) {
                 postsDiv.style.cssText =
                     `
@@ -1219,7 +944,6 @@ async function loadPosts() {
                  overflow-Y: hidden;
                 `
 
-                // Yalnız bir dəfə buttonları əlavə etmək üçün yoxlanış
                 if (btnDirection && btnDirection.children.length === 0) {
                     let btnLeft = document.createElement("button");
                     btnLeft.classList.add("btn-left");

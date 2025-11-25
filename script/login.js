@@ -42,11 +42,11 @@ form.addEventListener("submit", async (e) => {
             }).then((result) => {
                 if (result.isConfirmed || result.dismiss === Swal.DismissReason.backdrop) {
 
-                    if (json.role === "admin") {
+                    // if (json.role === "admin") {
                         // window.location.href = "../admin-dashboard/documents/a1d2m3i4n5P1a2n3e4l5.html";
                     // } else {
                         window.location.href = "../index.html";
-                    }
+                    // }
                 }
             });
 

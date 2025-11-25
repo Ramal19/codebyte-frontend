@@ -707,7 +707,7 @@ li>a:hover {
     padding-top: 50px;
   }
 
-  .contact-form{
+  .contact-form {
 
     display: flex;
     flex-direction: column;
@@ -717,5 +717,25 @@ li>a:hover {
 
     display: flex;
     flex-direction: column;
+  }
+
+  .contact-dom>p {
+
+    width: 100%;
+    text-align: center;
+  }
+
+  .contact-form>.form {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .contact-form>.form>.name>label>input {
+
+    width: 368px;
+  }
+
+  .contact-form>.codebyte-info {
+    width: auto;
   }
 }
