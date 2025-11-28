@@ -1,12 +1,725 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="az">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CodeByte - Profil</title>
+    <title>CodeByte - Profil Dashboard</title>
     <link rel="shortcut icon" href="../image/CodeByte.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+
+    <style>
+        :root {
+            --primary-color: #2da0fd;
+            --primary-light: #4c8cff;
+            --text-dark: #333;
+            --text-light: #666;
+            --bg-light: #f4f7f9;
+            --border-color: #e0e0e0;
+            --success-color: #28a745;
+            --danger-color: #dc3545;
+            --warning-color: #ffc107;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            font-family: Arial, sans-serif;
+        }
+
+        .profile-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* --- Sidebar Stili --- */
+        .profile-sidebar {
+            width: 250px;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .user-info-card {
+            text-align: center;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .profile-avatar {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 10px;
+            border: 3px solid var(--primary-color);
+        }
+
+        .username-display {
+            font-size: 1.25em;
+            color: var(--text-dark);
+        }
+
+        .user-role {
+            font-size: 0.9em;
+            color: var(--primary-light);
+            margin-bottom: 15px;
+        }
+
+        .edit-profile-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .edit-profile-btn:hover {
+            background-color: var(--primary-light);
+        }
+
+        .profile-nav {
+            display: flex;
+            flex-direction: column;
+            padding-top: 20px;
+            flex-grow: 1;
+            /* Navigasiyanı uzatmaq üçün */
+        }
+
+        .nav-item {
+            padding: 12px 10px;
+            text-decoration: none;
+            color: var(--text-light);
+            border-radius: 5px;
+            margin: 5px 0;
+            transition: background-color 0.2s, color 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 500;
+        }
+
+        .nav-item:hover,
+        .nav-item.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .logout-btn {
+            margin-top: auto;
+            color: var(--danger-color);
+        }
+
+        .logout-btn:hover {
+            background-color: var(--danger-color);
+            color: white;
+        }
+
+        /* --- Əsas Məzmun Stili --- */
+        .profile-content {
+            flex-grow: 1;
+            padding: 40px;
+        }
+
+        .content-section {
+            display: none;
+            /* Aktiv bölməni göstərmək üçün */
+            animation: fadeIn 0.5s;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            color: var(--text-dark);
+            margin-bottom: 25px;
+        }
+
+        /* Stat Cards */
+        .stat-cards {
+            display: flex;
+            gap: 20px;
+            margin-top: 20px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+
+        .stat-card {
+            flex: 1;
+            min-width: 200px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            text-align: center;
+        }
+
+        .stat-card i {
+            font-size: 2em;
+            margin-bottom: 10px;
+            color: var(--primary-color);
+        }
+
+        .stat-value {
+            font-size: 2em;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        /* Reytinq Qrafiki */
+        .rating-chart-placeholder {
+            height: 300px;
+            background-color: #fff;
+            border: 1px dashed var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 20px;
+            border-radius: 8px;
+            color: var(--text-light);
+        }
+
+
+        /* Mənim Postlarım Stili */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .new-post-btn {
+            background-color: var(--success-color);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .new-post-btn:hover {
+            background-color: #218838;
+        }
+
+        .post-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #fff;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .post-info h3 {
+            font-size: 1.1em;
+            color: var(--text-dark);
+        }
+
+        .post-stats {
+            font-size: 0.85em;
+            color: var(--text-light);
+            margin-top: 5px;
+        }
+
+        .post-actions button {
+            margin-left: 10px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.1em;
+            transition: color 0.2s;
+            padding: 5px;
+        }
+
+        .post-actions .edit {
+            color: var(--primary-color);
+        }
+
+        .post-actions .delete {
+            color: var(--danger-color);
+        }
+
+        .post-actions .view {
+            color: var(--warning-color);
+        }
+
+        /* Mobil görünüş üçün düzəlişlər */
+        @media (max-width: 768px) {
+            .profile-container {
+                flex-direction: column;
+            }
+
+            .profile-sidebar {
+                width: 100%;
+                padding: 15px;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            }
+
+            .profile-nav {
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: center;
+                border-top: 1px solid var(--border-color);
+                padding-top: 15px;
+            }
+
+            .nav-item {
+                flex: 1 1 auto;
+                text-align: center;
+                justify-content: center;
+            }
+
+            .logout-btn {
+                margin-top: 5px;
+                flex: 1 1 100%;
+                /* Çıxış düyməsi yeni sətrdə */
+            }
+
+            .profile-content {
+                padding: 20px 15px;
+            }
+
+            .post-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .post-actions {
+                margin-top: 10px;
+                width: 100%;
+                text-align: right;
+            }
+        }
+    </style>
 </head>
+
 <body>
-    
+    <div class="profile-container">
+        <aside class="profile-sidebar">
+            <div class="user-info-card">
+                <img src="https://via.placeholder.com/90/2da0fd/FFFFFF?text=CB" alt="Profil Şəkli"
+                    class="profile-avatar" id="user-avatar">
+                <h2 class="username-display" id="user-username">Cavid_Məmmədov</h2>
+                <p class="user-role" id="user-role">Premium İstifadəçi</p>
+                <button class="edit-profile-btn"><i class="bi bi-pencil-square"></i> Profili Redaktə Et</button>
+            </div>
+
+            <nav class="profile-nav">
+                <a href="#dashboard" class="nav-item active"><i class="bi bi-grid-fill"></i> Dashboard</a>
+                <a href="#posts" class="nav-item"><i class="bi bi-file-earmark-text-fill"></i> Mənim Postlarım</a>
+                <a href="#stats" class="nav-item"><i class="bi bi-graph-up"></i> Statistika & Reytinq</a>
+                <a href="#settings" class="nav-item"><i class="bi bi-gear-fill"></i> Parametrlər</a>
+                <a href="#" class="nav-item logout-btn" id="logout-btn"><i class="bi bi-box-arrow-right"></i> Çıxış</a>
+            </nav>
+        </aside>
+
+        <main class="profile-content">
+            <section id="dashboard" class="content-section active">
+                <h1>👋 Xoş Gəldin, <span id="welcome-username">Cavid!</span></h1>
+
+                <div class="stat-cards">
+                    <div class="stat-card">
+                        <i class="bi bi-star-fill rating-icon"></i>
+                        <h3>Reytinq Xalı</h3>
+                        <p class="stat-value" id="current-rating">1450</p>
+                    </div>
+                    <div class="stat-card">
+                        <i class="bi bi-chat-left-text-fill post-count-icon"></i>
+                        <h3>Ümumi Post Sayı</h3>
+                        <p class="stat-value" id="total-posts">24</p>
+                    </div>
+                    <div class="stat-card">
+                        <i class="bi bi-trophy-fill rank-icon"></i>
+                        <h3>Qlobal Sıralama</h3>
+                        <p class="stat-value" id="global-rank">#123</p>
+                    </div>
+                </div>
+
+                <h2>Reytinq Performansı</h2>
+                <div class="rating-chart-placeholder">
+                    <p>Reytinq qrafiki (Chart.js və s. ilə) burada göstəriləcək.</p>
+                </div>
+            </section>
+
+            <section id="posts" class="content-section">
+                <div class="section-header">
+                    <h2>Mənim Postlarım (<span id="post-count-display">24</span>)</h2>
+                    <button class="new-post-btn"><i class="bi bi-plus-circle-fill"></i> Yeni Post Yarat</button>
+                </div>
+
+                <div class="my-posts-list" id="my-posts-list">
+                    <div class="post-item">
+                        <div class="post-info">
+                            <h3>JavaScript'də Async/Await haqqında</h3>
+                            <p class="post-stats">👍 15 | 💬 3 | 🗓 22.02.2025</p>
+                        </div>
+                        <div class="post-actions">
+                            <button class="action-btn edit" title="Redaktə et"><i class="bi bi-pencil"></i></button>
+                            <button class="action-btn delete" title="Sil"><i class="bi bi-trash"></i></button>
+                            <button class="action-btn view" title="Görünüş"><i class="bi bi-eye"></i></button>
+                        </div>
+                    </div>
+                    <div class="post-item">
+                        <div class="post-info">
+                            <h3>Node.js ilə Sürətli REST API</h3>
+                            <p class="post-stats">👍 18 | 💬 4 | 🗓 15.03.2025</p>
+                        </div>
+                        <div class="post-actions">
+                            <button class="action-btn edit" title="Redaktə et"><i class="bi bi-pencil"></i></button>
+                            <button class="action-btn delete" title="Sil"><i class="bi bi-trash"></i></button>
+                            <button class="action-btn view" title="Görünüş"><i class="bi bi-eye"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="stats" class="content-section">
+                <h2>Ətraflı Statistikalar</h2>
+                <div class="detailed-stats">
+                    <p>Bu hissədə Post növlərinə, ortalama bəyənmə sayına və s. dair ətraflı cədvəllər və qrafiklər
+                        yerləşəcək.</p>
+                </div>
+            </section>
+
+            <section id="settings" class="content-section">
+                <h2>Hesab Parametrləri</h2>
+                <form class="settings-form">
+                    <p>Bu hissədə istifadəçi parolunu, e-poçtunu və bildiriş parametrlərini idarə edə bilər.</p>
+                </form>
+            </section>
+
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const API_URL = "https://codebyte-backend-ibyq.onrender.com";
+
+            const loginUserString = localStorage.getItem("loginUser");
+            const token = localStorage.getItem("token");
+
+            let userData = null;
+
+            if (loginUserString && token) {
+                try {
+                    userData = JSON.parse(loginUserString);
+                } catch (e) {
+                    console.error("Local Storage-dakı istifadəçi məlumatları zədələnib.");
+                }
+            }
+
+            // İstifadəçi yoxlanışı və yönləndirmə
+            if (!token || !userData) {
+                // Təhlükəsizlik səbəbi ilə login səhifəsinə yönləndiririk
+                alert("Zəhmət olmasa, əvvəlcə daxil olun.");
+                window.location.href = "../login.html";
+                return;
+            }
+
+
+            // DOM Elementləri və İstifadəçi Məlumatları
+            const navItems = document.querySelectorAll('.profile-nav .nav-item');
+            const contentSections = document.querySelectorAll('.profile-content .content-section');
+            const welcomeUsername = document.getElementById('welcome-username');
+            const userUsernameDisplay = document.getElementById('user-username');
+            const userRoleDisplay = document.getElementById('user-role');
+            const logoutBtn = document.getElementById('logout-btn');
+            const currentUsername = userData.username;
+            const currentRole = userData.role || 'Standart İstifadəçi';
+            const userId = userData.id; // İndi id də lazımdır!
+
+            // Profil kartını və Xoş gəldin mesajını yenilə
+            if (userUsernameDisplay) userUsernameDisplay.textContent = currentUsername;
+            if (userRoleDisplay) userRoleDisplay.textContent = currentRole;
+            if (welcomeUsername) {
+                const simpleName = currentUsername.split('_')[0];
+                welcomeUsername.textContent = simpleName + '!';
+            }
+
+
+            // ------------------------------------
+            // 1. ÇIXIŞ (LOGOUT) MƏNTİQİ
+            // ------------------------------------
+            function handleLogout() {
+                localStorage.removeItem("token");
+                localStorage.removeItem("loginUser");
+                alert("Sistemdən uğurla çıxış edildi.");
+                window.location.href = "../index.html";
+            }
+
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    handleLogout();
+                });
+            }
+
+            // ------------------------------------
+            // 2. NAVİGASİYA VƏ MƏLUMAT YÜKLƏMƏ
+            // ------------------------------------
+            navItems.forEach(item => {
+                item.addEventListener('click', (e) => {
+                    if (item.id === 'logout-btn') return;
+
+                    e.preventDefault();
+                    const targetId = item.getAttribute('href').substring(1);
+
+                    navItems.forEach(nav => nav.classList.remove('active'));
+                    item.classList.add('active');
+
+                    contentSections.forEach(section => {
+                        section.classList.remove('active');
+                        if (section.id === targetId) {
+                            section.classList.add('active');
+
+                            // YÜKLƏMƏ MƏNTİQİ
+                            if (targetId === 'posts') {
+                                loadUserPosts();
+                            } else if (targetId === 'stats') {
+                                loadStatsAndRatings();
+                            }
+                        }
+                    });
+                });
+            });
+
+            // ------------------------------------
+            // 3. ŞƏXSİ POSTLARI YÜKLƏMƏK
+            // ------------------------------------
+            async function loadUserPosts() {
+                const postsContainer = document.getElementById('my-posts-list');
+                const postCountDisplay = document.getElementById('post-count-display');
+                postsContainer.innerHTML = '<p class="loading-message">Postlar yüklənir...</p>';
+
+                try {
+                    const res = await fetch(`${API_URL}/posts/my-posts`, {
+                        method: "GET",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Authorization": `Bearer ${token}`
+                        },
+                    });
+
+                    const posts = await res.json();
+
+                    if (res.ok && Array.isArray(posts)) {
+                        renderPosts(posts);
+                        postCountDisplay.textContent = posts.length;
+                    } else {
+                        postsContainer.innerHTML = `<p style="color:red;">Postlar yüklənərkən xəta: ${posts.message || 'Bilinməyən xəta'}</p>`;
+                    }
+
+                } catch (error) {
+                    console.error("Post yüklənməsi xətası:", error);
+                    postsContainer.innerHTML = '<p style="color:red;">Serverlə əlaqə qurulmadı. Zəhmət olmasa backend-in işlədiyindən əmin olun.</p>';
+                }
+            }
+
+            function renderPosts(posts) {
+                const postsContainer = document.getElementById('my-posts-list');
+                postsContainer.innerHTML = '';
+                if (posts.length === 0) {
+                    postsContainer.innerHTML = '<p>Hələ heç bir kurs paylaşılmayıb.</p>';
+                    return;
+                }
+
+                posts.forEach(post => {
+                    // Təsdiqlənmə statusunu müəyyən etmək
+                    const statusText = post.isApproved ?
+                        '<span style="color: var(--success-color); font-weight: bold;">Təsdiqlənib</span>' :
+                        '<span style="color: var(--warning-color); font-weight: bold;">Baxışda</span>';
+
+                    const postElement = document.createElement('div');
+                    postElement.classList.add('post-item');
+                    postElement.innerHTML = `
+                <div class="post-info">
+                    <h3>${post.text}</h3>
+                    <p class="post-stats">🗓 ${post.createdAt ? new Date(post.createdAt).toLocaleDateString('az-AZ') : 'Tarix yoxdur'} | Status: ${statusText}</p>
+                </div>
+                <div class="post-actions">
+                    <button class="action-btn edit" data-post-id="${post.id}" title="Redaktə et"><i class="bi bi-pencil"></i></button>
+                    <button class="action-btn delete" data-post-id="${post.id}" title="Sil"><i class="bi bi-trash"></i></button>
+                    <button class="action-btn view" data-post-id="${post.id}" title="Görünüş"><i class="bi bi-eye"></i></button>
+                </div>
+            `;
+                    postsContainer.appendChild(postElement);
+                });
+
+                // Silmə hadisələrini əlavə et
+                postsContainer.querySelectorAll('.action-btn.delete').forEach(btn => {
+                    btn.addEventListener('click', (e) => handleDeletePost(e.currentTarget.dataset.postId));
+                });
+
+                // Buradan View və Edit səhifələrinə yönləndirmə əlavə edin
+                postsContainer.querySelectorAll('.action-btn.view').forEach(btn => {
+                    btn.addEventListener('click', () => window.location.href = `../course-details.html?id=${btn.dataset.postId}`);
+                });
+            }
+
+            // Kursu silmə funksiyası (backendinizdəki DELETE /posts/:id marşrutunu istifadə edir)
+            async function handleDeletePost(postId) {
+                if (!confirm("Əminsiniz? Bu kursu silmək istəyirsiniz?")) return;
+
+                try {
+                    const res = await fetch(`${API_URL}/posts/${postId}`, {
+                        method: "DELETE",
+                        headers: {
+                            "Authorization": `Bearer ${token}`
+                        },
+                    });
+
+                    const json = await res.json();
+
+                    if (res.ok) {
+                        alert(json.message);
+                        loadUserPosts(); // Postları yenidən yüklə
+                    } else {
+                        alert(`Silinmə uğursuz oldu: ${json.message}`);
+                    }
+
+                } catch (error) {
+                    console.error("Post silinmə xətası:", error);
+                    alert("Serverlə əlaqə qurulmadı.");
+                }
+            }
+
+
+            // ------------------------------------
+            // 4. ƏTRAFLI STATİSTİKA VƏ REYTİNQLƏRİ YÜKLƏMƏK
+            // ------------------------------------
+            async function loadStatsAndRatings() {
+                const detailedStatsContainer = document.getElementById('stats');
+                detailedStatsContainer.innerHTML = '<h2>Ətraflı Statistikalar</h2><p class="loading-message">Statistika və Reytinqlər yüklənir...</p>';
+
+                try {
+                    // İstifadəçinin verdiyi reytinqləri gətir
+                    const resRatings = await fetch(`${API_URL}/ratings/my-ratings`, {
+                        method: "GET",
+                        headers: { "Authorization": `Bearer ${token}` },
+                    });
+                    const ratings = await resRatings.json();
+
+                    // İstifadəçinin bütün postlarını (təsdiqlənmiş, baxışda) gətir (bu məlumatı loadUserPosts-dan da istifadə etmək olar, amma bütövlük üçün yenidən çağırıram)
+                    const resPosts = await fetch(`${API_URL}/posts/my-posts`, {
+                        method: "GET",
+                        headers: { "Authorization": `Bearer ${token}` },
+                    });
+                    const userPosts = await resPosts.json();
+
+                    renderDetailedStats(userPosts, ratings);
+
+                } catch (error) {
+                    console.error("Statistika yüklənməsi xətası:", error);
+                    detailedStatsContainer.innerHTML = '<h2>Ətraflı Statistikalar</h2><p style="color:red;">Məlumatlar yüklənərkən xəta baş verdi.</p>';
+                }
+            }
+
+            function renderDetailedStats(posts, ratings) {
+                const statsSection = document.getElementById('stats');
+
+                // Postlar üçün statistika
+                const approvedCount = posts.filter(p => p.isApproved).length;
+                const pendingCount = posts.filter(p => !p.isApproved).length;
+                const totalPosts = posts.length;
+
+                let statsHTML = `
+            <h2>Statistikaya Baxış</h2>
+            <div class="stat-cards">
+                <div class="stat-card" style="background-color: #e6f7ff;">
+                    <i class="bi bi-file-earmark-check-fill" style="color: #1890ff;"></i>
+                    <h3>Təsdiqlənmiş Kurs</h3>
+                    <p class="stat-value" style="color: #1890ff;">${approvedCount}</p>
+                </div>
+                <div class="stat-card" style="background-color: #fffbe6;">
+                    <i class="bi bi-clock-history" style="color: #faad14;"></i>
+                    <h3>Baxışda olan</h3>
+                    <p class="stat-value" style="color: #faad14;">${pendingCount}</p>
+                </div>
+                <div class="stat-card" style="background-color: #f0f0f0;">
+                    <i class="bi bi-bar-chart-fill" style="color: var(--text-dark);"></i>
+                    <h3>Ümumi Post</h3>
+                    <p class="stat-value" style="color: var(--text-dark);">${totalPosts}</p>
+                </div>
+            </div>
+            
+            <h2>Sizin Reytinqləriniz (${ratings.length} qeyd)</h2>
+            <div class="my-ratings-list" style="max-height: 400px; overflow-y: auto;">
+        `;
+
+                if (ratings.length === 0) {
+                    statsHTML += '<p>Hələ heç bir kursa reytinq verməmisiniz.</p>';
+                } else {
+                    ratings.forEach(r => {
+                        const stars = '⭐'.repeat(r.score) + '☆'.repeat(5 - r.score);
+                        statsHTML += `
+                    <div class="post-item" style="display:flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <div class="post-info">
+                            <h3 style="font-size: 1em;">${r.courseTitle}</h3>
+                            <p class="post-stats">${r.createdAt ? new Date(r.createdAt.seconds * 1000).toLocaleDateString('az-AZ') : 'Tarix yoxdur'}</p>
+                        </div>
+                        <div style="font-size: 1.2em;">${stars}</div>
+                    </div>
+                `;
+                    });
+                }
+
+                statsHTML += `</div>`;
+                statsSection.innerHTML = statsHTML;
+            }
+
+            // Səhifə yüklənərkən ümumi post sayını Dashboard-da göstərmək üçün çağırılır
+            // Bu funksiya API-dən məlumatları asinxron yükləməyi tələb edir.
+            // İlk yükləmə üçün yalnız Dashbord statistikasını yeniləmək məqsədi ilə:
+            async function initialLoadDashboardStats() {
+                try {
+                    const res = await fetch(`${API_URL}/posts/my-posts`, {
+                        method: "GET",
+                        headers: { "Authorization": `Bearer ${token}` },
+                    });
+                    const posts = await res.json();
+
+                    if (res.ok && Array.isArray(posts)) {
+                        const totalPosts = posts.length;
+                        const approvedCount = posts.filter(p => p.isApproved).length;
+
+                        document.getElementById('total-posts').textContent = totalPosts;
+
+                        // Reytinq və Sıralama məlumatları hələ ki, static qalır (API marşrutu yoxdur)
+                        document.getElementById('current-rating').textContent = 'API ?'; // Reytinq API-si lazımdır
+                        document.getElementById('global-rank').textContent = '#?';
+                    }
+                } catch (e) {
+                    console.log("Dashboard ilkin yüklənməsi xətası.");
+                }
+            }
+            initialLoadDashboardStats();
+        });
+    </script>
 </body>
+
 </html>

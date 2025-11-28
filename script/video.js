@@ -306,10 +306,8 @@ if (!post) {
 
             loadComments(post.id, currentVideoIndex);
 
-            // Video dəyişəndə reytinq məlumatını yeniləyirik
             loadUserRating(post.id);
 
-            // Aktiv video vurgulamasını dəyiş
             videoThumbnails.forEach(item => {
                 item.style.backgroundColor = "#fff";
             });
@@ -317,7 +315,6 @@ if (!post) {
         });
     });
 
-    // Ilk yüklənməni başlat
     loadInitialData();
 
 
@@ -344,20 +341,15 @@ if (!post) {
 
             btn.style.cssText = `border-bottom: 2px solid #2da0fd; color: #000;`;
 
-            // Bütün bölmələri gizlət
             comments.style.display = "none";
             rating.style.display = "none";
 
             if (i === 0) {
-                // Search funksiyası (əlavə kod tələb olunur)
                 console.log("Search kliklendi");
             } else if (i === 1) {
-                // Ümumi Baxış (Overview)
                 console.log("Ümumi baxış kliklendi");
-                // Buraya post.text və digər məlumatları göstərən məntiq əlavə edin
 
             } else {
-                // Rəylər (Comments + Rating)
                 comments.style.display = "flex"
                 rating.style.display = "block"
             }

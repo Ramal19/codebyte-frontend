@@ -486,7 +486,7 @@ if (logData) {
         window.location.href = "./document/post-manage.html"
     })
 
-    goToProfile.addEventListener("click", ()=>{
+    goToProfile.addEventListener("click", () => {
 
         window.location.href = "./document/profile.html";
     })
@@ -727,7 +727,17 @@ const postsDiv = document.getElementById("posts");
 const btnDirection = document.querySelector(".btn-direction");
 const searchInp = document.getElementById("search-input");
 
+const searchIcon = document.getElementById("search-icon");
 
+if (searchIcon && !searchIcon._hasListener) {
+    searchIcon.addEventListener("click", () => {
+        if (searchInp.value.trim() !== "") {
+            localStorage.setItem("searchValue", searchInp.value);
+            window.location.href = "./document/search.html"
+        }
+    })
+    searchIcon._hasListener = true;
+}
 const renderStars = (score) => {
     const roundedScore = Math.round(score);
     let stars = '';
@@ -926,16 +936,7 @@ async function loadPosts() {
             });
 
 
-            const searchIcon = document.getElementById("search-icon");
-            if (searchIcon && !searchIcon._hasListener) {
-                searchIcon.addEventListener("click", () => {
-                    if (searchInp.value.trim() !== "") {
-                        localStorage.setItem("searchValue", searchInp.value);
-                        window.location.href = "./document/search.html"
-                    }
-                })
-                searchIcon._hasListener = true;
-            }
+
 
             if (postsDiv.children.length > 4) {
                 postsDiv.style.cssText =

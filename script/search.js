@@ -13,6 +13,10 @@ searchInp.value = localStorage.getItem("searchValue") || "";
 
 // searchBtn.style.display = searchInp.value !== "" ? "block" : "none";
 
+if (searchInp.value.trim() !== "") {
+    searchCard();
+}
+
 function showUserPanel(user, storageKey) {
     registerBtn.style.display = "none";
     loginBtn.style.display = "none";
@@ -275,6 +279,6 @@ function showLoginModal(p) {
 
 loadPosts();
 
-window.addEventListener("beforeunload", () => {
-    localStorage.removeItem("searchValue");
-});
+// window.addEventListener("beforeunload", () => {
+//     localStorage.removeItem("searchValue");
+// });
