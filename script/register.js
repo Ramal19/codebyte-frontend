@@ -1,4 +1,7 @@
-emailjs.init("EsHztpH0Dv7cXaD1n");
+// ====================================================================
+// --- EmailJS BAŞLADILMASI (VACİB HİSSƏ) ---
+emailjs.init("EsHztpH0Dv7cXaD1n"); 
+// ====================================================================
 
 const regUser = localStorage.getItem("registeredUser");
 const loginUser = localStorage.getItem("loginUser");
@@ -23,17 +26,20 @@ const line = document.querySelector(".line");
 const passRequirements = document.getElementById("pass-requirements");
 const requirementsListItems = document.querySelectorAll('#pass-requirements li');
 
-
 const verificationContainer = document.getElementById("verificationContainer");
 const verificationCodeInput = document.getElementById("verificationCodeInput");
 const verifyButton = document.getElementById("verifyButton");
 
 let generatedVerificationCode = null;
-let userDataToRegister = {};
+let userDataToRegister = {}; 
 
 const EMAILJS_SERVICE_ID = "service_uxvssjk";
 const EMAILJS_TEMPLATE_ID = "template_i41ipll";
 
+
+// ====================================================================
+// --- FUNKSİYALAR ---
+// ====================================================================
 
 function getPasswordStrength(password) {
     let score = 0;
@@ -74,7 +80,11 @@ if (passRequirements) {
 }
 
 
+// ====================================================================
+// --- HADİSƏLƏR (EVENTS) ---
+// ====================================================================
 
+// --- FORM SUBMIT HADİSƏSİ (Mərhələ 1: Konflikt Yoxlanışı və Kod Göndərilməsi) ---
 form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
@@ -105,7 +115,6 @@ form.addEventListener("submit", async (e) => {
         regButton.disabled = true;
     }
 
-
     try {
         const checkRes = await fetch(`${API_URL}/register`, {
             method: "POST",
@@ -117,61 +126,68 @@ form.addEventListener("submit", async (e) => {
             const errorJson = await checkRes.json();
             const errorMessage = errorJson.message || "Bilinməyən xəta baş verdi.";
 
-            if (checkRes.status === 409) {
+            if (checkRes.status === 409 || checkRes.status === 400) {
                 Swal.fire({
-                    title: "Qeydiyyat Xətası (409) 🛑",
-                    text: errorMessage,
+                    title: "Qeydiyyat Xətası 🛑",
+                    text: errorMessage, 
                     icon: "warning"
                 });
                 return;
-            }
-            else {
-                Swal.fire({
-                    title: "Qeydiyyat Xətası ❌",
+            } else {
+                 Swal.fire({
+                    title: "Server Xətası ❌",
                     text: errorMessage,
                     icon: "error"
                 });
                 return;
             }
         }
+        
+        // Əgər checkRes.ok (200/201) gəlibsə, deməli serverdə hələ qeydiyyat yoxdur.
+        // İndi EmailJS ilə kodu göndərə bilərik.
+        
+        generatedVerificationCode = Math.floor(100000 + Math.random() * 900000);
 
-        const successJson = await checkRes.json();
+        if (regButton) {
+            regButton.textContent = "Kod göndərilir...";
+            regButton.disabled = true;
+        }
 
-        localStorage.setItem("token", successJson.token);
-        localStorage.setItem("registeredUser", JSON.stringify({
-            username: data.username,
-            email: data.email,
-            role: successJson.role
-        }));
-
-        Swal.fire({
-            title: "Qeydiyyat Uğurlu! 🎉",
-            text: "Qeydiyyatınız uğurla tamamlandı. Giriş səhifəsinə yönləndirilirsiniz.",
-            icon: "success"
-        }).then(() => {
-            window.location.href = "../index.html";
+        await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+            user_email: data.email,
+            from_name: data.username,
+            verification_code: generatedVerificationCode,
+            message: "Sizin təsdiq kodunuz: " + generatedVerificationCode 
         });
 
-        return;
+        Swal.fire({
+            title: "Kod Göndərildi! 📧",
+            text: `${data.email} ünvanına 6 rəqəmli təsdiq kodu göndərildi.`,
+            icon: "success"
+        });
+
+        form.style.display = 'none';
+        if (verificationContainer) {
+            verificationContainer.style.display = 'flex';
+        }
 
     } catch (error) {
-        console.error("Server yoxlamasında xəta:", error);
+        console.error("Proses xətası:", error);
         Swal.fire({
-            title: "Server Xətası! 🛑",
-            text: "Server ilə əlaqə qurularkən gözlənilməz bir xəta baş verdi.",
+            title: "Xəta! ❌",
+            text: "Server və ya EmailJS ilə əlaqə qurularkən gözlənilməz bir xəta baş verdi.",
             icon: "error"
         });
-        return;
     } finally {
         const regButton = document.querySelector('.Qeydiyyat-btn');
-        if (regButton) {
+        if (regButton && form.style.display !== 'none') {
             regButton.textContent = "Qeydiyyatdan keç";
             regButton.disabled = false;
         }
     }
-
 });
 
+// --- KOD TƏSDİQLƏNMƏSİ HADİSƏSİ (Mərhələ 2: Qeydiyyatın Tamamlanması) ---
 if (verifyButton) {
     verifyButton.addEventListener("click", async () => {
         const userEnteredCode = verificationCodeInput.value.trim();
@@ -182,7 +198,51 @@ if (verifyButton) {
         }
 
         if (userEnteredCode === String(generatedVerificationCode)) {
-            Swal.fire({ title: "Məntiq Xətası", text: "Qeydiyyat məntiqi dəyişib. Server yoxlaması artıq tamamlanıb.", icon: "error" });
+
+            try {
+                const res = await fetch(`${API_URL}/register`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(userDataToRegister)
+                });
+
+                if (!res.ok) {
+                    const errorJson = await res.json();
+                    const errorMessage = errorJson.message || "Bilinməyən xəta baş verdi.";
+                    
+                    Swal.fire({
+                        title: "Qeydiyyat Xətası! 🚨",
+                        text: "Təsdiqdən sonra serverdə qeydiyyat uğursuz oldu: " + errorMessage,
+                        icon: "error"
+                    });
+                    return;
+                }
+
+                const json = await res.json();
+
+                localStorage.setItem("token", json.token);
+                localStorage.setItem("registeredUser", JSON.stringify({
+                    username: userDataToRegister.username,
+                    email: userDataToRegister.email,
+                    role: json.role
+                }));
+
+                Swal.fire({
+                    title: "Qeydiyyat Uğurlu! 🎉",
+                    text: "Hesabınız təsdiqləndi. Giriş səhifəsinə yönləndirilirsiniz.",
+                    icon: "success"
+                }).then(() => {
+                    window.location.href = "../index.html";
+                });
+
+            } catch (error) {
+                console.error("Qeydiyyat prosesində xəta:", error);
+                Swal.fire({
+                    title: "Server Xətası! 🛑",
+                    text: "Qeydiyyatı tamamlamaq mümkün olmadı.",
+                    icon: "error"
+                });
+            }
 
         } else {
             Swal.fire({
@@ -195,6 +255,7 @@ if (verifyButton) {
 }
 
 
+// Parol inputu üçün canlı yoxlama
 if (inpPass) {
     inpPass.addEventListener("input", () => {
         const password = inpPass.value;
@@ -209,6 +270,9 @@ if (inpPass) {
 }
 
 
+// ====================================================================
+// --- DİGƏR ANİMASİYA VƏ KİÇİK FUNKSİYALAR ---
+// ====================================================================
 
 const inputs = document.querySelectorAll(".input");
 const icons = document.querySelectorAll(".icon");
