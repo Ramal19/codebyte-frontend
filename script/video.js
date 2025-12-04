@@ -198,14 +198,8 @@ if (!post) {
                 }
 
                 commentDiv.innerHTML = `
-                    <div class="profil">
-                        <span>${c.username[0]}</span>
-                        <strong>${c.username}</strong>
-                    </div>
-                    <div class="comment-main">
-                        <p> ${c.text}</p>
-                        <small>${date}</small>
-                    </div>
+                    <div class="profil"><span>${c.username[0]}</span><strong>${c.username}</strong></div>
+                    <div class="comment-main"><p> ${c.text}</p><small>${date}</small></div>
                 `;
                 commentsList.appendChild(commentDiv);
             });

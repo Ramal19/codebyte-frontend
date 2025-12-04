@@ -376,20 +376,44 @@ if (userData) {
     })
 }
 
+let nav = null;
+
 
 if (logData) {
 
     const user = JSON.parse(logData);
 
+    const navbar = document.querySelector(".container");
+    const menu = document.getElementById("scrollBtn");
+
+    if (nav === null) {
+
+        nav = document.createElement("div");
+        navbar.appendChild(nav);
+        navbar.insertBefore(nav, menu);
+
+        nav.innerHTML =
+            `
+            <div class="profil-img"></div>
+            <div class="username">
+                ${user.username}
+            </div>
+        `
+
+        nav.style.cssText = 
+        `
+            position: absolute;
+            top: 50px;
+            z-index: 10000;
+        `
+    }
+
+
     const currentUser = user.username || "E-poct tapilmadi!";
-
-    // console.log(currentUser);
-
 
     registerBtn.style.display = "none";
     loginBtn.style.display = "none";
     const userInfo = document.createElement("div");
-
 
     userInfo.id = "userInfo";
     userInfo.innerHTML =
@@ -397,7 +421,6 @@ if (logData) {
         <div class="profil-img">
         </div>
     `
-
 
     regPart.appendChild(userInfo)
 
@@ -445,11 +468,6 @@ if (logData) {
     }
 
     fetchUsers();
-
-    // console.log(user.role);
-
-    // console.log(userMail);
-
 
     let userDiv = document.createElement("div");
     userDiv.classList.add("user-div");

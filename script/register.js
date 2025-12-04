@@ -1,217 +1,253 @@
-// Dəyişənlərin ilkin təyini
+emailjs.init("EsHztpH0Dv7cXaD1n");
+
 const regUser = localStorage.getItem("registeredUser");
 const loginUser = localStorage.getItem("loginUser");
 
-// Səhifəyə girişi yoxlamaq
 if (regUser || loginUser) {
-    alert("Siz artıq qeydiyyatdan keçmisiniz!");
-    window.location.href = "../index.html";
+    Swal.fire({
+        title: "Xəbərdarlıq!",
+        text: "Siz artıq qeydiyyatdan keçmisiniz!",
+        icon: "warning",
+        timer: 3000,
+        showConfirmButton: false
+    }).then(() => {
+        window.location.href = "../index.html";
+    });
 }
 
-const API_URL = "https://codebyte-backend-ibyq.onrender.com"
+const API_URL = "https://codebyte-backend-ibyq.onrender.com";
 const form = document.getElementById("regForm");
 
-// Lazım olan elementləri təyin edirik
 const inpPass = document.getElementById("reg-password");
-let line = document.querySelector(".line");
-let pass_length = document.querySelector(".pass-length"); // Xəbərdarlıq mesajı
+const line = document.querySelector(".line");
+const passRequirements = document.getElementById("pass-requirements");
+const requirementsListItems = document.querySelectorAll('#pass-requirements li');
 
-// Başlanğıcda xəbərdarlıq mesajını gizlədirik
-if (pass_length) {
-    pass_length.style.display = "none";
+
+const verificationContainer = document.getElementById("verificationContainer");
+const verificationCodeInput = document.getElementById("verificationCodeInput");
+const verifyButton = document.getElementById("verifyButton");
+
+let generatedVerificationCode = null;
+let userDataToRegister = {};
+
+const EMAILJS_SERVICE_ID = "service_uxvssjk";
+const EMAILJS_TEMPLATE_ID = "template_i41ipll";
+
+
+function getPasswordStrength(password) {
+    let score = 0;
+    const checks = {
+        length: password.length >= 8,
+        lower: /[a-z]/.test(password),
+        upper: /[A-Z]/.test(password),
+        number: /[0-9]/.test(password),
+        symbol: /[^A-Za-z0-9\s]/.test(password)
+    };
+    Object.keys(checks).forEach(key => { if (checks[key]) score++; });
+    return { score, checks };
+}
+
+function updatePasswordRequirements(checks) {
+    requirementsListItems.forEach(li => {
+        const reqKey = li.getAttribute('data-requirement');
+        if (checks[reqKey]) li.classList.add('fulfilled');
+        else li.classList.remove('fulfilled');
+    });
+}
+
+function updateStrengthBar(score) {
+    let widthPercentage = (score / 5) * 100;
+    let backgroundColor = 'red';
+
+    if (score === 5) backgroundColor = 'green';
+    else if (score >= 3) backgroundColor = 'orange';
+    else backgroundColor = 'red';
+
+    line.style.width = widthPercentage + "%";
+    line.style.backgroundColor = backgroundColor;
+    line.style.height = "10px";
+}
+
+if (passRequirements) {
+    passRequirements.style.display = 'none';
 }
 
 
-// --- 1. FORM SUBMIT HADİSƏSİ (DÜYMƏYƏ KLİK) ---
+
 form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    // Parolun gücünü yoxlamaq üçün funksiya (bu, API-yə göndərilməzdən əvvəl yoxlamadır)
-    const password = form.password.value;
-    let strengthScore = 0; 
-
-    // Parol tələbləri
-    if (password.length >= 8) { strengthScore++; }
-    if (/[a-z]/.test(password)) { strengthScore++; }
-    if (/[A-Z]/.test(password)) { strengthScore++; }
-    if (/[0-9]/.test(password)) { strengthScore++; }
-    if (/[^A-Za-z0-9\s]/.test(password)) { strengthScore++; }
-    
-    // ƏSAS MƏNTİQ: Əgər parol tam güclü deyilsə (score 5-dən azdırsa)
-    if (strengthScore < 5) {
-        // .pass-length elementini görünən et
-        if (pass_length) {
-            pass_length.style.display = "block"; 
-            // Əlavə olaraq parolu daxil etdiyi inputa fokuslanma
-            inpPass.focus();
-        }
-        
-        // Forma göndərilməsini dayandır və funksiyanı tərk et
-        return; 
-    } else {
-        // Əgər parol güclüdürsə, mesajı gizlət (əvvəlki yoxlamadan qalıbsa)
-        if (pass_length) {
-            pass_length.style.display = "none";
-        }
-    }
-
-
-    // Əgər kod bu nöqtəyə gəlibsə, deməli parol güclüdür və API sorğusu icra oluna bilər
     const data = {
-        username: form.username.value,
-        email: form.email.value,
+        username: form.username.value.trim(),
+        email: form.email.value.trim(),
         password: form.password.value
     };
 
+    if (!data.username || !data.email || !data.password) {
+        Swal.fire({ title: "Diqqət!", text: "Bütün sahələri doldurun.", icon: "warning" });
+        return;
+    }
+
+    const { score } = getPasswordStrength(data.password);
+    if (score < 5) {
+        if (passRequirements) passRequirements.style.display = 'block';
+        inpPass.focus();
+        Swal.fire({ title: "Diqqət!", text: "Parol bütün tələblərə cavab verməlidir.", icon: "warning" });
+        return;
+    }
+
+    userDataToRegister = data;
+
+    const regButton = document.querySelector('.Qeydiyyat-btn');
+    if (regButton) {
+        regButton.textContent = "Yoxlanılır...";
+        regButton.disabled = true;
+    }
+
+
     try {
-        const res = await fetch(`${API_URL}/register`, {
+        const checkRes = await fetch(`${API_URL}/register`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(data)
         });
 
-        const json = await res.json();
+        if (!checkRes.ok) {
+            const errorJson = await checkRes.json();
+            const errorMessage = errorJson.message || "Bilinməyən xəta baş verdi.";
 
-        let iconType = "error";
-        const isSuccess = json.message && json.message.toLowerCase().includes("uğur");
-
-        if (isSuccess) {
-            iconType = "success";
-            localStorage.setItem("token", json.token);
-            localStorage.setItem("registeredUser", JSON.stringify({
-                username: data.username,
-                email: data.email,
-                role: json.role // role-u json-dan alırıq
-            }));
+            if (checkRes.status === 409) {
+                Swal.fire({
+                    title: "Qeydiyyat Xətası (409) 🛑",
+                    text: errorMessage,
+                    icon: "warning"
+                });
+                return;
+            }
+            else {
+                Swal.fire({
+                    title: "Qeydiyyat Xətası ❌",
+                    text: errorMessage,
+                    icon: "error"
+                });
+                return;
+            }
         }
 
+        const successJson = await checkRes.json();
+
+        localStorage.setItem("token", successJson.token);
+        localStorage.setItem("registeredUser", JSON.stringify({
+            username: data.username,
+            email: data.email,
+            role: successJson.role
+        }));
+
         Swal.fire({
-            title: json.message,
-            icon: iconType,
-        }).then((result) => {
-            if (isSuccess && (result.isConfirmed || result.dismiss === Swal.DismissReason.backdrop)) {
-                console.log("Qeydiyyat uğurlu oldu, ana səhifəyə yönləndirilir.");
-                window.location.href = "../index.html";
-            }
+            title: "Qeydiyyat Uğurlu! 🎉",
+            text: "Qeydiyyatınız uğurla tamamlandı. Giriş səhifəsinə yönləndirilirsiniz.",
+            icon: "success"
+        }).then(() => {
+            window.location.href = "../index.html";
         });
+
+        return;
 
     } catch (error) {
-        console.error("Qeydiyyat prosesində kritik xəta:", error);
+        console.error("Server yoxlamasında xəta:", error);
         Swal.fire({
-            title: "Xəta!",
-            text: "Server ilə əlaqə qurularkən xəta baş verdi.",
+            title: "Server Xətası! 🛑",
+            text: "Server ilə əlaqə qurularkən gözlənilməz bir xəta baş verdi.",
             icon: "error"
         });
+        return;
+    } finally {
+        const regButton = document.querySelector('.Qeydiyyat-btn');
+        if (regButton) {
+            regButton.textContent = "Qeydiyyatdan keç";
+            regButton.disabled = false;
+        }
     }
+
 });
 
+if (verifyButton) {
+    verifyButton.addEventListener("click", async () => {
+        const userEnteredCode = verificationCodeInput.value.trim();
 
-// --- 2. INPUT HADİSƏSİ (DİNAMİK GÜC GÖSTƏRİCİSİ) ---
-// Bu hissə sadəcə line elementinin rəngini və genişliyini dəyişir,
-// lakin pass-length-i görünən etmir (Submit-ə qədər gözləyir)
+        if (!userEnteredCode || userEnteredCode.length !== 6) {
+            Swal.fire({ title: "Diqqət!", text: "Zəhmət olmasa, 6 rəqəmli təsdiq kodunu daxil edin.", icon: "warning" });
+            return;
+        }
 
-inpPass.addEventListener("input", () => {
-    const password = inpPass.value;
-    let strengthScore = 0; 
+        if (userEnteredCode === String(generatedVerificationCode)) {
+            Swal.fire({ title: "Məntiq Xətası", text: "Qeydiyyat məntiqi dəyişib. Server yoxlaması artıq tamamlanıb.", icon: "error" });
 
-    // Tələbləri yoxlamaq
-    if (password.length >= 8) { strengthScore++; }
-    if (/[a-z]/.test(password)) { strengthScore++; }
-    if (/[A-Z]/.test(password)) { strengthScore++; }
-    if (/[0-9]/.test(password)) { strengthScore++; }
-    if (/[^A-Za-z0-9\s]/.test(password)) { strengthScore++; }
-
-
-    let widthPercentage = (strengthScore / 5) * 100;
-    let backgroundColor = 'red'; 
-
-    if (strengthScore === 5) {
-        backgroundColor = 'green'; 
-    } else if (strengthScore >= 3) {
-        backgroundColor = 'orange'; 
-    } else if (strengthScore >= 1) {
-        backgroundColor = 'red'; 
-    } else {
-        widthPercentage = 0; 
-        backgroundColor = 'transparent';
-    }
-
-    // Pass-length mesajı burada idarə olunmur, line elementini yeniləyirik
-    line.style.cssText =
-        `
-        width: ${widthPercentage}%;
-        background-color: ${backgroundColor};
-        height: 100%;
-        transition: width 0.3s, background-color 0.3s;
-    `;
-    
-    // İnput zamanı bütün parollar sıfırlanarsa mesajı gizlədirik
-    if (password.length === 0 && pass_length) {
-         pass_length.style.display = "none";
-    }
-});
+        } else {
+            Swal.fire({
+                title: "Yanlış Kod! 🔄",
+                text: "Daxil etdiyiniz təsdiq kodu yanlışdır. Zəhmət olmasa, yenidən yoxlayın.",
+                icon: "error"
+            });
+        }
+    });
+}
 
 
-// --- 3. INPUT VƏ ICON HADİSƏLƏRİ (DƏYİŞİLMƏDƏN QALAN KOD) ---
+if (inpPass) {
+    inpPass.addEventListener("input", () => {
+        const password = inpPass.value;
+        const { score, checks } = getPasswordStrength(password);
+
+        updateStrengthBar(score);
+        updatePasswordRequirements(checks);
+
+        if (password.length > 0 && score < 5) passRequirements.style.display = 'block';
+        else passRequirements.style.display = 'none';
+    });
+}
+
+
 
 const inputs = document.querySelectorAll(".input");
 const icons = document.querySelectorAll(".icon");
 
 inputs.forEach((inp, index) => {
     inp.addEventListener("click", () => {
-        if (icons[index]) {
-            icons[index].style.cssText = `font-size: 14px; transform: translateY(-25px); transition: all 0.3s ease;`;
-        }
+        if (icons[index]) icons[index].style.cssText = `font-size: 14px; transform: translateY(-25px); transition: all 0.3s ease;`;
     });
-
     inp.addEventListener("focus", () => {
-        if (icons[index]) {
-            icons[index].style.cssText = `font-size: 14px; transform: translateY(-25px); transition: all 0.3s ease;`;
+        if (icons[index]) icons[index].style.cssText = `font-size: 14px; transform: translateY(-25px); transition: all 0.3s ease;`;
+    });
+    inp.addEventListener("focusout", () => {
+        if (inp.value.trim() === "" && icons[index]) {
+            icons[index].style.cssText = `font-size: 18px; transform: translateY(0); transition: all 0.3s ease;`;
         }
     });
-
-    inp.addEventListener("focusout", () => {
-
-        if (inp.value.trim() === "") {
-            if (icons[index]) {
-                icons[index].style.cssText = `font-size: 18px; transform: translateY(0); transition: all 0.3s ease;`;
-            }
-        }
-
-    })
 });
 
 icons.forEach((el, index) => {
     el.addEventListener("click", () => {
         el.style.cssText = `font-size: 14px; transform: translateY(-25px); transition: all 0.3s ease;`;
-        if (inputs[index]) {
-            inputs[index].focus();
-        }
+        if (inputs[index]) inputs[index].focus();
     });
 });
 
-
 let eye = document.querySelector(".bi-eye-fill");
-let eyeClose = document.querySelector(".bi-eye-slash-fill")
-const passwordInput = inputs[2]; // Üçüncü inputun parol inputu olduğunu güman edirik
+let eyeClose = document.querySelector(".bi-eye-slash-fill");
 
-if (eyeClose) {
-    eyeClose.style.display = "none";
-}
+if (eyeClose) eyeClose.style.display = "none";
 
-if (eye) {
+if (eye && eyeClose && inpPass) {
     eye.addEventListener("click", () => {
-        passwordInput.type = "text";
-
+        inpPass.type = "text";
         eye.style.display = "none";
         eyeClose.style.display = "inline-block";
     });
-}
 
-if (eyeClose) {
     eyeClose.addEventListener("click", () => {
-        passwordInput.type = "password";
-
+        inpPass.type = "password";
         eye.style.display = "inline-block";
         eyeClose.style.display = "none";
     });
