@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Kurs izləmə</title>
+    <link rel="stylesheet" href="../style/course-view.css">
+</head>
+
+<body>
+    <div class="course-container">
+        <div class="video-player">
+            <video id="mainVideo" controls autoplay></video>
+        </div>
+        <div class="video-list" id="videoList"></div>
+    </div>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const id = params.get("id");
+
+        async function loadCourse() {
+            const res = await fetch(`https://codebyte-backend-ibyq.onrender.com/courses/${id}`);
+            const course = await res.json();
+
+            const mainVideo = document.getElementById("mainVideo");
+            const videoList = document.getElementById("videoList");
+
+            mainVideo.src = `https://codebyte-backend-ibyq.onrender.com/uploads/${course.videos[0].file}`;
+
+            course.videos.forEach((v, index) => {
+                const item = document.createElement("div");
+                item.className = "video-item";
+                item.innerHTML = `
+          <img src="https://codebyte-backend-ibyq.onrender.com/uploads/${v.thumb}" width="100">
+          <span>${v.title}</span>
+        `;
+                item.onclick = () => {
+                    mainVideo.src = `https://codebyte-backend-ibyq.onrender.com/uploads/${v.file}`;
+                };
+                videoList.appendChild(item);
+            });
+        }
+
+        loadCourse();
+    </script>
+</body>
+
+</html>

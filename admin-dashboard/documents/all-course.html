@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="az">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel | Kurs Baxışı & Aktiv Kurslar</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="../styles/all-course.css">
+</head>
+
+<body>
+
+    <header class="card-shadow">
+        <div class="container header-content">
+            <h1 class="title" onclick="window.location.href='../index.html'">
+                CodeByte Admin
+            </h1>
+            <div class="admin-info">
+                <span id="adminRole"></span>
+                <button id="logoutBtn">
+                    <i class="fas fa-sign-out-alt"></i> Çıxış
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <h2>Baxışda Olan Kurslar (<span id="pendingCount">0</span>)
+        </h2>
+
+        <div id="pendingPostsContainer" class="posts-grid">
+        </div>
+
+        <div id="pendingLoadingIndicator" class="indicator">
+            <i class="fas fa-spinner fa-spin"></i>
+            <p>Baxışda olan kurslar yüklənir...</p>
+        </div>
+
+        <div id="pendingEmptyMessage" class="hidden message-box mb-12">
+            <i class="fas fa-check-circle"></i>
+            <p>Təbriklər! Baxışda olan heç bir kurs yoxdur.</p>
+        </div>
+
+        <hr>
+
+        <h2>
+            Aktiv Kurslar (<span id="activeCount">0</span>)
+        </h2>
+
+        <div class="search-area">
+            <input type="search" id="activeSearchInput">
+
+        </div>
+
+        <div id="activePostsContainer" class="posts-grid">
+        </div>
+
+        <div id="activeLoadingIndicator" class="indicator">
+            <i class="fas fa-spinner fa-spin"></i>
+            <p>Aktiv kurslar yüklənir...</p>
+        </div>
+
+        <div id="activeEmptyMessage" class="hidden message-box">
+            <i class="fas fa-info-circle"></i>
+            <p>Hazırda aktiv (yayımlanmış) kurs yoxdur.</p>
+        </div>
+
+    </main>
+
+    <script src="../scripts/all-course.js">
+
+    </script>
+</body>
+
+</html>

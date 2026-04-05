@@ -1,0 +1,186 @@
+/* === Ümumi stil === */
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #f7f9fc, #eef2f7);
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+/* === Navbar === */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #1f2937;
+    padding: 15px 40px;
+    color: white;
+}
+
+.navbar .logo img {
+    height: 45px;
+}
+
+.navbar ul {
+    list-style: none;
+    display: flex;
+    gap: 25px;
+    margin: 0;
+    padding: 0;
+}
+
+.navbar ul li a {
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.navbar ul li a:hover {
+    color: #60a5fa;
+}
+
+/* === Əsas konteyner === */
+#authActions {
+    max-width: 700px;
+    background: white;
+    margin: 50px auto;
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+    text-align: center;
+}
+
+#authActions h2 {
+    margin-bottom: 25px;
+    color: #1f2937;
+}
+
+/* === Fayl yükləmə düyməsi === */
+.custom-file-upload {
+    display: inline-block;
+    background: #2563eb;
+    color: white;
+    padding: 12px 25px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.custom-file-upload:hover {
+    background: #1e40af;
+}
+
+.custom-file-upload input {
+    display: none;
+}
+
+/* === Input və Select sahələri === */
+input[type="text"],
+input[type="number"],
+select {
+    width: 100%;
+    padding: 12px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    outline: none;
+    transition: border-color 0.2s ease;
+}
+
+input[type="text"]:focus,
+select:focus {
+    border-color: #2563eb;
+}
+
+/* === Video bölmələri === */
+#videosContainer {
+    text-align: left;
+    margin-top: 30px;
+}
+
+.video-item {
+    background: #f9fafb;
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #e5e7eb;
+}
+
+.video-item input[type="file"],
+.video-item input[type="text"],
+.video-item input[type="text"] {
+    width: 100%;
+    margin-top: 10px;
+}
+
+/* === Button-lar === */
+button {
+    display: inline-block;
+    background: #2563eb;
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background 0.3s ease, transform 0.2s ease;
+    margin: 10px 5px;
+}
+
+button:hover {
+    background: #1e40af;
+    transform: translateY(-2px);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+#courseCoverPreview {
+    margin-top: 15px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 600px) {
+    .navbar {
+        flex-direction: column;
+        padding: 15px;
+    }
+
+    .navbar ul {
+        flex-direction: column;
+        gap: 10px;
+        margin-top: 10px;
+    }
+
+    #authActions {
+        width: 90%;
+        padding: 25px 20px;
+        margin: 20px auto;
+    }
+
+    #authActions h2 {
+        font-size: 20px;
+    }
+
+    .custom-file-upload {
+        width: 100%;
+    }
+
+    button {
+        width: 100%;
+        margin-top: 10px;
+    }
+
+    .video-item {
+        padding: 10px;
+    }
+
+    input[type="text"],
+    select {
+        font-size: 14px;
+    }
+}

@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeByte</title>
+    <link rel="stylesheet" href="./style/index.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <link rel="shortcut icon" href="./image/CodeByte.png" type="image/x-icon">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cascadia+Mono:ital,wght@0,200..700;1,200..700&family=Dancing+Script:wght@400..700&family=IBM+Plex+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&family=Playwrite+MX+Guides&family=Space+Grotesk:wght@300..700&family=Spectral:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,200;1,300;1,400;1,500;1,600;1,700;1,800&family=Winky+Sans:ital,wght@0,300..900;1,300..900&display=swap"
+        rel="stylesheet">
+
+</head>
+
+<body>
+    <div class="conAll">
+        <header>
+            <nav class="navbar">
+
+                <div class="menu">
+                    <i class="bi bi-list"></i>
+                </div>
+
+                <div class="logo">
+                    <img src="./image/codebyte.remove.png" alt="LOGO">
+                </div>
+
+                <ul>
+                    <li>
+                        <a href="./index.html">
+                            Ana Səhifə
+                        </a>
+                    </li>
+                    <li>
+                        <a href="./document/kurs.html">
+                            Kurslar
+                        </a>
+                    </li>
+                    <li>
+                        <a href="./document/instructors.html">
+                            Təlimçilər
+                        </a>
+                    </li>
+                    <li>
+                        <a href="">
+                            Yol xəritəsi
+                        </a>
+                    </li>
+                    <li>
+                        <a href="./document/contact.html">
+                            Əlaqə
+                        </a>
+                    </li>
+                </ul>
+
+
+                <!-- <div class="ui-input-container">
+                    <input required="" id="search-input" placeholder="Tapmaq istədiyiniz kursu axtarın..."
+                        class="ui-input" type="text" />
+                    <div class="ui-input-underline"></div>
+                    <div class="ui-input-highlight"></div>
+                    <div class="ui-input-icon">
+                        <svg id="search-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <path stroke-linejoin="round" stroke-linecap="round" stroke-width="2" stroke="currentColor"
+                                d="M21 21L16.65 16.65M19 11C19 15.4183 15.4183 19 11 19C6.58172 19 3 15.4183 3 11C3 6.58172 6.58172 3 11 3C15.4183 3 19 6.58172 19 11Z">
+                            </path>
+                        </svg>
+                    </div>
+                </div> -->
+
+                <div class="add">
+                    <span class="wishlist-add">
+                        <i class="bi bi-heart"></i>
+                        <i class="bi bi-cart"></i>
+                        <i class="bi bi-bell"></i>
+                    </span>
+                </div>
+
+                <div class="registration-part">
+                    <button id="login" class="login-button">
+                        Daxil olun
+                    </button>
+                    <button id="register" class="register-button">
+                        Qeydiyyat
+                    </button>
+                </div>
+
+
+                <div class="responsive">
+                    <i class="bi bi-search"></i>
+                    <i class="bi bi-cart"></i>
+                </div>
+            </nav>
+        </header>
+
+        <section class="main-section" id="sectionForBubble">
+            <div class="bubble-layer"></div>
+
+            <div class="half-circle">
+                <img src="./image/half-circle.png" alt="">
+            </div>
+
+            <div class="main-left">
+                <div class="main-left-top">
+                    <h1>
+                        Təhsil üçün ən yaxşı onlayn platforma.
+                    </h1>
+                    <span>
+                        Seçilmiş mütəxəssislərdən keyfiyyətli onlayn kurslar. Öz inkişaf yolunuza ilk addımı atın.
+                    </span>
+                </div>
+
+                <div class="main-left-middle">
+                    <button id="getStarted">
+                        <i class="bi bi-hand-thumbs-up"></i> Başlayın
+                    </button>
+                    <button class="howtowork">
+                        Necə işləyir
+                    </button>
+                </div>
+
+                <div class="main-left-bottom">
+                    <div class="bottom-item">
+                        <span class="counter" data-target="260"></span>
+                        <div class="line"></div>
+                        <span>Müəllimlər</span>
+                    </div>
+                    <div class="bottom-item">
+                        <span class="counter" data-target="5340"></span>
+                        <div class="line"></div>
+                        <span>Tələbələr</span>
+                    </div>
+                    <div class="bottom-item">
+                        <span class="counter" data-target="280"></span>
+                        <div class="line"></div>
+                        <span>Kurslar</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="main-right">
+                <img src="./image/home-student.png" class="tilt-img" alt="">
+            </div>
+        </section>
+
+        <section class="web-info" id="webInfo">
+            <div class="mouse-move" id="mouseClick">
+                <i class="bi bi-mouse2"></i>
+            </div>
+
+            <div class="shape">
+                <img src="./image/shape.png" alt="">
+            </div>
+
+            <img src="./image/shape-right.png" class="second-shape" alt="">
+
+            <div class="container-section">
+                <div class="elements">
+                    <div class="left-side">
+                        <div class="top-item">
+                            <span class="icon">
+                                <i class="bi bi-award"></i>
+                            </span>
+                            <span class="top-text">
+                                Zəmanətli və sertifikatlı
+                            </span>
+                        </div>
+
+                        <div class="middle-item">
+                            <h1>
+                                İstənilən vaxt və istənilən yerdə onlayn təhsil.
+                            </h1>
+                        </div>
+
+                    </div>
+
+                    <div class="right-side">
+                        <div class="item">
+                            <h1>
+                                01
+                            </h1>
+                            <p>
+                                Çevik cədvəl
+                            </p>
+                            <span>
+                                CodeByte istifadəçilərə biliklərini daha sürətli və rahat şəkildə inkişaf etdirməyə
+                                imkan
+                                verən müasir onlayn təhsil platformasıdır.
+                            </span>
+                            <div class="line"></div>
+                        </div>
+                        <div class="item">
+                            <h1>
+                                02
+                            </h1>
+                            <p>
+                                Cib üçün uyğun
+                            </p>
+                            <span>
+                                CodeByte öyrənənlərə təlim prosesini daha sürətli və daha asan şəkildə başa vurmağa
+                                imkan
+                                yaradır.
+                            </span>
+                            <div class="line"></div>
+                        </div>
+                        <div class="item">
+                            <h1>
+                                03
+                            </h1>
+                            <p>
+                                Ekspert Təlimatçı
+                            </p>
+                            <span>
+                                CodeByte ilə öyrənənlər dərsləri tez və asan mənimsəyir.
+                            </span>
+                            <div class="line"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="container">
+            <button id="scrollBtn">
+                ↑
+            </button>
+
+            <section id="beginCourse" class="courses">
+                <div class="container-section">
+                    <div class="img-div">
+                        <img src="./image/circle.png" alt="">
+                    </div>
+
+                    <div class="heading">
+                        <h1>
+                            Populyar kurslar
+                        </h1>
+
+                        <a href="./document/kurs.html">
+                            Bütün kursları araşdırın <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+
+                    <div class="course-box">
+                        <!-- <div class="course-list">
+                            <button class="btn-course" data-category="All">Hamısı</button>
+                            <button class="btn-course" data-category="JavaScript">JavaScript</button>
+                            <button class="btn-course" data-category="C++">C++</button>
+                            <button class="btn-course" data-category="React JS">React JS</button>
+                            <button class="btn-course" data-category="Python">Python</button>
+                            <button class="btn-course" data-category="Canva">Canva</button>
+                            <button class="btn-course" data-category="Other">Başqa</button>
+                        </div> -->
+                        <div id="posts" class="course-card-list">
+                            <div class="loader">
+                                <div class="spinner"></div>
+                            </div>
+                        </div>
+                        <div class="btn-direction"></div>
+                    </div>
+                </div>
+
+                <div class="all-view-courses">
+                    <p>Biz sizə mükəmməl repetitor tapmaqda kömək edirik. Bu, tamamilə pulsuzdur.</p>
+                    <a href="./document/kurs.html" id="booksHtmlSwitch" class="view-all-button">
+                        Bütün kursları araşdırın
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+            </section>
+
+
+
+        </div>
+        <section class="main-container">
+            <div class="image-wrapper">
+                <!-- <div class="yellow-circle"></div> -->
+                <!-- <div class="green-shape"></div> -->
+                <img src="./image/home-student.png" alt="Student" class="student-photo">
+            </div>
+
+            <div class="content-wrapper">
+                <div class="premium-badge">
+                    <div class="badge-icon">💼</div>
+                    <span class="badge-text">Premium öyrənmə təcrübəsi</span>
+                </div>
+
+                <h1 class="title">Möhtəşəm onlayn<br>kurslar təqdim edir.</h1>
+
+                <div class="accordion">
+                    <div class="acc-item" onclick="toggleAcc(this)">
+                        <h3>Sizin üçün vacib olan bacarıqlara yiyələnin</h3>
+                        <div class="acc-content">
+                            <p>Karyeranız üçün ən aktual və tələb olunan bilikləri mütəxəssislərdən öyrənin.</p>
+                        </div>
+                    </div>
+
+                    <div class="acc-item active" onclick="toggleAcc(this)">
+                        <h3>Effektiv metodlarla əlaqə saxlayın</h3>
+                        <div class="acc-content">
+                            <p>Öz tempinizdə istifadə edə biləcəyiniz veb əsaslı təlim. Kurslar interaktivdir.</p>
+                        </div>
+                        <div class="hourglass">⌛</div>
+                    </div>
+
+                    <div class="acc-item" onclick="toggleAcc(this)">
+                        <h3>Öyrənmə bacarıqlarınızı artırın</h3>
+                        <div class="acc-content">
+                            <p>Daha sürətli və effektiv öyrənmə texnikaları ilə vaxtınıza qənaət edin.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <a href="#" class="btn-search">Kursları araşdırın &rarr;</a>
+            </div>
+        </section>
+        <section class="faq-part">
+            <h1>
+                Tez-tez verilən suallar
+            </h1>
+
+            <div class="faq-questions">
+                <div class="faq-card">
+                    <h3>
+                        <i class="bi bi-chevron-down"></i> CodeByte nədir?
+                    </h3>
+                    <p>
+                        CodeByte, proqramlaşdırma və IT sahəsində müxtəlif kurslar, ixtisaslar və sertifikat proqramları
+                        təklif edən onlayn təhsil platformasıdır. İstifadəçilər fərdi öyrənmə tempində biliklərini
+                        artırmaq
+                        və karyeralarını inkişaf etdirmək üçün geniş məzmun kitabxanasından faydalana bilərlər.
+                    </p>
+                </div>
+                <div class="faq-card">
+                    <h3>
+                        <i class="bi bi-chevron-down"></i> Kurslara necə qeydiyyatdan keçmək olar?
+                    </h3>
+                    <p>
+                        Kurslara qeydiyyatdan keçmək üçün CodeByte veb saytında qeydiyyatdan keçməli və ya mövcud
+                        hesabınıza
+                        daxil olmalısınız. İstədiyiniz kursu seçdikdən sonra "Qeydiyyatdan keç" düyməsini klikləyin və
+                        ödəniş məlumatlarınızı daxil edin (əgər kurs pulsuz deyilsə). Qeydiyyat tamamlandıqdan sonra
+                        dərslərə
+                        dərhal giriş əldə edəcəksiniz.
+                    </p>
+                </div>
+                <div class="faq-card">
+                    <h3>
+                        <i class="bi bi-chevron-down"></i> Kurslar hansı formatda təqdim olunur?
+                    </h3>
+                    <p>
+                        CodeByte kursları əsasən video mühazirələr, oxu materialları, viktorinalar və praktiki layihələr
+                        şəklində təqdim olunur. Bir çox kurs interaktiv elementlər və real dünya nümunələri ilə
+                        zənginləşdirilir
+                        ki, bu da öyrənmə təcrübəsini daha cəlbedici və effektiv edir.
+                    </p>
+                </div>
+                <div class="faq-card">
+                    <h3>
+                        <i class="bi bi-chevron-down"></i> Kursları bitirdikdən sonra sertifikat alacam?
+                    </h3>
+                    <p>
+                        Bəli, CodeByte bir çox kursu uğurla tamamlayan istifadəçilərə sertifikat təqdim edir.
+                        Sertifikatlar
+                        istifadəçinin profilində mövcuddur və onları LinkedIn-də paylaşmaq və ya CV-lərinə əlavə etmək
+                        olar.
+                        Sertifikatların mövcudluğu kursdan asılı olaraq dəyişə bilər, buna görə də qeydiyyatdan əvvəl
+                        kurs
+                        səhifəsindəki məlumatları yoxlamaq tövsiyə olunur.
+                    </p>
+                </div>
+                <div class="faq-card">
+                    <h3>
+                        <i class="bi bi-chevron-down"></i> Kurslara giriş müddəti nə qədərdir?
+                    </h3>
+                    <p>
+                        Kurslara giriş müddəti kursdan kursa dəyişir. Bəzi kurslar ömürlük giriş təklif edir, digərləri
+                        isə
+                        müəyyən bir müddət üçün (məsələn, 6 ay və ya 1 il) giriş təmin edir. Kursun giriş müddəti barədə
+                        ətraflı məlumatı kursun təsvirində və ya qeydiyyat səhifəsində tapa bilərsiniz.
+                    </p>
+                </div>
+
+            </div>
+        </section>
+
+        <footer class="footer">
+            <div class="footer-top">
+                <p>Ən yaxşı şirkətlər <a href="#">Biznes Platformamızı</a> seçərək tələb olunan bacarıqları inkişaf
+                    etdirirlər.</p>
+                <div class="footer-logos">
+                    <img src="" alt="Nasdaq">
+                    <img src="" alt="VW">
+                    <img src="" alt="NetApp">
+                    <img src="" alt="Eventbrite">
+                </div>
+            </div>
+
+            <div class="footer-links">
+                <div>
+                    <h4>Tələb Olunan Peşələr</h4>
+                    <a href="#">Məlumat Alimi</a>
+                    <a href="#">Full Stack Veb Proqramçı</a>
+                    <a href="#">Bulud Mühəndisi</a>
+                    <a href="#">Layihə Meneceri</a>
+                    <a href="#">Oyun Yaradıcı</a>
+                    <a href="#">Bütün Peşələr</a>
+                </div>
+                <div>
+                    <h4>Veb İnkişaf</h4>
+                    <a href="#">Veb İnkişaf</a>
+                    <a href="#">JavaScript</a>
+                    <a href="#">React JS</a>
+                    <a href="#">Angular</a>
+                    <a href="#">Java</a>
+                </div>
+                <div>
+                    <h4>İT Sertifikatlar</h4>
+                    <a href="#">Amazon AWS</a>
+                    <a href="#">Azure Fundamentals</a>
+                    <a href="#">Həll Memarı</a>
+                    <a href="#">Kubernetes</a>
+                </div>
+                <div>
+                    <h4>Məlumat Elmi</h4>
+                    <a href="#">Python</a>
+                    <a href="#">Maşın Öyrənməsi</a>
+                    <a href="#">Dərin Öyrənmə</a>
+                    <a href="#">Süni İntellekt</a>
+                </div>
+                <div>
+                    <h4>Biznes Analitika</h4>
+                    <a href="#">Excel</a>
+                    <a href="#">SQL</a>
+                    <a href="#">Power BI</a>
+                    <a href="#">Biznes Analizi</a>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <div class="footer-col">
+                    <h4>Haqqımızda</h4>
+                    <a href="#">Şirkət haqqında</a>
+                    <a href="#">Karyera</a>
+                    <a href="#">Bizimlə əlaqə</a>
+                    <a href="#">Bloq</a>
+                    <a href="#">Investorlar</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Kəşf et</h4>
+                    <a href="#">Mobil tətbiq</a>
+                    <a href="#">Müəllim ol</a>
+                    <a href="#">Planlar və Qiymətlər</a>
+                    <a href="#">Tərəfdaşlıq</a>
+                    <a href="#">Dəstək</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Biznes üçün</h4>
+                    <a href="#">Biznes Həlləri</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Hüquqi</h4>
+                    <a href="#">Əlçatanlıq</a>
+                    <a href="#">Məxfilik siyasəti</a>
+                    <a href="#">Sayt xəritəsi</a>
+                    <a href="#">Şərtlər</a>
+                </div>
+            </div>
+
+            <div class="footer-copy">
+                <p>© 2025 Platforma, MMC.</p>
+                <div class="language">🌐 Azərbaycan dili</div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="./script/index.js"></script>
+</body>
+
+</html>

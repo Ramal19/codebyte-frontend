@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="az">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CodeByte - Qeydiyyat</title>
+  <link rel="stylesheet" href="../style/register.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+</head>
+
+<body>
+  <div class="con">
+    <div class="circle"></div>
+
+    <form id="regForm" class="form-box">
+      <div class="box-left">
+        <h1>Qeydiyyat</h1>
+        <p>CodeByte-da hesab aç və öyrənməyə başla!</p>
+
+        <div class="username">
+          <span class="username-icon icon"><i class="bi bi-person"></i> İstifadəçi adı</span>
+          <input name="username" class="input" type="text" id="reg-username" required>
+        </div>
+
+        <div class="email">
+          <span class="email-icon icon"><i class="bi bi-envelope"></i> Email</span>
+          <input name="email" class="input" type="email" id="reg-email" required>
+        </div>
+
+        <div class="password">
+          <span class="password-icon icon"><i class="bi bi-lock"></i> Şifrə</span>
+          <input name="password" class="input" type="password" id="reg-password" required>
+          <i class="bi bi-eye-fill"></i>
+          <i class="bi bi-eye-slash-fill" style="display:none;"></i>
+        </div>
+
+        <div class="pass-validation-area">
+          <div class="line"></div>
+          <div class="pass-length" id="pass-requirements" style="display:none;">
+            <p>Parol aşağıdakı tələblərə cavab verməlidir:</p>
+            <ul>
+              <li data-requirement="length">Minimum 8 simvol</li>
+              <li data-requirement="lower">Ən azı 1 kiçik hərf (a-z)</li>
+              <li data-requirement="upper">Ən azı 1 böyük hərf (A-Z)</li>
+              <li data-requirement="number">Ən azı 1 rəqəm (0-9)</li>
+              <li data-requirement="symbol">Ən azı 1 xüsusi simvol</li>
+            </ul>
+          </div>
+        </div>
+
+        <button class="registerBtn" id="reg" type="submit">Qeydiyyatdan keç</button>
+        <p>Artıq hesabın var? <a href="./login.html">Daxil ol</a></p>
+      </div>
+
+      <div class="box-right">
+        <div class="login-img">
+          <img src="../image/login.png" alt="Foto">
+        </div>
+      </div>
+    </form>
+
+    <div id="verificationContainer" class="verification"
+      style="display:none; flex-direction: column; align-items: center; gap: 15px;">
+      <h3>Email Təsdiqi</h3>
+      <p>Zəhmət olmasa, e-poçtunuza göndərilən 6 rəqəmli kodu daxil edin.</p>
+      <input type="text" id="verificationCodeInput" placeholder="6 rəqəmli kod" maxlength="6"
+        style="padding: 10px; text-align: center; font-size: 1.2rem;">
+      <button id="verifyButton" class="registerBtn">Kodu Təsdiqlə</button>
+    </div>
+
+  </div>
+
+  <script>
+    emailjs.init("EsHztpH0Dv7cXaD1n");
+
+    const API_URL = "https://codebyte-backend-ibyq.onrender.com";
+    const form = document.getElementById("regForm");
+    const inpPass = document.getElementById("reg-password");
+    const line = document.querySelector(".line");
+    const passRequirements = document.getElementById("pass-requirements");
+    const requirementsListItems = document.querySelectorAll('#pass-requirements li');
+    const verificationContainer = document.getElementById("verificationContainer");
+    const verificationCodeInput = document.getElementById("verificationCodeInput");
+    const verifyButton = document.getElementById("verifyButton");
+
+    let generatedVerificationCode = null;
+    let userDataToRegister = {}; // Kod təsdiqlənəndə göndəriləcək məlumatlar
+
+    const EMAILJS_SERVICE_ID = "service_uxvssjk";
+    const EMAILJS_TEMPLATE_ID = "template_i41ipll";
+
+    // Parol yoxlanılması funksiyaları
+    function getPasswordStrength(password) {
+      const checks = {
+        length: password.length >= 8,
+        lower: /[a-z]/.test(password),
+        upper: /[A-Z]/.test(password),
+        number: /[0-9]/.test(password),
+        symbol: /[^A-Za-z0-9\s]/.test(password)
+      };
+      let score = Object.values(checks).filter(Boolean).length;
+      return { score, checks };
+    }
+
+    function updatePasswordRequirements(checks) {
+      requirementsListItems.forEach(li => {
+        const reqKey = li.getAttribute('data-requirement');
+        if (checks[reqKey]) li.classList.add('fulfilled');
+        else li.classList.remove('fulfilled');
+      });
+    }
+
+    // FORM SUBMIT -  Yoxlama və Kod Göndərmə
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const data = {
+        username: form.username.value.trim(),
+        email: form.email.value.trim(),
+        password: form.password.value
+      };
+
+      const { score } = getPasswordStrength(data.password);
+      if (score < 5) {
+        Swal.fire({ title: "Diqqət!", text: "Parol tələblərə cavab vermir.", icon: "warning" });
+        return;
+      }
+
+      const regButton = document.getElementById("reg");
+      regButton.textContent = "Yoxlanılır...";
+      regButton.disabled = true;
+
+      try {
+        const checkRes = await fetch(`${API_URL}/register`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ ...data, checkOnly: true })
+        });
+
+        const checkJson = await checkRes.json();
+        if (!checkRes.ok) throw new Error(checkJson.message || "Bu istifadəçi artıq mövcuddur.");
+
+        userDataToRegister = data;
+        generatedVerificationCode = Math.floor(100000 + Math.random() * 900000);
+
+        await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+          user_email: data.email,
+          from_name: "CodeByte Support",
+          verification_code: generatedVerificationCode,
+          message: "Sizin təsdiq kodunuz: " + generatedVerificationCode
+        });
+
+        Swal.fire({ title: "Kod Göndərildi!", text: "Zəhmət olmasa emailinizi yoxlayın.", icon: "success" });
+        form.style.display = 'none';
+        verificationContainer.style.display = 'flex';
+
+      } catch (error) {
+        Swal.fire({ title: "Xəta!", text: error.message, icon: "error" });
+        regButton.textContent = "Qeydiyyatdan keç";
+        regButton.disabled = false;
+      }
+    });
+
+    // VERIFY BUTTON -  -0 Kodun yoxlanılması və Əsl Qeydiyyat
+    verifyButton.addEventListener("click", async () => {
+      const userEnteredCode = verificationCodeInput.value.trim();
+
+      if (userEnteredCode !== String(generatedVerificationCode)) {
+        Swal.fire({ title: "Səhv!", text: "Daxil etdiyiniz kod yanlışdır.", icon: "error" });
+        return;
+      }
+
+      verifyButton.textContent = "Hesab yaradılır...";
+      verifyButton.disabled = true;
+
+      try {
+        // İndi məlumatları serverə göndəririk ki, bazaya yazılsın (checkOnly YOXDUR)
+        const res = await fetch(`${API_URL}/register`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(userDataToRegister)
+        });
+
+        const json = await res.json();
+        if (!res.ok) throw new Error(json.message || "Qeydiyyat zamanı xəta.");
+
+        // Uğurlu qeydiyyatdan sonra məlumatları saxla
+        localStorage.setItem("token", json.token);
+        localStorage.setItem("registeredUser", JSON.stringify({
+          username: userDataToRegister.username,
+          email: userDataToRegister.email,
+          role: json.role
+        }));
+
+        Swal.fire({ title: "Uğurlu!", text: "Qeydiyyat tamamlandı! Xoş gəldiniz.", icon: "success" })
+          .then(() => window.location.href = "../index.html");
+
+      } catch (error) {
+        Swal.fire({ title: "Xəta!", text: error.message, icon: "error" });
+        verifyButton.textContent = "Kodu Təsdiqlə";
+        verifyButton.disabled = false;
+      }
+    });
+
+    // İnput Dizayn və Parol Vizual Effektləri (Sənin kodundan saxlanılıb)
+    if (inpPass) {
+      inpPass.addEventListener("input", () => {
+        const { score, checks } = getPasswordStrength(inpPass.value);
+        updatePasswordRequirements(checks);
+
+        let widthPercentage = (score / 5) * 100;
+        line.style.width = widthPercentage + "%";
+        line.style.backgroundColor = score === 5 ? 'green' : (score >= 3 ? 'orange' : 'red');
+        line.style.height = "5px";
+
+        passRequirements.style.display = (inpPass.value.length > 0 && score < 5) ? 'block' : 'none';
+      });
+    }
+
+    // Şifrəni göstər/gizlə
+    let eye = document.querySelector(".bi-eye-fill");
+    let eyeClose = document.querySelector(".bi-eye-slash-fill");
+    if (eye && eyeClose && inpPass) {
+      eye.addEventListener("click", () => {
+        inpPass.type = "text";
+        eye.style.display = "none";
+        eyeClose.style.display = "inline-block";
+      });
+      eyeClose.addEventListener("click", () => {
+        inpPass.type = "password";
+        eye.style.display = "inline-block";
+        eyeClose.style.display = "none";
+      });
+    }
+  </script>
+</body>
+
+</html>

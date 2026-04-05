@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="az">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>İstifadəçi Paneli</title>
+    <link rel="stylesheet" href="../style/dashboard.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body>
+
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="profile-card">
+                <div class="avatar-wrapper">
+                    <img id="userAvatar" src="../assets/default-avatar.png" alt="Profil">
+                    <div class="upload-btn-wrapper" onclick="document.getElementById('avatarInput').click()">
+                        <i class="fas fa-camera"></i>
+                    </div>
+                </div>
+                <input type="file" id="avatarInput" accept="image/*" hidden>
+                <h3 id="usernameDisplay">İstifadəçi adı</h3>
+                <p id="userEmail">email@nümunə.com</p>
+                <button id="logoutBtn" class="btn-logout">Çıxış et</button>
+            </div>
+        </aside>
+
+        <main class="content">
+            <div class="header">
+                <h2>Mənim Kurslarım</h2>
+                <a href="postadd.html" class="btn-add">+ Yeni Kurs Paylaş</a>
+            </div>
+
+            <div id="courseGrid" class="course-grid">
+                <div class="loading">Yüklənir...</div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../script/dashboard.js"></script>
+</body>
+
+</html>

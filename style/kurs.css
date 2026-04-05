@@ -1,0 +1,537 @@
+* {
+
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body {
+
+  position: relative;
+  font-family: 'Poppins', sans-serif;
+
+}
+
+body>.menu-div {
+
+  position: fixed;
+  top: 0;
+  z-index: 10000;
+  width: 100%;
+  height: 100vh;
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(10px);
+  box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+}
+
+.menu-div>.menu-item {
+
+  width: 50%;
+  height: 100%;
+  background-color: #fff;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px;
+}
+
+.menu-item>#closeMenu {
+
+  font-size: 18px;
+  background-color: #fff;
+  border-radius: 9999px;
+  width: 40px;
+  height: 40px;
+  position: absolute;
+  top: 20px;
+  right: -60px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.menu-item>button {
+
+  background-color: transparent;
+  border: none;
+  font-size: 18px;
+  color: #2da0fd;
+  font-weight: 700;
+  text-align: left;
+}
+
+.menu-item>.user-info-menu {
+
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.user-info-menu>.profil-img-menu {
+
+  width: 50px;
+  height: 50px;
+  background-color: #1c1d1f;
+  color: #fff;
+  font-size: 18px;
+  border-radius: 9999px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+header {
+
+  display: flex;
+}
+
+header>.navbar {
+
+  width: 100%;
+  height: 80px;
+  display: flex;
+  /* background-color: transparent; */
+  padding: 20px 0px;
+  align-items: center;
+  justify-content: space-around;
+  color: #fff;
+  margin-bottom: -80px;
+  /* margin-top: -90px; */
+  position: fixed;
+  z-index: 10000;
+  transition: margin-top 0.4s ease;
+}
+
+.navbar>.logo {
+
+  width: auto;
+  padding: 8px 14px;
+  border-radius: 8px;
+}
+
+.logo>img {
+
+  width: 150px;
+  filter:
+    drop-shadow(0 2px 4px rgba(255, 208, 0, 0.35)) drop-shadow(0 6px 12px rgba(6, 24, 44, 0.25));
+}
+
+.navbar>ul {
+
+  display: flex;
+  list-style: none;
+  gap: 30px;
+}
+
+ul>li {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+li>a {
+  text-decoration: none;
+  color: #fff;
+  transition: color 0.2s;
+}
+
+li:nth-child(2)>a {
+
+  color: #FFFFFF99;
+}
+
+li>a:hover {
+  color: #FFFFFF99;
+}
+
+
+.navbar>.add {
+
+  width: 70px;
+}
+
+.add>.wishlist-add {
+
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.add>.wishlist-add>.bi-cart,
+.bi-heart,
+.bi-bell {
+
+  font-size: 24px;
+}
+
+.navbar>.responsive {
+  display: none;
+}
+
+
+.navbar>.registration-part {
+
+  display: flex;
+  gap: 20px;
+  position: relative;
+  padding: 20px 0;
+}
+
+.registration-part>.login-button,
+.register-button {
+
+  background-color: #fff;
+  padding: 4px 12px;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 1.5rem;
+  border: none;
+}
+
+.navbar>.menu {
+
+  display: none;
+}
+
+.main-section {
+
+  width: 100%;
+  height: 457px;
+  background-image: url("../image/home-bg.png");
+  background-size: cover;
+  overflow: hidden;
+  display: flex;
+  gap: 50px;
+  justify-content: center;
+  align-items: center;
+}
+
+.main-section>.main-text {
+
+  width: 500px;
+
+}
+
+.main-text>p {
+  font-size: 20px;
+  font-weight: 400;
+  color: #3517b0;
+}
+
+.main-text>h1 {
+
+  font-size: 60px;
+  font-weight: 500;
+  color: #fff;
+}
+
+.main-section>.image {
+
+  width: 650px;
+  /* position: relative; */
+}
+
+.image>img {
+
+  width: 100%;
+  margin-top: 175px;
+  /* position: absolute; */
+  /* top: -15%; */
+}
+
+/* Kurslar Konteyneri */
+.course-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 30px;
+  padding: 40px 0;
+}
+
+/* Kurs Kartı */
+.course-card {
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+  transition: 0.3s ease;
+  border: 1px solid #eee;
+}
+
+.course-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* Şəkil və Qiymət */
+.course-img-container {
+  position: relative;
+  height: 200px;
+}
+
+.course-img-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.price-badge {
+  position: absolute;
+  bottom: -15px;
+  right: 20px;
+  background: #2d3436;
+  color: #fff;
+  padding: 8px 15px;
+  border-radius: 25px;
+  font-weight: bold;
+  font-size: 14px;
+  border: 2px solid #fff;
+}
+
+/* Kartın İçı */
+.container {
+
+  padding: 50px;
+}
+
+.course-body {
+  padding: 25px 20px 20px;
+}
+
+.course-meta {
+  font-size: 11px;
+  color: #888;
+  letter-spacing: 1px;
+  margin-bottom: 10px;
+}
+
+.course-title {
+  font-size: 18px;
+  margin: 10px 0 20px;
+  color: #2d3436;
+  line-height: 1.4;
+  min-height: 50px;
+}
+
+.course-info {
+  display: flex;
+  justify-content: space-between;
+  border-top: 1px solid #f0f0f0;
+  padding-top: 15px;
+  font-size: 13px;
+  color: #636e72;
+}
+/* Filter və Axtarış Bölməsi */
+.filter-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 30px 0;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.search-area {
+    display: flex;
+    align-items: center;
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 5px;
+    padding: 5px 15px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+}
+
+.search-area input {
+    border: none;
+    outline: none;
+    padding: 10px;
+    width: 250px;
+    font-size: 14px;
+}
+
+.search-area button {
+    background: #333;
+    color: #fff;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.search-area button:hover {
+    background: #555;
+}
+
+.control-area {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+#sortSelect {
+    padding: 10px 15px;
+    border: 1px solid #e0e0e0;
+    border-radius: 5px;
+    outline: none;
+    cursor: pointer;
+    background: #fff;
+}
+
+.view-switcher {
+    display: flex;
+    border: 1px solid #e0e0e0;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.view-switcher button {
+    background: #fff;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    color: #888;
+    transition: 0.3s;
+}
+
+.view-switcher button.active {
+    background: #f8f9fa;
+    color: #333;
+}
+
+.view-switcher button:not(:last-child) {
+    border-right: 1px solid #e0e0e0;
+}
+
+/* Grid Rejimi (Standart) */
+.course-grid.grid-mode {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 25px;
+}
+
+/* List Rejimi */
+.course-grid.list-mode {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.course-grid.list-mode .course-card {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    height: 200px;
+}
+
+.course-grid.list-mode .course-img-container {
+    width: 300px;
+    height: 100%;
+}
+
+.course-grid.list-mode .course-img-container img {
+    height: 100%;
+    object-fit: cover;
+}
+
+.course-grid.list-mode .course-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 20px;
+}
+/* Başlıq fontu və ölçüsü */
+.main-text h1 {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 700;
+    font-size: 42px;
+    color: #ffffff;
+    line-height: 1.2;
+}
+
+/* Kiçik "Onlayn kurslarımız" yazısı (p teqi) */
+.main-text p {
+    font-family: 'Inter', sans-serif; /* Və ya Google Fonts-dan gələn başqa bir incə font */
+    color: #ffd700; /* Şəkildəki mavi fon üzərində diqqət çəkən qızılı/sarı rəng */
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+}
+/* Responsive düzəlişlər */
+@media (max-width: 768px) {
+    .filter-wrapper {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .search-area input {
+        width: 100%;
+    }
+
+    .course-grid.list-mode .course-card {
+        flex-direction: column;
+        height: auto;
+    }
+
+    .course-grid.list-mode .course-img-container {
+        width: 100%;
+        height: 200px;
+    }
+}
+
+@media (max-width: 600px) {
+
+
+  .navbar>.menu {
+
+    display: block;
+  }
+
+  .menu>.bi-list {
+
+    font-size: 24px;
+  }
+
+  header>.navbar {
+
+    display: flex;
+    justify-content: space-between;
+    padding: 0 20px;
+  }
+
+  .navbar>.logo {
+
+    margin-left: 30px;
+  }
+
+  header>.navbar>ul {
+
+    display: none;
+  }
+
+  header>.navbar>.registration-part {
+
+    display: none;
+  }
+
+  header>.navbar>.search-bar,
+  .add {
+
+    display: none;
+  }
+
+  header>.navbar>.responsive {
+
+    display: flex;
+    gap: 10px;
+  }
+
+  header>.navbar>.responsive>.bi-search,
+  .bi-cart {
+
+    font-size: 20px;
+  }
+}

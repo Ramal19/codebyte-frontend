@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="az">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>İstifadəçilərin İdarəetmə Paneli</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f2f5;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #1a73e8;
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+
+        .controls {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        #search,
+        #roleFilter {
+            flex-grow: 1;
+            padding: 12px 15px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            transition: border-color 0.3s, box-shadow 0.3s;
+            min-width: 200px;
+        }
+
+        #search:focus,
+        #roleFilter:focus {
+            border-color: #1a73e8;
+            box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.1);
+            outline: none;
+        }
+
+        #users-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+
+        #users-table thead th {
+            background-color: #1a73e8;
+            color: white;
+            padding: 15px;
+            font-weight: 500;
+            text-align: left;
+        }
+
+        #users-table tbody td {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            background-color: #fff;
+        }
+
+        #users-table tbody tr:hover {
+            background-color: #f9f9f9;
+        }
+
+        #users-table thead tr:first-child th:first-child {
+            border-top-left-radius: 8px;
+        }
+
+        #users-table thead tr:first-child th:last-child {
+            border-top-right-radius: 8px;
+        }
+
+        #users-table tbody tr:last-child td:first-child {
+            border-bottom-left-radius: 8px;
+        }
+
+        #users-table tbody tr:last-child td:last-child {
+            border-bottom-right-radius: 8px;
+        }
+
+        #users-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+
+        .role-user {
+            color: #28a745;
+            font-weight: 600;
+        }
+
+        .role-teacher {
+            color: #ffc107;
+            font-weight: 600;
+        }
+
+        .role-admin {
+            color: #dc3545;
+            font-weight: 600;
+        }
+
+        button.delete-btn {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: background-color 0.3s ease, transform 0.1s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        button.delete-btn:hover {
+            background-color: #c82333;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Xəta/Məlumat Mesajları üçün Stil */
+        .info-message {
+            color: #dc3545;
+            text-align: center;
+            padding: 20px;
+            font-weight: 600;
+        }
+        
+        /* Media Query stilləri (dəyişmədi, amma tamlıq üçün saxlanıldı) */
+        @media (max-width: 768px) {
+            .container {
+                margin: 15px;
+                padding: 15px;
+            }
+
+            .controls {
+                flex-direction: column;
+            }
+
+            #users-table,
+            #users-table tbody,
+            #users-table tr,
+            #users-table td {
+                display: block;
+            }
+
+            #users-table thead {
+                display: none;
+            }
+
+            #users-table tr {
+                margin-bottom: 15px;
+                border: 1px solid #ddd;
+                border-radius: 8px;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            }
+
+            #users-table td {
+                text-align: right;
+                padding-left: 50%;
+                position: relative;
+                border: none;
+            }
+
+            #users-table td::before {
+                content: attr(data-label);
+                position: absolute;
+                left: 10px;
+                width: calc(50% - 20px);
+                padding-right: 10px;
+                white-space: nowrap;
+                text-align: left;
+                font-weight: 600;
+                color: #555;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>İstifadəçilərin İdarəetmə Paneli</h1>
+
+        <div class="controls">
+            <input type="text" id="search" placeholder="İstifadəçi adı, email üzrə axtar...">
+
+            <select id="roleFilter">
+                <option value="">Role görə filter (Hamısı)</option>
+                <option value="user">User</option>
+                <option value="teacher">Teacher</option>
+                <option value="admin">Admin</option>
+            </select>
+        </div>
+
+        <table id="users-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>İstifadəçi Adı</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Əməliyyat</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        const API_BASE_URL = "https://codebyte-backend-ibyq.onrender.com";
+        const USERS_API_URL = `${API_BASE_URL}/users`;
+
+        const tableBody = document.querySelector("#users-table tbody");
+        const searchInput = document.querySelector("#search");
+        const roleFilter = document.querySelector("#roleFilter");
+
+        let allUsers = [];
+        const columnLabels = ["ID", "İstifadəçi Adı", "Email", "Role", "Əməliyyat"];
+
+        async function fetchUsers() {
+            tableBody.innerHTML = `<tr><td colspan="5" class="info-message" style="color:#1a73e8;">Məlumatlar yüklənir...</td></tr>`;
+
+            const token = localStorage.getItem('token');
+
+            if (!token) {
+                tableBody.innerHTML = `<tr><td colspan="5" class="info-message">❌ **401 Unauthorized**: İstifadəçi məlumatlarını gətirmək üçün admin **giriş tokeni** (Authorization Token) tələb olunur. Zəhmət olmasa daxil olun.</td></tr>`;
+                return;
+            }
+
+            try {
+                const response = await fetch(USERS_API_URL, {
+                    method: "GET",
+                    headers: {
+                        "Authorization": `Bearer ${token}`
+                    }
+                });
+
+                if (!response.ok) {
+                    let errorMessage = `HTTP xətası! Status: ${response.status}.`;
+
+                    if (response.status === 401) {
+                        errorMessage = "401 Unauthorized: Token etibarsızdır və ya müddəti bitib. Yenidən daxil olun.";
+                    } else if (response.status === 403) {
+                        errorMessage = "403 Forbidden: Bu əməliyyata icazəniz yoxdur.";
+                    }
+
+                    throw new Error(errorMessage);
+                }
+
+                allUsers = await response.json();
+                applyFilters();
+
+            } catch (error) {
+                console.error("Məlumat gətirilərkən xəta:", error);
+                tableBody.innerHTML = `<tr><td colspan="5" class="info-message">Məlumatlar yüklənə bilmədi. Serveri yoxlayın. (Xəta: ${error.message || 'Bilinməyən server xətası'})</td></tr>`;
+            }
+        }
+
+        function getRoleClass(role) {
+            return `role-${role ? role.toLowerCase() : 'user'}`;
+        }
+
+        function displayUsers(users) {
+
+            tableBody.innerHTML = "";
+
+            if (users.length === 0) {
+                tableBody.innerHTML = `<tr><td colspan="5" class="info-message" style="color:#555;">Heç bir istifadəçi tapılmadı.</td></tr>`;
+                return;
+            }
+
+            users.forEach((user, index) => {
+
+                const row = tableBody.insertRow();
+
+                const data = [
+                    index + 1,
+                    user.username,
+                    user.email,
+                    user.role,
+                    null
+                ];
+
+                data.forEach((value, colIndex) => {
+                    const cell = row.insertCell();
+                    cell.setAttribute('data-label', columnLabels[colIndex]);
+
+                    if (value !== null) {
+                        cell.textContent = value;
+                    }
+
+                    if (colIndex === 3) {
+                        cell.classList.add(getRoleClass(user.role));
+                    }
+
+                    if (colIndex === 4) {
+                        const deleteBtn = document.createElement("button");
+                        deleteBtn.textContent = "Sil";
+                        deleteBtn.classList.add("delete-btn");
+                        deleteBtn.addEventListener("click", () => deleteUser(user.id));
+                        cell.appendChild(deleteBtn);
+                    }
+                });
+            });
+        }
+
+        async function deleteUser(id) {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                Swal.fire('Giriş Tələb Olunur', 'Əməliyyat üçün giriş tokeni tələb olunur! Zəhmət olmasa admin hesabı ilə daxil olun.', 'warning');
+                return;
+            }
+
+            Swal.fire({
+                title: 'İstifadəçini Silmək?',
+                text: "Bu istifadəçini silmək istədiyinizə əminsiniz? Bu, geri qaytarılmaz bir əməliyyatdır.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#ef4444',
+                cancelButtonColor: '#6b7280',
+                confirmButtonText: 'Bəli, Sil!',
+                cancelButtonText: 'Ləğv et'
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    try {
+                        const response = await fetch(`${USERS_API_URL}/${id}`, {
+                            method: "DELETE",
+                            headers: {
+                                "Authorization": `Bearer ${token}`
+                            },
+                        });
+
+                        let message = "Əməliyyat uğursuz oldu.";
+                        let icon = 'error';
+
+                        if (response.ok) {
+                            message = "İstifadəçi uğurla silindi.";
+                            icon = 'success';
+                            // Cədvəli yeniləyin
+                            allUsers = allUsers.filter(user => user.id !== id);
+                            applyFilters();
+                        } else if (response.status === 401) {
+                            message = "Giriş tokeni etibarsızdır. Yenidən daxil olun.";
+                        } else if (response.status === 403) {
+                            message = "Silməyə icazəniz yoxdur. Yalnız Administratorlar bu əməliyyatı edə bilər.";
+                        } else {
+                            const errorData = await response.json().catch(() => ({ message: "Bilinməyən server xətası." }));
+                            message = errorData.message || `Server xətası: Status ${response.status}`;
+                        }
+
+                        Swal.fire({
+                            title: response.ok ? 'Silindi!' : 'Xəta!',
+                            text: message,
+                            icon: icon
+                        });
+
+                    } catch (e) {
+                        Swal.fire('Xəta!', 'Serverlə əlaqə qurularkən xəta baş verdi.', 'error');
+                        console.error("Delete error:", e);
+                    }
+                }
+            });
+        }
+
+        function applyFilters() {
+            const query = searchInput.value.toLowerCase();
+            const role = roleFilter.value;
+
+            const filteredUsers = allUsers.filter(user =>
+                (user.username.toLowerCase().includes(query) || user.email.toLowerCase().includes(query)) &&
+                (role === "" || (user.role && user.role.toLowerCase() === role.toLowerCase()))
+            );
+
+            displayUsers(filteredUsers);
+        }
+
+        searchInput.addEventListener("input", applyFilters);
+        roleFilter.addEventListener("change", applyFilters);
+
+        fetchUsers();
+    </script>
+</body>
+
+</html>

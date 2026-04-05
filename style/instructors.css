@@ -1,0 +1,147 @@
+:root {
+    --primary-green: #3d5a32;
+    /* Tünd yaşıl */
+    --accent-lime: #c4d334;
+    /* Sarı-yaşıl */
+    --text-dark: #2d3436;
+    --text-gray: #636e72;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #ffffff;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.main-section {
+    display: flex;
+    max-width: 1100px;
+    width: 90%;
+    justify-content: space-between;
+    align-items: center;
+    gap: 40px;
+    padding: 20px;
+}
+
+/* SOL TƏRƏF - Mətnlər */
+.content-left {
+    flex: 1;
+}
+
+.badge {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.icon-box {
+    background-color: var(--accent-lime);
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.badge span {
+    font-weight: 600;
+    color: var(--text-dark);
+    font-size: 15px;
+}
+
+h1 {
+    font-size: 48px;
+    line-height: 1.1;
+    color: var(--text-dark);
+    margin: 0 0 20px 0;
+    font-weight: 800;
+}
+
+.description {
+    color: var(--text-gray);
+    font-size: 16px;
+    line-height: 1.6;
+    max-width: 400px;
+}
+
+/* SAĞ TƏRƏF - Proqress Dairələri */
+.stats-right {
+    display: flex;
+    gap: 30px;
+}
+
+.skill-item {
+    text-align: center;
+    width: 160px;
+}
+
+.circle-container {
+    position: relative;
+    width: 160px;
+    height: 160px;
+    margin-bottom: 15px;
+}
+
+.circle-container svg {
+    width: 160px;
+    height: 160px;
+    transform: rotate(-90deg);
+}
+
+circle {
+    fill: none;
+    stroke-width: 6;
+    stroke-linecap: round;
+}
+
+.bg-circle {
+    stroke: #f1f2f6;
+}
+
+.progress-circle {
+    stroke: url(#gradient_style);
+    stroke-dasharray: 440;
+    stroke-dashoffset: 440;
+    transition: stroke-dashoffset 2s ease-out;
+}
+
+.number {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 32px;
+    font-weight: bold;
+    color: var(--text-dark);
+}
+
+.skill-label {
+    font-weight: 600;
+    font-size: 15px;
+    color: var(--text-dark);
+}
+
+@media (max-width: 768px) {
+    .main-section {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .badge {
+        justify-content: center;
+    }
+
+    .description {
+        margin: 0 auto;
+    }
+
+    .stats-right {
+        margin-top: 30px;
+    }
+}

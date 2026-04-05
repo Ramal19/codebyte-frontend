@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeByte - Kurslar</title>
+    <link rel="stylesheet" href="../style/kurs.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <link rel="shortcut icon" href="../image/CodeByte.png" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cascadia+Mono:wght@200..700&family=IBM+Plex+Sans:wght@100..700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="menu">
+                <i class="bi bi-list"></i>
+            </div>
+
+            <div class="logo">
+                <img src="../image/codebyteLogoMa.png" alt="LOGO">
+            </div>
+
+            <ul>
+                <li><a href="../index.html">Ana Səhifə</a></li>
+                <li><a href="./kurs.html">Kurslar</a></li>
+                <li><a href="./telimciler.html">Təlimçilər</a></li>
+                <li><a href="#">Yol xəritəsi</a></li>
+                <li><a href="./contact.html">Əlaqə</a></li>
+            </ul>
+
+            <div class="add">
+                <span class="wishlist-add">
+                    <i class="bi bi-heart"></i>
+                    <i class="bi bi-cart"></i>
+                    <i class="bi bi-bell"></i>
+                </span>
+            </div>
+
+            <div class="registration-part">
+                <button id="login" class="login-button">Daxil olun</button>
+                <button id="register" class="register-button">Qeydiyyat</button>
+            </div>
+
+            <div class="responsive">
+                <i class="bi bi-search"></i>
+                <i class="bi bi-cart"></i>
+            </div>
+        </nav>
+    </header>
+
+    <section class="main-section" id="sectionForBubble">
+        <div class="bubble-layer"></div>
+        <div class="main-text">
+            <p>Onlayn kurslarımız</p>
+            <h1>Ən yaxşı elektron təlim kursları.</h1>
+        </div>
+        <div class="image">
+            <img src="../image/home-student.png" alt="STUDENT FOTO">
+        </div>
+    </section>
+
+    <section class="courses-section">
+        <div class="container">
+            <h2 class="title">Bütün Kurslar</h2>
+
+            <div class="filter-wrapper">
+                <div class="search-area">
+                    <input type="text" id="searchInput" placeholder="Kursları axtar...">
+                    <button id="searchBtn"><i class="bi bi-search"></i></button>
+                </div>
+
+                <div class="control-area">
+                    <select id="sortSelect">
+                        <option value="newest">Yeni paylaşılanlar</option>
+                        <option value="az">Başlıq (A-Z)</option>
+                        <option value="za">Başlıq (Z-A)</option>
+                        <option value="low">Qiymət (Ucuzdan bahaya)</option>
+                        <option value="high">Qiymət (Bahadan ucuza)</option>
+                    </select>
+
+                    <div class="view-switcher">
+                        <button id="gridView" class="active"><i class="bi bi-grid-3x3-gap"></i></button>
+                        <button id="listView"><i class="bi bi-list"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="course-grid" class="course-grid grid-mode"></div>
+        </div>
+    </section>
+
+    <script src="../script/kurs.js"></script>
+</body>
+
+</html>
