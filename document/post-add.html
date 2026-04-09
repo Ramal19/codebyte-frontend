@@ -3,70 +3,496 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>CodeByte - Kurs əlavə et</title>
-    <link rel="stylesheet" href="../style/post-add.css">
-    <link rel="shortcut icon" href="../image/CodeByte.png" type="image/x-icon">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeByte - Kurs Əlavə et</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="shortcut icon" href="../image/CodeByte.png" type="image/x-icon">
 
+    <style>
+        :root {
+            --primary: #2b6df1;
+            --dark: #242f40;
+            --light: #f4f7fe;
+            --border: #e2e8f0;
+            --success: #10b981;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            overflow-x: hidden;
+        }
+
+        /* Navbar */
+        .navbar {
+            background: var(--dark);
+            padding: 1rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            cursor: pointer;
+        }
+
+        .logo span {
+            color: var(--primary);
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            max-width: 600px;
+            margin: 30px auto;
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+        }
+
+        .progress-line {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            height: 2px;
+            background: var(--border);
+            width: 100%;
+            z-index: 1;
+            transform: translateY(-50%);
+        }
+
+        .progress-active {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            height: 2px;
+            background: var(--primary);
+            width: 0%;
+            z-index: 1;
+            transform: translateY(-50%);
+            transition: 0.4s ease;
+        }
+
+        .step-circle {
+            width: 35px;
+            height: 35px;
+            background: white;
+            border: 2px solid var(--border);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2;
+            transition: 0.4s;
+            font-weight: bold;
+        }
+
+        .step-circle.active {
+            border-color: var(--primary);
+            color: var(--primary);
+            box-shadow: 0 0 10px rgba(43, 109, 241, 0.3);
+        }
+
+        /* Form Container */
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+
+        .step-card {
+            background: white;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            display: none;
+            animation: slideIn 0.5s ease;
+        }
+
+        .step-card.active {
+            display: block;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        h2 {
+            margin-bottom: 25px;
+            font-size: 1.5rem;
+            text-align: center;
+        }
+
+        /* Inputs */
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .input-group input,
+        .input-group select {
+            width: 100%;
+            padding: 12px;
+            border: 1.5px solid var(--border);
+            border-radius: 8px;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        .input-group input:focus {
+            border-color: var(--primary);
+        }
+
+        /* Cover Upload */
+        .cover-box {
+            width: 100%;
+            height: 200px;
+            border: 2px dashed var(--border);
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cover-box:hover {
+            border-color: var(--primary);
+            background: #f8faff;
+        }
+
+        #coverPreview {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: none;
+        }
+
+        /* Video Item */
+        .video-item {
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .resurs-btn {
+            background: #edf2f7;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            margin-top: 10px;
+            transition: 0.3s;
+        }
+
+        .resurs-btn:hover {
+            background: #e2e8f0;
+        }
+
+        .doc-info {
+            font-size: 0.75rem;
+            color: var(--success);
+            margin-top: 5px;
+            display: none;
+        }
+
+        /* Buttons */
+        .btn-row {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .btn-next {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-prev {
+            background: #e2e8f0;
+            color: var(--dark);
+        }
+
+        .btn-add {
+            background: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
 </head>
 
 <body>
-    <header>
-        <nav class="navbar">
-            <div class="logo">
-                <img src="../image/codebyteLogoMa.png" alt="LOGO">
-            </div>
-            <ul>
-                <li><a href="../index.html">Ana Səhifə</a></li>
-                <li><a href="./kurs.html">Kurslar</a></li>
-                <li><a href="./telimciler.html">Təlimçilər</a></li>
-                <li><a href="./contact.html">Əlaqə</a></li>
-            </ul>
-        </nav>
+
+    <header class="navbar">
+        <div class="logo" onclick="window.location.href='../index.html'">CODE<span>BYTE</span></div>
+        <div style="font-size: 0.8rem; opacity: 0.7;">Kurs Yaradıcı Paneli</div>
     </header>
 
-    <div id="authActions">
-        <h2>Yeni Kurs Əlavə Et</h2>
+    <div class="progress-container">
+        <div class="progress-line"></div>
+        <div class="progress-active" id="progressLine"></div>
+        <div class="step-circle active" data-step="1">1</div>
+        <div class="step-circle" data-step="2">2</div>
+        <div class="step-circle" data-step="3">3</div>
+    </div>
 
-        <!-- Kurs qapağı -->
-        <label class="custom-file-upload">
-            <input type="file" id="courseCover" accept="image/*">
-            Kurs üçün ümumi qapaq şəkli seçin
-        </label>
-        <br>
-        <img id="courseCoverPreview" style="visibility:hidden;width:250px;margin-top:10px;">
-
-        <!-- Kurs başlığı -->
-        <input type="text" id="courseTitle" placeholder="Kursun adını daxil edin">
-
-        <!-- Kateqoriyalar -->
-        <select id="categorySelect">
-            <option hidden>Kateqoriya seçin</option>
-            <option value="JavaScript">JavaScript</option>
-            <option value="C++">C++</option>
-            <option value="React JS">React JS</option>
-            <option value="Python">Python</option>
-            <option value="Canva">Canva</option>
-            <option value="Other">Digər</option>
-        </select>
-
-        <!-- Videolar -->
-        <div id="videosContainer">
-            <h3>Videolar</h3>
-            <div class="video-item">
-                <input type="file" class="videoInput" accept="video/*">
-                <input type="file" class="thumbInput" accept="image/*">
-                <input type="text" class="videoTitle" placeholder="Videonun başlığı">
-                <!-- <label for="coursePrice">Kursun Qiyməti (AZN)</label> -->
-                <input type="number" id="coursePrice" placeholder="Qiyməti daxil edin (0 - pulsuz)">
+    <div class="container">
+        <div class="step-card active" id="step1">
+            <h2><i class="fa-solid fa-circle-info"></i> Ümumi Məlumat</h2>
+            <div class="input-group">
+                <label>Kursun Başlığı</label>
+                <input type="text" id="courseTitle" placeholder="Məsələn: Sıfırdan Python">
+            </div>
+            <div class="input-group">
+                <label>Kateqoriya</label>
+                <select id="categorySelect">
+                    <option value="">Seçin...</option>
+                    <option value="frontend">Frontend</option>
+                    <option value="backend">Backend</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label>Qiymət (AZN)</label>
+                <input type="number" id="coursePrice" placeholder="0 yazsanız pulsuz olacaq">
+            </div>
+            <div class="btn-row" style="justify-content: flex-end;">
+                <button class="btn btn-next" onclick="nextStep(2)">Növbəti <i
+                        class="fa-solid fa-arrow-right"></i></button>
             </div>
         </div>
 
-        <button id="addMoreVideo">Daha çox video əlavə et</button>
-        <button id="uploadCourseBtn">Kursu paylaş</button>
+        <div class="step-card" id="step2">
+            <h2><i class="fa-solid fa-image"></i> Vizual Görünüş</h2>
+            <div class="input-group">
+                <label>Kursun Qapaq Şəkli</label>
+                <div class="cover-box" onclick="document.getElementById('courseCover').click()">
+                    <img id="coverPreview" src="">
+                    <i class="fa-solid fa-cloud-arrow-up" style="font-size: 2rem; color: var(--primary);"></i>
+                    <p style="margin-top: 10px;">Şəkil yükləmək üçün klikləyin</p>
+                </div>
+                <input type="file" id="courseCover" accept="image/*" class="hidden">
+            </div>
+            <div class="btn-row">
+                <button class="btn btn-prev" onclick="prevStep(1)">Geri</button>
+                <button class="btn btn-next" onclick="nextStep(3)">Növbəti <i
+                        class="fa-solid fa-arrow-right"></i></button>
+            </div>
+        </div>
+
+        <div class="step-card" id="step3">
+            <h2><i class="fa-solid fa-play"></i> Dərs Materialları</h2>
+            <button class="btn btn-add" id="addMoreVideo"><i class="fa-solid fa-plus"></i> Yeni Video Bölməsi</button>
+
+            <div id="videosContainer">
+            </div>
+
+            <div class="btn-row">
+                <button class="btn btn-prev" onclick="prevStep(2)">Geri</button>
+                <button class="btn btn-next" id="uploadCourseBtn" style="background: var(--success);">Kursu Tamamla <i
+                        class="fa-solid fa-check"></i></button>
+            </div>
+        </div>
     </div>
 
-    <script src="../script/post-add.js">
+    <script>
+        const API_URL = "https://codebyte-backend-ibyq.onrender.com";
+        const token = localStorage.getItem("token");
+
+        let currentStep = 1;
+        const MAX_DOC_SIZE = 10 * 1024 * 1024; // 10MB
+        const MAX_VIDEO_SIZE = 100 * 1024 * 1024;
+
+        // Step Naviqasiyası
+        function updateProgress() {
+            document.querySelectorAll('.step-circle').forEach(circle => {
+                circle.classList.toggle('active', circle.dataset.step <= currentStep);
+            });
+            document.getElementById('progressLine').style.width = ((currentStep - 1) / 2) * 100 + "%";
+        }
+
+        function nextStep(step) {
+            // Validation
+            if (currentStep === 1) {
+                if (!document.getElementById('courseTitle').value || !document.getElementById('categorySelect').value) {
+                    return Swal.fire("Xəta", "Zəhmət olmasa başlıq və kateqoriyanı doldurun", "error");
+                }
+            }
+            if (currentStep === 2) {
+                if (!document.getElementById('courseCover').files[0]) {
+                    return Swal.fire("Xəta", "Kursun qapaq şəkli mütləqdir", "error");
+                }
+            }
+
+            document.getElementById(`step${currentStep}`).classList.remove('active');
+            currentStep = step;
+            document.getElementById(`step${currentStep}`).classList.add('active');
+            updateProgress();
+        }
+
+        function prevStep(step) {
+            document.getElementById(`step${currentStep}`).classList.remove('active');
+            currentStep = step;
+            document.getElementById(`step${currentStep}`).classList.add('active');
+            updateProgress();
+        }
+
+        // Qapaq önbaxış
+        document.getElementById('courseCover').addEventListener('change', function (e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (event) {
+                    const img = document.getElementById('coverPreview');
+                    img.src = event.target.result;
+                    img.style.display = "block";
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Video və Sənəd əlavə etmə məntiqi
+        document.getElementById('addMoreVideo').addEventListener('click', () => {
+            const div = document.createElement('div');
+            div.className = 'video-item';
+            div.innerHTML = `
+                <div class="input-group">
+                    <label>Video Faylı (MP4)</label>
+                    <input type="file" class="videoInput" accept="video/*">
+                </div>
+                <div class="input-group">
+                    <label>Video Başlığı</label>
+                    <input type="text" class="videoTitle" placeholder="Məs: Dərs 1">
+                </div>
+                <button class="resurs-btn" onclick="this.nextElementSibling.click()">
+                    <i class="fa-solid fa-file-pdf"></i> Resurs əlavə et (PDF/Word)
+                </button>
+                <input type="file" class="docInput hidden" accept=".pdf,.doc,.docx" onchange="checkDoc(this)">
+                <p class="doc-info"></p>
+                <i class="fa-solid fa-trash" style="position:absolute; top:15px; right:15px; cursor:pointer; color:#e53e3e" onclick="this.parentElement.remove()"></i>
+            `;
+            document.getElementById('videosContainer').appendChild(div);
+        });
+
+        function checkDoc(input) {
+            const file = input.files[0];
+            const info = input.nextElementSibling;
+            if (file) {
+                if (file.size > MAX_DOC_SIZE) {
+                    Swal.fire("Sənəd çox böyükdür", "Maksimum 10MB ola bilər", "warning");
+                    input.value = "";
+                    info.style.display = "none";
+                } else {
+                    info.innerText = "Yükləndi: " + file.name;
+                    info.style.display = "block";
+                }
+            }
+        }
+
+        // Final Upload
+        document.getElementById('uploadCourseBtn').addEventListener('click', async () => {
+            const title = document.getElementById('courseTitle').value;
+            const category = document.getElementById('categorySelect').value;
+            const price = document.getElementById('coursePrice').value;
+            const cover = document.getElementById('courseCover').files[0];
+
+            const videoItems = document.querySelectorAll('.video-item');
+            if (videoItems.length === 0) return Swal.fire("Xəta", "Ən azı bir video dərs əlavə etməlisiniz", "error");
+
+            const formData = new FormData();
+            formData.append("text", title);
+            formData.append("category", category);
+            formData.append("price", price);
+            formData.append("courseCover", cover);
+
+            const titles = [];
+            let valid = true;
+
+            videoItems.forEach((item, index) => {
+                const video = item.querySelector('.videoInput').files[0];
+                const vTitle = item.querySelector('.videoTitle').value;
+                const doc = item.querySelector('.docInput').files[0];
+
+                if (!video || !vTitle) {
+                    valid = false;
+                    return;
+                }
+
+                formData.append("videos", video);
+                titles.push(vTitle);
+                if (doc) {
+                    formData.append("documents", doc); // Backenddə bu adı tutmalısan
+                }
+            });
+
+            if (!valid) return Swal.fire("Xəta", "Bütün video və başlıq sahələrini doldurun", "error");
+
+            formData.append("videoTitles", JSON.stringify(titles));
+
+            Swal.fire({ title: 'Göndərilir...', didOpen: () => Swal.showLoading() });
+
+            try {
+                const res = await fetch(`${API_URL}/posts`, {
+                    method: "POST",
+                    headers: { "Authorization": "Bearer " + token },
+                    body: formData
+                });
+                if (res.ok) {
+                    Swal.fire("Uğurlu!", "Kurs təsdiq üçün göndərildi", "success").then(() => window.location.href = "../index.html");
+                } else {
+                    Swal.fire("Xəta", "Server xətası baş verdi", "error");
+                }
+            } catch (err) {
+                Swal.fire("Xəta", err.message, "error");
+            }
+        });
     </script>
 </body>
 

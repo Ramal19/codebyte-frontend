@@ -1,3 +1,4 @@
+
 emailjs.init("EsHztpH0Dv7cXaD1n");
 
 const API_URL = "https://codebyte-backend-ibyq.onrender.com";
@@ -11,13 +12,13 @@ const verificationCodeInput = document.getElementById("verificationCodeInput");
 const verifyButton = document.getElementById("verifyButton");
 
 let generatedVerificationCode = null;
-let userDataToRegister = {};
+let userDataToRegister = {}; // Kod təsdiqlənəndə göndəriləcək məlumatlar
 
 const EMAILJS_SERVICE_ID = "service_uxvssjk";
 const EMAILJS_TEMPLATE_ID = "template_i41ipll";
 
+// Parol yoxlanılması funksiyaları
 function getPasswordStrength(password) {
-    let score = 0;
     const checks = {
         length: password.length >= 8,
         lower: /[a-z]/.test(password),
@@ -25,7 +26,7 @@ function getPasswordStrength(password) {
         number: /[0-9]/.test(password),
         symbol: /[^A-Za-z0-9\s]/.test(password)
     };
-    Object.keys(checks).forEach(key => { if (checks[key]) score++; });
+    let score = Object.values(checks).filter(Boolean).length;
     return { score, checks };
 }
 
@@ -37,16 +38,7 @@ function updatePasswordRequirements(checks) {
     });
 }
 
-function updateStrengthBar(score) {
-    let widthPercentage = (score / 5) * 100;
-    let backgroundColor = score === 5 ? 'green' : (score >= 3 ? 'orange' : 'red');
-    line.style.width = widthPercentage + "%";
-    line.style.backgroundColor = backgroundColor;
-    line.style.height = "10px";
-}
-
-if (passRequirements) passRequirements.style.display = 'none';
-
+// FORM SUBMIT -  Yoxlama və Kod Göndərmə
 form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
@@ -55,11 +47,6 @@ form.addEventListener("submit", async (e) => {
         email: form.email.value.trim(),
         password: form.password.value
     };
-
-    if (!data.username || !data.email || !data.password) {
-        Swal.fire({ title: "Diqqət!", text: "Bütün sahələri doldurun.", icon: "warning" });
-        return;
-    }
 
     const { score } = getPasswordStrength(data.password);
     if (score < 5) {
@@ -78,22 +65,20 @@ form.addEventListener("submit", async (e) => {
             body: JSON.stringify({ ...data, checkOnly: true })
         });
 
-        if (!checkRes.ok) {
-            const errorJson = await checkRes.json();
-            throw new Error(errorJson.message || "Bu istifadəçi artıq mövcuddur.");
-        }
+        const checkJson = await checkRes.json();
+        if (!checkRes.ok) throw new Error(checkJson.message || "Bu istifadəçi artıq mövcuddur.");
 
         userDataToRegister = data;
         generatedVerificationCode = Math.floor(100000 + Math.random() * 900000);
 
         await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
             user_email: data.email,
-            from_name: data.username,
+            from_name: "CodeByte Support",
             verification_code: generatedVerificationCode,
             message: "Sizin təsdiq kodunuz: " + generatedVerificationCode
         });
 
-        Swal.fire({ title: "Kod Göndərildi!", text: "Emailinizi yoxlayın.", icon: "success" });
+        Swal.fire({ title: "Kod Göndərildi!", text: "Zəhmət olmasa emailinizi yoxlayın.", icon: "success" });
         form.style.display = 'none';
         verificationContainer.style.display = 'flex';
 
@@ -104,11 +89,12 @@ form.addEventListener("submit", async (e) => {
     }
 });
 
+// VERIFY BUTTON -  -0 Kodun yoxlanılması və Əsl Qeydiyyat
 verifyButton.addEventListener("click", async () => {
     const userEnteredCode = verificationCodeInput.value.trim();
 
     if (userEnteredCode !== String(generatedVerificationCode)) {
-        Swal.fire({ title: "Səhv!", text: "Kod düzgün deyil.", icon: "error" });
+        Swal.fire({ title: "Səhv!", text: "Daxil etdiyiniz kod yanlışdır.", icon: "error" });
         return;
     }
 
@@ -116,6 +102,7 @@ verifyButton.addEventListener("click", async () => {
     verifyButton.disabled = true;
 
     try {
+        // İndi məlumatları serverə göndəririk ki, bazaya yazılsın (checkOnly YOXDUR)
         const res = await fetch(`${API_URL}/register`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -123,9 +110,9 @@ verifyButton.addEventListener("click", async () => {
         });
 
         const json = await res.json();
+        if (!res.ok) throw new Error(json.message || "Qeydiyyat zamanı xəta.");
 
-        if (!res.ok) throw new Error(json.message || "Qeydiyyat tamamlanarkən xəta oldu.");
-
+        // Uğurlu qeydiyyatdan sonra məlumatları saxla
         localStorage.setItem("token", json.token);
         localStorage.setItem("registeredUser", JSON.stringify({
             username: userDataToRegister.username,
@@ -133,7 +120,7 @@ verifyButton.addEventListener("click", async () => {
             role: json.role
         }));
 
-        Swal.fire({ title: "Uğurlu!", text: "Qeydiyyat tamamlandı.", icon: "success" })
+        Swal.fire({ title: "Uğurlu!", text: "Qeydiyyat tamamlandı! Xoş gəldiniz.", icon: "success" })
             .then(() => window.location.href = "../index.html");
 
     } catch (error) {
@@ -143,32 +130,25 @@ verifyButton.addEventListener("click", async () => {
     }
 });
 
+// İnput Dizayn və Parol Vizual Effektləri (Sənin kodundan saxlanılıb)
 if (inpPass) {
     inpPass.addEventListener("input", () => {
         const { score, checks } = getPasswordStrength(inpPass.value);
-        updateStrengthBar(score);
         updatePasswordRequirements(checks);
+
+        let widthPercentage = (score / 5) * 100;
+        line.style.width = widthPercentage + "%";
+        line.style.backgroundColor = score === 5 ? 'green' : (score >= 3 ? 'orange' : 'red');
+        line.style.height = "5px";
+
         passRequirements.style.display = (inpPass.value.length > 0 && score < 5) ? 'block' : 'none';
     });
 }
 
-const inputs = document.querySelectorAll(".input");
-const icons = document.querySelectorAll(".icon");
-inputs.forEach((inp, index) => {
-    inp.addEventListener("focus", () => {
-        if (icons[index]) icons[index].style.cssText = `font-size: 14px; transform: translateY(-25px); transition: all 0.3s ease;`;
-    });
-    inp.addEventListener("focusout", () => {
-        if (inp.value.trim() === "" && icons[index]) {
-            icons[index].style.cssText = `font-size: 18px; transform: translateY(0); transition: all 0.3s ease;`;
-        }
-    });
-});
-
+// Şifrəni göstər/gizlə
 let eye = document.querySelector(".bi-eye-fill");
 let eyeClose = document.querySelector(".bi-eye-slash-fill");
 if (eye && eyeClose && inpPass) {
-    eyeClose.style.display = "none";
     eye.addEventListener("click", () => {
         inpPass.type = "text";
         eye.style.display = "none";
@@ -180,3 +160,10 @@ if (eye && eyeClose && inpPass) {
         eyeClose.style.display = "none";
     });
 }
+
+const inputs = document.querySelectorAll(".input");
+const icons = document.querySelectorAll(".icon");
+inputs.forEach((inp, index) => {
+    console.log(inp);
+    
+});

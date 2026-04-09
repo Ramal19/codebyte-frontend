@@ -20,6 +20,8 @@ logo.addEventListener("click", () => {
   window.location.href = "../index.html";
 });
 
+
+
 courseCoverInput.addEventListener("change", () => {
   const file = courseCoverInput.files[0];
   if (!file) return;
@@ -45,12 +47,19 @@ courseCoverInput.addEventListener("change", () => {
 addMoreVideoBtn.addEventListener("click", () => {
   const div = document.createElement("div");
   div.className = "video-item";
-  div.innerHTML =
-    `
-        <input type="file" class="videoInput" accept="video/*">
-        <input type="file" class="thumbInput" accept="image/*">
-        <input type="text" class="videoTitle" placeholder="Videonun başlığı">
-    `;
+  div.innerHTML = `
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+        <div class="input-group">
+            <label><i class="fa-solid fa-video"></i> Video Faylı</label>
+            <input type="file" class="videoInput" accept="video/*">
+        </div>
+        <div class="input-group">
+            <label><i class="fa-solid fa-image"></i> Video Örtüyü</label>
+            <input type="file" class="thumbInput" accept="image/*">
+        </div>
+    </div>
+    <input type="text" class="videoTitle" placeholder="Videonun başlığı" style="padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
+`;
   videosContainer.appendChild(div);
 
   const videoInput = div.querySelector(".videoInput");
