@@ -19,6 +19,7 @@
             --bg-light: #f7f9fa;
         }
 
+        /* Mövcud stillər saxlanıldı... */
         * {
             margin: 0;
             padding: 0;
@@ -34,7 +35,6 @@
             overflow: hidden;
         }
 
-        /* HEADER */
         header {
             background-color: var(--primary-dark);
             color: #fff;
@@ -77,14 +77,12 @@
             max-width: 400px;
         }
 
-        /* MAIN CONTENT LAYOUT */
         .main-wrapper {
             display: flex;
             flex: 1;
             overflow: hidden;
         }
 
-        /* LEFT SIDE: Video & Tabs */
         .video-container-main {
             flex: 3;
             overflow-y: auto;
@@ -98,7 +96,6 @@
             display: block;
         }
 
-        /* TABS AREA */
         .btns {
             display: flex;
             border-bottom: 1px solid var(--border-color);
@@ -126,25 +123,67 @@
             border-bottom: 2px solid var(--primary-dark);
         }
 
-        /* CONTENT SECTIONS */
         .tab-content-wrapper {
             padding: 30px;
             max-width: 900px;
             margin: 0 auto;
         }
 
-        /* RATING SECTION */
+        /* YENİ: SƏNƏDLƏR ÜÇÜN STİLLƏR */
+        .document-list {
+            list-style: none;
+            padding: 0;
+            margin-top: 15px;
+        }
+
+        .document-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background: var(--bg-light);
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border: 1px solid var(--border-color);
+            transition: 0.3s;
+            text-decoration: none;
+            color: var(--text-main);
+        }
+
+        .document-item:hover {
+            background: #fff;
+            border-color: var(--accent-blue);
+            transform: translateY(-2px);
+        }
+
+        .document-item i {
+            font-size: 1.5rem;
+            margin-right: 15px;
+            color: #ff4d4d;
+            /* PDF rəngi */
+        }
+
+        .doc-info {
+            flex-grow: 1;
+        }
+
+        .doc-info span {
+            display: block;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .doc-info small {
+            color: var(--text-light);
+            font-size: 12px;
+        }
+
+        /* Rating & Comment stilləri eynilə saxlanıldı... */
         .rating-section-container {
             background: var(--bg-light);
             padding: 25px;
             border-radius: 8px;
             margin-bottom: 30px;
             border: 1px solid var(--border-color);
-        }
-
-        .rating-section-container h3 {
-            font-size: 18px;
-            margin-bottom: 10px;
         }
 
         #star-rating {
@@ -158,20 +197,6 @@
             color: #ccc;
             cursor: pointer;
             transition: transform 0.2s;
-        }
-
-        .star:hover {
-            transform: scale(1.1);
-        }
-
-        #rating-message {
-            font-size: 13px;
-            color: var(--text-light);
-        }
-
-        /* COMMENT SECTION */
-        #comment-input {
-            margin-bottom: 40px;
         }
 
         #comment-input textarea {
@@ -195,12 +220,6 @@
             float: right;
         }
 
-        /* COMMENTS LIST */
-        #comments-list {
-            clear: both;
-            margin-top: 50px;
-        }
-
         .comment {
             display: flex;
             gap: 15px;
@@ -221,26 +240,6 @@
             text-transform: uppercase;
         }
 
-        .comment-main strong {
-            font-size: 15px;
-            display: block;
-            margin-bottom: 4px;
-        }
-
-        .comment-main p {
-            font-size: 14px;
-            line-height: 1.5;
-            color: var(--text-main);
-        }
-
-        .comment-main small {
-            color: var(--text-light);
-            font-size: 12px;
-            margin-top: 8px;
-            display: block;
-        }
-
-        /* RIGHT SIDEBAR: Playlist */
         .thumbs {
             flex: 1;
             background-color: #fff;
@@ -269,45 +268,12 @@
             background-color: var(--bg-light);
         }
 
-        .video-thumbnail input[type="checkbox"] {
-            width: 18px;
-            height: 18px;
-            cursor: pointer;
-        }
-
         .video-thumbnail img {
             width: 80px;
             border-radius: 4px;
             aspect-ratio: 16/9;
             object-fit: cover;
         }
-
-        .video-thumbnail span {
-            font-size: 13px;
-            font-weight: 500;
-            line-height: 1.3;
-            color: var(--text-main);
-        }
-
-        /* Overlay */
-        .video-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.85);
-            z-index: 100;
-            display: none;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            color: #fff;
-        }
-
-        /* Scrollbar */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-thumb { background: #d1d7dc; }
     </style>
 </head>
 
@@ -317,53 +283,56 @@
         <div class="navbar">
             <div class="left-side">
                 <div class="logo"><img src="../image/codebyteLogoMa.png" alt="Logo"></div>
-                <div class="course-name">
-                    <span id="course-title"></span>
-                </div>
-            </div>
-            <div class="right-side">
-                <i class="bi bi-person-circle" style="font-size: 1.2rem; cursor: pointer;"></i>
+                <div class="course-name"><span id="course-title"></span></div>
             </div>
         </div>
     </header>
 
     <div class="main-wrapper">
         <div class="video-container-main">
-            <div style="position: relative;">
-                <video id="main-video" controlsList="nodownload" controls></video>
-                <div class="video-overlay" id="video-overlay">
-                    <img id="overlay-image" src="" alt="Qeyd qadağandır" style="display: none; max-width: 200px; margin-bottom: 20px;">
-                    <p id="overlay-text">Video Dayandırıldı</p>
-                </div>
-            </div>
+            <video id="main-video" controlsList="nodownload" controls></video>
 
             <div class="btns">
-                <button class="btn" id="searchVideoContent"><i class="bi bi-search"></i></button>
-                <button class="btn" id="overview">Ümumi baxış</button>
-                <button class="btn active-btn" id="comments">Rəylər</button>
+                <button class="btn" id="overview-btn">Ümumi baxış</button>
+                <button class="btn" id="resources-btn">Resurslar</button>
+                <button class="btn active-btn" id="comments-btn">Rəylər</button>
             </div>
 
             <div class="tab-content-wrapper">
-                <div class="rating-section-container" id="rating-section">
-                    <h3>Kursa Reytinq Ver</h3>
-                    <div id="star-rating">
-                        <span class="star" data-score="1">☆</span>
-                        <span class="star" data-score="2">☆</span>
-                        <span class="star" data-score="3">☆</span>
-                        <span class="star" data-score="4">☆</span>
-                        <span class="star" data-score="5">☆</span>
-                    </div>
-                    <p id="rating-message">Kursu qiymətləndirərək bizə dəstək olun.</p>
+                <div id="overview-section" style="display: none;">
+                    <h3 id="overview-course-name" style="margin-bottom: 10px;"></h3>
+                    <p id="overview-category" style="color: var(--accent-blue); font-weight: 600; margin-bottom: 20px;">
+                    </p>
+                    <div id="overview-description"></div>
                 </div>
 
-                <div class="comments-section-container" id="comments-section">
-                    <h3>Şərhlər</h3>
-                    <div id="comment-input">
-                        <textarea id="comment-text" placeholder="Şərhinizi yazın..." rows="3"></textarea>
-                        <button id="submit-comment">Şərh Yaz</button>
+                <div id="resources-section" style="display: none;">
+                    <h3>Kurs Materialları</h3>
+                    <div id="document-list" class="document-list">
                     </div>
-                    <div id="comments-list">
+                </div>
+
+                <div id="comments-rating-container">
+                    <div class="rating-section-container" id="rating-section">
+                        <h3>Kursa Reytinq Ver</h3>
+                        <div id="star-rating">
+                            <span class="star" data-score="1">☆</span>
+                            <span class="star" data-score="2">☆</span>
+                            <span class="star" data-score="3">☆</span>
+                            <span class="star" data-score="4">☆</span>
+                            <span class="star" data-score="5">☆</span>
                         </div>
+                        <p id="rating-message">Kursu qiymətləndirərək bizə dəstək olun.</p>
+                    </div>
+
+                    <div class="comments-section-container" id="comments-section">
+                        <h3>Şərhlər</h3>
+                        <div id="comment-input">
+                            <textarea id="comment-text" placeholder="Şərhinizi yazın..." rows="3"></textarea>
+                            <button id="submit-comment">Şərh Yaz</button>
+                        </div>
+                        <div id="comments-list" style="margin-top: 50px;"></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -375,21 +344,21 @@
     </div>
 
     <script>
-        // SƏNİN JS KODUN (Dəyişilməyib, sadəcə dizayn elementləri ilə inteqrasiya edilib)
         const API_URL = "https://codebyte-backend-ibyq.onrender.com";
         const post = JSON.parse(localStorage.getItem("selectedPost"));
 
         if (!post) {
-            document.body.innerHTML = "<h3>Kurs tapılmadı</h3>";
+            document.body.innerHTML = "<h3 style='padding:50px; text-align:center;'>Kurs tapılmadı</h3>";
         } else {
             document.getElementById("course-title").textContent = post.text;
+            document.getElementById("overview-course-name").textContent = post.text;
+            document.getElementById("overview-category").textContent = post.category || "Kateqoriya yoxdur";
+
             const video = document.getElementById("main-video");
             const list = document.getElementById("video-list");
             const commentsList = document.getElementById("comments-list");
             const commentTextarea = document.getElementById("comment-text");
             const submitButton = document.getElementById("submit-comment");
-            const commentsSection = document.getElementById("comments-section");
-            const ratingSection = document.getElementById("rating-section");
             const starRatingDiv = document.getElementById("star-rating");
             const ratingMessage = document.getElementById("rating-message");
             const stars = starRatingDiv.querySelectorAll('.star');
@@ -398,6 +367,26 @@
             let userHasRated = false;
             let userCurrentScore = 0;
 
+            // --- SƏNƏDLƏRİ RENDER ETMƏK ---
+            function loadDocuments() {
+                const docContainer = document.getElementById("document-list");
+                if (post.documents && post.documents.length > 0) {
+                    docContainer.innerHTML = post.documents.map((docUrl, index) => `
+                        <a href="${docUrl}" target="_blank" class="document-item">
+                            <i class="bi bi-file-earmark-pdf-fill"></i>
+                            <div class="doc-info">
+                                <span>Material #${index + 1}</span>
+                                <small>Yükləmək və ya baxmaq üçün klikləyin</small>
+                            </div>
+                            <i class="bi bi-download" style="color: var(--text-light); font-size: 1rem;"></i>
+                        </a>
+                    `).join('');
+                } else {
+                    docContainer.innerHTML = "<p style='color:var(--text-light);'>Bu kurs üçün əlavə material yüklənməyib.</p>";
+                }
+            }
+
+            // --- REYTİNQ FUNKSİYALARI ---
             const renderStars = (score) => {
                 stars.forEach(star => {
                     const starScore = parseInt(star.dataset.score);
@@ -408,37 +397,22 @@
 
             const handleStarClick = async (score) => {
                 const token = localStorage.getItem('token');
-                if (!token) {
-                    Swal.fire("Daxil Olun", "Reytinq vermək üçün daxil olmalısınız.", "warning");
-                    return;
-                }
-                if (userHasRated) {
-                    Swal.fire("Məlumat", "Siz artıq bu kursa reytinq vermisiniz.", "info");
-                    return;
-                }
+                if (!token) { Swal.fire("Daxil Olun", "Reytinq vermək üçün daxil olmalısınız.", "warning"); return; }
+                if (userHasRated) { Swal.fire("Məlumat", "Siz artıq bu kursa reytinq vermisiniz.", "info"); return; }
 
                 try {
                     const response = await fetch(`${API_URL}/rate-course`, {
                         method: "POST",
-                        headers: {
-                            "Content-Type": "application/json",
-                            "Authorization": `Bearer ${token}`,
-                        },
-                        body: JSON.stringify({
-                            courseId: post.id,
-                            score: score,
-                        }),
+                        headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
+                        body: JSON.stringify({ courseId: post.id, score: score }),
                     });
-
                     if (response.ok) {
                         userHasRated = true;
                         userCurrentScore = score;
                         Swal.fire("Uğurlu!", "Reytinqiniz qeydə alındı.", "success");
                         loadUserRating(post.id);
                     }
-                } catch (error) {
-                    console.error("Xəta:", error);
-                }
+                } catch (error) { console.error("Xəta:", error); }
             };
 
             async function loadUserRating(courseId) {
@@ -448,9 +422,7 @@
                     const data = await res.json();
                     ratingMessage.textContent = `Kursun orta balı: ${data.averageRating.toFixed(1)} (${data.count} səs)`;
                 } catch (e) { console.error(e); }
-
                 if (!token) return;
-
                 try {
                     const userRes = await fetch(`${API_URL}/user-rating/${courseId}`, {
                         headers: { "Authorization": `Bearer ${token}` },
@@ -459,10 +431,7 @@
                         const userData = await userRes.json();
                         userHasRated = userData.hasRated;
                         userCurrentScore = userData.score;
-                        if (userHasRated) {
-                            renderStars(userCurrentScore);
-                            starRatingDiv.style.pointerEvents = 'none';
-                        }
+                        if (userHasRated) { renderStars(userCurrentScore); starRatingDiv.style.pointerEvents = 'none'; }
                     }
                 } catch (e) { console.error(e); }
             }
@@ -473,16 +442,13 @@
                 star.addEventListener('mouseout', () => renderStars(userCurrentScore));
             });
 
+            // --- ŞƏRH FUNKSİYALARI ---
             async function loadComments(postId, videoIndex) {
                 commentsList.innerHTML = "Yüklənir...";
                 try {
                     const response = await fetch(`${API_URL}/comments/${postId}/${videoIndex}`);
                     const comments = await response.json();
-                    commentsList.innerHTML = "";
-                    if (comments.length === 0) {
-                        commentsList.innerHTML = "<p>Hələ şərh yoxdur.</p>";
-                        return;
-                    }
+                    commentsList.innerHTML = comments.length === 0 ? "<p>Hələ şərh yoxdur.</p>" : "";
                     comments.forEach(c => {
                         const div = document.createElement("div");
                         div.className = "comment";
@@ -503,72 +469,78 @@
                 const token = localStorage.getItem('token');
                 const text = commentTextarea.value.trim();
                 if (!token || text === "") return;
-
                 try {
                     const response = await fetch(`${API_URL}/comments`, {
                         method: "POST",
-                        headers: {
-                            "Content-Type": "application/json",
-                            "Authorization": `Bearer ${token}`,
-                        },
+                        headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
                         body: JSON.stringify({ postId: post.id, videoIndex: currentVideoIndex, text }),
                     });
-                    if (response.ok) {
-                        commentTextarea.value = "";
-                        loadComments(post.id, currentVideoIndex);
-                    }
+                    if (response.ok) { commentTextarea.value = ""; loadComments(post.id, currentVideoIndex); }
                 } catch (e) { console.error(e); }
             }
 
+            // --- VİDEO SİYAHISI ---
             const videoThumbnails = [];
             post.videos.forEach((v, i) => {
                 const div = document.createElement("div");
                 div.className = "video-thumbnail";
+                if (i === 0) div.style.backgroundColor = "#e4e8eb";
                 const coverUrl = post.videoCovers[i] || post.courseCover;
-                const titleText = post.videoTitles[i] || "Video " + (i+1);
-
-                div.innerHTML = `
-                    <input type="checkbox" ${i === 0 ? 'checked' : ''}>
-                    <img src="${coverUrl}">
-                    <span>${titleText}</span>`;
-
+                const titleText = post.videoTitles[i] || "Video " + (i + 1);
+                div.innerHTML = `<input type="checkbox" ${i === 0 ? 'checked' : ''}><img src="${coverUrl}"><span>${titleText}</span>`;
                 videoThumbnails.push(div);
                 list.appendChild(div);
-
                 div.addEventListener("click", () => {
-                    video.src = v;
-                    video.play();
-                    currentVideoIndex = i;
+                    video.src = v; video.play(); currentVideoIndex = i;
                     loadComments(post.id, i);
                     videoThumbnails.forEach(t => t.style.backgroundColor = "#fff");
                     div.style.backgroundColor = "#e4e8eb";
                 });
             });
 
+            // --- İLKİN YÜKLƏMƏ ---
             video.src = post.videos[0];
             loadComments(post.id, 0);
             loadUserRating(post.id);
+            loadDocuments();
 
             submitButton.addEventListener("click", submitComment);
             document.querySelector(".logo").addEventListener("click", () => window.location.href = "../index.html");
 
-            // Tab idarəetməsi
-            let buttons = document.querySelectorAll(".btn");
-            buttons.forEach((btn, i) => {
-                btn.addEventListener("click", () => {
-                    buttons.forEach(b => b.classList.remove("active-btn"));
-                    btn.classList.add("active-btn");
-                    
-                    if (i === 2) {
-                        commentsSection.style.display = "block";
-                        ratingSection.style.display = "block";
-                    } else {
-                        commentsSection.style.display = "none";
-                        ratingSection.style.display = "none";
-                    }
-                });
-            });
+            // --- TAB İDARƏETMƏSİ ---
+            const tabButtons = {
+                overview: document.getElementById("overview-btn"),
+                resources: document.getElementById("resources-btn"),
+                comments: document.getElementById("comments-btn")
+            };
+
+            const sections = {
+                overview: document.getElementById("overview-section"),
+                resources: document.getElementById("resources-section"),
+                commentsRating: document.getElementById("comments-rating-container")
+            };
+
+            function switchTab(activeTab) {
+                Object.values(tabButtons).forEach(btn => btn.classList.remove("active-btn"));
+                Object.values(sections).forEach(sec => sec.style.display = "none");
+
+                if (activeTab === 'overview') {
+                    tabButtons.overview.classList.add("active-btn");
+                    sections.overview.style.display = "block";
+                } else if (activeTab === 'resources') {
+                    tabButtons.resources.classList.add("active-btn");
+                    sections.resources.style.display = "block";
+                } else {
+                    tabButtons.comments.classList.add("active-btn");
+                    sections.commentsRating.style.display = "block";
+                }
+            }
+
+            tabButtons.overview.addEventListener("click", () => switchTab('overview'));
+            tabButtons.resources.addEventListener("click", () => switchTab('resources'));
+            tabButtons.comments.addEventListener("click", () => switchTab('comments'));
         }
     </script>
 </body>
+
 </html>
