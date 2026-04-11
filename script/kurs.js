@@ -82,7 +82,7 @@ function renderData(data) {
     if (!courseGrid) return;
 
     courseGrid.innerHTML = data.map(course => `
-        <div class="course-card card shadow">
+        <div class="course-card card shadow" data-id="${course.id}">
             <div class="course-img-container">
                 <img src="${course.courseCover || course.image || 'https://placehold.co/600x400'}" alt="Course">
                 <div class="price-badge">${course.price ? (course.price === 'pulsuz' ? 'Ödənişsiz' : course.price + ' ₼') : '0.00 ₼'}</div>
@@ -99,6 +99,23 @@ function renderData(data) {
             </div>
         </div>
     `).join('');
+
+    const cards = courseGrid.querySelectorAll(".course-card");
+    cards.forEach(card => {
+        card.onclick = () => {
+            const courseId = card.getAttribute("data-id");
+            const selectedCourse = data.find(c => c.id == courseId);
+            const user = getActiveUser();
+
+            if (user) {
+                localStorage.setItem("selectedPost", JSON.stringify(selectedCourse));
+                window.location.href = "./video.html";
+            } else {
+                alert("Kursu izləmək üçün zəhmət olmasa daxil olun!");
+                window.location.href = "./login.html";
+            }
+        };
+    });
 }
 
 window.addEventListener("scroll", () => {
