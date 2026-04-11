@@ -1423,7 +1423,7 @@ li>a:hover {
   opacity: .7;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 768px) {
 
 
   .navbar>.menu {
