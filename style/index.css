@@ -1422,7 +1422,7 @@ li>a:hover {
   background: rgb(0, 149, 246);
   opacity: .7;
 }
-
+/* 
 @media (max-width: 768px) {
 
 
@@ -1503,7 +1503,7 @@ li>a:hover {
 /* 
   .main-left-bottom>.bottom-item{
     
-  } */
+  } 
   
   .main-right>img {
 
@@ -1556,7 +1556,7 @@ li>a:hover {
   .img-text-second>h1 {
 
     font-size: 24px;
-  } */
+  } 
 
   .elements {
     display: flex;
@@ -1651,10 +1651,10 @@ li>a:hover {
   .timer-modal>.timer-left {
 
     width: 430px;
-  } */
+  } 
 }
 
-/* 
+
 @media only screen and (max-width: 1200px) {
 
 
@@ -1838,4 +1838,175 @@ li>a:hover {
     height: 50px;
     padding: 0;
   }
-} */
+} */ 
+
+@media (max-width: 768px) {
+    /* 1. Navbar və Menyu Düzəlişləri */
+    header>.navbar {
+        padding: 10px 20px;
+        justify-content: space-between;
+    }
+
+    .navbar>ul, 
+    .navbar>.ui-input-container,
+    .navbar>.registration-part {
+        display: none; /* Mobil menyu istifadə olunacağı üçün gizlədirik */
+    }
+
+    .navbar>.menu {
+        display: block; /* Menyu ikonunu görünən edirik */
+        font-size: 24px;
+        cursor: pointer;
+    }
+
+    .navbar>.logo img {
+        width: 120px;
+    }
+
+    /* 2. Main Section (Hero) Düzəlişləri */
+    .main-section {
+        flex-direction: column;
+        height: auto;
+        padding: 120px 20px 50px;
+        text-align: center;
+    }
+
+    .main-left>.main-left-top>h1 {
+        width: 100%;
+        font-size: 40px;
+        line-height: 3rem;
+    }
+
+    .main-left>.main-left-top>span {
+        width: 100%;
+        font-size: 16px;
+    }
+
+    .main-left>.main-left-middle {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .main-left-bottom {
+        justify-content: center;
+        gap: 15px;
+    }
+
+    .main-right {
+        width: 100%;
+        margin-top: 40px;
+    }
+
+    .main-right>img {
+        width: 100%;
+        height: auto;
+    }
+
+    .half-circle {
+        display: none; /* Mobildə qarışıqlıq yaratmasın */
+    }
+
+    /* 3. Global Container və Məlumat Hissəsi */
+    .container-section {
+        padding: 40px 20px;
+    }
+
+    .elements {
+        flex-direction: column;
+        gap: 40px;
+    }
+
+    .middle-item>h1 {
+        width: 100%;
+        font-size: 32px;
+    }
+
+    .right-side {
+        width: 100%;
+        height: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 60px;
+    }
+
+    .right-side>.item {
+        position: static !important; /* Mütləq mövqeləri ləğv edirik */
+        width: 100%;
+        text-align: center;
+    }
+
+    .right-side>.item>h1 {
+        font-size: 60px;
+        top: -40px !important;
+        left: 0 !important;
+        width: 100%;
+    }
+
+    .right-side>.item>.line {
+        margin: 10px auto;
+    }
+
+    /* 4. Kurslar Bölməsi */
+    .heading {
+        flex-direction: column;
+        gap: 10px;
+        padding: 0 20px;
+        text-align: center;
+    }
+
+    .heading>h1 {
+        font-size: 32px;
+    }
+
+    .course-list {
+        overflow-x: auto; /* Tablar çoxdursa sürüşdürülsün */
+        white-space: nowrap;
+        justify-content: flex-start;
+    }
+
+    .course-list>button {
+        min-width: 120px;
+        padding: 15px 10px;
+    }
+
+    .course-card-list {
+        padding: 20px;
+        justify-content: center;
+    }
+
+    .course-card-list>.lesson-card {
+        width: 100%; /* Kartlar tam eni tutsun */
+        max-width: 350px;
+    }
+
+    /* 5. FAQ və Footer */
+    .faq-part {
+        padding: 30px 20px;
+    }
+
+    .faq-questions {
+        padding: 20px !important;
+    }
+
+    .footer {
+        padding: 40px 20px;
+    }
+
+    .footer-top {
+        flex-direction: column;
+        gap: 20px;
+        text-align: center;
+    }
+
+    .footer-copy {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+    }
+
+    /* 6. Login Form Modalı */
+    .container-logForm {
+        width: 90%;
+        padding: 30px 20px;
+    }
+}
