@@ -12,12 +12,11 @@ const verificationCodeInput = document.getElementById("verificationCodeInput");
 const verifyButton = document.getElementById("verifyButton");
 
 let generatedVerificationCode = null;
-let userDataToRegister = {}; // Kod təsdiqlənəndə göndəriləcək məlumatlar
+let userDataToRegister = {};
 
 const EMAILJS_SERVICE_ID = "service_uxvssjk";
 const EMAILJS_TEMPLATE_ID = "template_i41ipll";
 
-// Parol yoxlanılması funksiyaları
 function getPasswordStrength(password) {
     const checks = {
         length: password.length >= 8,
@@ -38,7 +37,6 @@ function updatePasswordRequirements(checks) {
     });
 }
 
-// FORM SUBMIT -  Yoxlama və Kod Göndərmə
 form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
@@ -89,7 +87,6 @@ form.addEventListener("submit", async (e) => {
     }
 });
 
-// VERIFY BUTTON -  -0 Kodun yoxlanılması və Əsl Qeydiyyat
 verifyButton.addEventListener("click", async () => {
     const userEnteredCode = verificationCodeInput.value.trim();
 
@@ -102,7 +99,6 @@ verifyButton.addEventListener("click", async () => {
     verifyButton.disabled = true;
 
     try {
-        // İndi məlumatları serverə göndəririk ki, bazaya yazılsın (checkOnly YOXDUR)
         const res = await fetch(`${API_URL}/register`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -112,7 +108,6 @@ verifyButton.addEventListener("click", async () => {
         const json = await res.json();
         if (!res.ok) throw new Error(json.message || "Qeydiyyat zamanı xəta.");
 
-        // Uğurlu qeydiyyatdan sonra məlumatları saxla
         localStorage.setItem("token", json.token);
         localStorage.setItem("registeredUser", JSON.stringify({
             username: userDataToRegister.username,
@@ -130,7 +125,6 @@ verifyButton.addEventListener("click", async () => {
     }
 });
 
-// İnput Dizayn və Parol Vizual Effektləri (Sənin kodundan saxlanılıb)
 if (inpPass) {
     inpPass.addEventListener("input", () => {
         const { score, checks } = getPasswordStrength(inpPass.value);
@@ -145,7 +139,6 @@ if (inpPass) {
     });
 }
 
-// Şifrəni göstər/gizlə
 let eye = document.querySelector(".bi-eye-fill");
 let eyeClose = document.querySelector(".bi-eye-slash-fill");
 if (eye && eyeClose && inpPass) {
@@ -164,6 +157,82 @@ if (eye && eyeClose && inpPass) {
 const inputs = document.querySelectorAll(".input");
 const icons = document.querySelectorAll(".icon");
 inputs.forEach((inp, index) => {
-    console.log(inp);
-    
+
+    inp.addEventListener("focus", () => {
+
+        if (index === 0) {
+            icons.forEach((el, index) => {
+                if (index === 0) {
+
+                    el.style.cssText = `transform: translateY(-25px); font-size: 14px`
+                }
+            })
+        } else if (index === 1) {
+            icons.forEach((el, index) => {
+                if (index === 1) {
+
+                    el.style.cssText = `transform: translateY(-25px); font-size: 14px`
+                }
+            })
+        } else {
+            icons.forEach((el, index) => {
+                if (index === 2) {
+
+                    el.style.cssText = `transform: translateY(-25px); font-size: 14px`
+                }
+            })
+        }
+
+    })
+
+    inp.addEventListener("blur", () => {
+
+        if (index === 0) {
+            icons.forEach((el, index) => {
+                if (index === 0) {
+
+                    el.style.cssText = `transform: translateY(0); font-size: 18px`
+                }
+            })
+        } else if (index === 1) {
+            icons.forEach((el, index) => {
+                if (index === 1) {
+
+                    el.style.cssText = `transform: translateY(0); font-size: 18px`
+                }
+            })
+        } else {
+            icons.forEach((el, index) => {
+                if (index === 2) {
+
+                    el.style.cssText = `transform: translateY(0); font-size: 18px`
+                }
+            })
+        }
+
+        if (index === 0 && inp.value.trim() !== "") {
+            icons.forEach((el, index) => {
+                if (index === 0) {
+                    el.style.cssText = `transform: translateY(-25px); font-size: 14px`
+                }
+            })
+        } else if (index === 1 && inp.value.trim() !== "") {
+            icons.forEach((el, index) => {
+                if (index === 1) {
+                    el.style.cssText = `transform: translateY(-25px); font-size: 14px`
+                }
+            })
+        } else {
+
+            icons.forEach((el, index) => {
+                if (index === 2) {
+                    el.style.cssText = `transform: translateY(-25px); font-size: 14px`
+                }
+            })
+        }
+    })
+
+
+
+
 });
