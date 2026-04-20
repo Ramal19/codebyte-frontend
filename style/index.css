@@ -862,141 +862,183 @@ li>a:hover {
   width: 100%;
   height: auto;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   flex-wrap: wrap;
-  gap: 30px;
+  column-gap: 40px;
+  row-gap: 20px;
   padding: 30px 50px;
   /* background-color: #66666680; */
 }
 
-.course-card-list>.lesson-card {
-  width: 376px;
-  height: 500px;
-  max-height: 470px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  border-radius: 7px;
-  border: 1px solid #ccc;
-  position: relative;
-  background-color: #fff;
-  overflow: hidden;
+.lesson-card.card {
+    width: 100%;
+    max-width: 300px;
+    background: #ffffff;
+    border: 1px solid #d1d7dc;
+    border-radius: 8px; /* Udemy-dən daha yumşaq künclər */
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    cursor: pointer;
 }
 
-.course-card-list>.lesson-card:hover {
-  background-color: #f6f7f9;
-  cursor: help;
+/* Hover effekti: Kart bir az yuxarı qalxır və kölgəsi dərinləşir */
+.lesson-card.card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15) !important;
+    border-color: #a435f0;
 }
 
-.course-card-list>.lesson-card img {
-  transition: transform 0.3s ease;
+/* Kursun şəkli */
+.lesson-card img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    transition: transform 0.5s ease;
 }
 
-.course-card-list>.lesson-card:hover>img {
-  transform: scale(1.1);
+.lesson-card:hover img {
+    transform: scale(1.05); /* Şəkil yüngülcə böyüyür */
 }
 
-.lesson-card>.free {
-
-  width: 70px;
-  height: 70px;
-  border-radius: 9999px;
-  background-color: #4f6f81;
-  color: #fff;
-  font-size: 12px;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: absolute;
-  right: 20px;
-  top: 205px;
+/* "Ödənişsiz" və ya "Kurs" etiketi */
+.free {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    background: rgba(255, 255, 255, 0.9);
+    color: #1c1d1f;
+    padding: 4px 10px;
+    font-size: 12px;
+    font-weight: 700;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    z-index: 2;
 }
 
-.lesson-card>img {
-
-  width: 100%;
-  height: 241px;
-  border: 1px solid #cccccc32;
-  border-radius: 7px;
-  background-color: #298bee14;
-  object-fit: cover;
-  display: block;
-  border-radius: 8px;
+/* Kartın mətn hissəsi */
+.card-text {
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 }
 
-.lesson-card>.card-text {
-
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: left;
-  gap: 30px;
-  padding: 35px 30px 18px;
+/* Kateqoriya və Müəllim adı */
+.name-type {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
 }
 
-.card-text>.name-type {
-
-  width: 100%;
-  display: flex;
-  align-items: center;
-  gap: 10px;
+.name-type h3 {
+    color: #6a6f73;
+    font-size: 13px !important;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
-.name-type>#instructor-name {
-
-  font-size: 16px;
-  color: #828C8A;
-  font-weight: 400;
+#instructor-name {
+    color: #1c1d1f;
+    font-size: 13px;
+    font-weight: 500;
 }
 
-.course-rating>.course-point {
-
-  color: #8B4309;
+/* Kursun Başlığı */
+.course-title {
+    font-size: 16px !important;
+    font-weight: 700 !important;
+    line-height: 1.2 !important;
+    color: #1c1d1f;
+    margin: 0;
+    min-height: 40px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
 
-.card-text>.card-content {
-
-  display: flex;
-  align-items: center;
-  gap: 5px;
+/* Reytinq ulduzları */
+.course-rating {
+    margin-top: 5px;
 }
 
-.card-text>h3 {
-  width: 100%;
-  font-size: 14px;
-  border-bottom: 1px solid #ccc;
-  padding-bottom: 30px;
+.course-point {
+    color: #b4690e; /* Qızılı rəng */
+    font-size: 14px;
 }
 
-.card-text>.price {
-
-  font-size: 16px;
-  font-weight: bolder;
-  color: #2da0fd;
-  text-decoration: line-through;
+/* Video sayı və Tarix */
+.card-meta {
+    color: #6a6f73 !important;
+    font-weight: 400;
+    display: flex;
+    align-items: center;
+    gap: 5px;
 }
 
-.price>.free {
-
-  font-weight: 500;
-  color: #545454;
-  text-decoration: line-through;
+.card-meta i {
+    color: #a435f0;
 }
 
-.courses>.all-view-courses {
-
-  display: flex;
-  gap: 5px;
-  font-size: 18px;
+/* Qiymət hissəsi */
+.price {
+    font-size: 18px !important;
+    font-weight: 800 !important;
+    color: #1c1d1f !important; /* Udemy bənövşəyisindən daha ciddi qara */
 }
 
-.all-view-courses>a {
+/* Düymələr konteyneri */
+.card-btns {
+    display: flex;
+    gap: 8px;
+}
 
-  text-decoration: none;
-  font-weight: bold;
-  color: #000;
+/* Wishlist düyməsi */
+.wish-btn {
+    border: 1px solid #d1d7dc !important;
+    background: transparent !important;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.wish-btn:hover {
+    background: #fff0f3 !important;
+    border-color: #ff3e6c !important;
+}
+
+.wish-btn i {
+    font-size: 18px;
+    transition: transform 0.2s ease;
+}
+
+.wish-btn:hover i {
+    transform: scale(1.2);
+    color: #ff3e6c !important;
+}
+
+/* Səbət düyməsi */
+.basket-btn {
+    background: #a435f0 !important;
+    padding: 0 15px !important;
+    height: 36px;
+    border-radius: 4px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.basket-btn:hover {
+    background: #8710d8 !important;
+    box-shadow: 0 4px 8px rgba(164, 53, 240, 0.3);
+}
+
+.basket-btn i {
+    font-size: 16px;
 }
 
 .main-container {

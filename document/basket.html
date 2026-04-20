@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="az">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Codebyte - Səbətim</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            color: #1c1d1f;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 8%;
+            background: #fff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        h1 {
+            margin-bottom: 30px;
+            font-size: 32px;
+        }
+
+        .basket-wrapper {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .basket-wrapper {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Səbət Elementləri */
+        .basket-items {
+            background: #fff;
+            border-radius: 8px;
+            padding: 20px;
+            border: 1px solid #d1d7dc;
+        }
+
+        .item {
+            display: flex;
+            gap: 15px;
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+            position: relative;
+        }
+
+        .item:last-child {
+            border-bottom: none;
+        }
+
+        .item img {
+            width: 120px;
+            height: 70px;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+
+        .item-info {
+            flex: 1;
+        }
+
+        .item-title {
+            font-weight: 700;
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+
+        .item-author {
+            font-size: 13px;
+            color: #6a6f73;
+        }
+
+        .item-price {
+            font-weight: bold;
+            font-size: 18px;
+            color: #a435f0;
+            margin-top: 5px;
+        }
+
+        .btn-remove {
+            background: none;
+            border: none;
+            color: #b32d0f;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
+        .btn-remove:hover {
+            text-decoration: underline;
+        }
+
+        /* Ümumi Məbləğ Paneli */
+        .summary-panel {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #d1d7dc;
+            height: fit-content;
+            position: sticky;
+            top: 20px;
+        }
+
+        .summary-title {
+            font-size: 18px;
+            color: #6a6f73;
+            margin-bottom: 10px;
+        }
+
+        .total-price {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 20px;
+        }
+
+        .btn-checkout {
+            width: 100%;
+            background: #a435f0;
+            color: #fff;
+            border: none;
+            padding: 15px;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        .btn-checkout:hover {
+            background: #8710d8;
+        }
+
+        .empty-basket {
+            text-align: center;
+            padding: 50px;
+            display: none;
+        }
+
+        .loader {
+            text-align: center;
+            padding: 50px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <a href="../index.html" class="logo">CodeByte</a>
+        <div>
+            <a href="wishlist.html" style="margin-right: 20px; text-decoration: none; color: #1c1d1f;"><i
+                    class="far fa-heart"></i> İstəklər</a>
+            <a href="profile.html" style="text-decoration: none; color: #1c1d1f;"><i class="far fa-user"></i> Panel</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1>Səbətim</h1>
+
+        <div id="loader" class="loader">Yüklənir...</div>
+
+        <div id="basket-content" class="basket-wrapper" style="display: none;">
+            <div class="basket-items" id="items-list">
+            </div>
+
+            <div class="summary-panel">
+                <div class="summary-title">Cəmi:</div>
+                <div class="total-price" id="total-amount">0.00 AZN</div>
+                <button class="btn-checkout" onclick="processCheckout()">Ödəniş et</button>
+            </div>
+        </div>
+
+        <div id="empty-state" class="empty-basket">
+            <i class="fas fa-shopping-cart fa-4x" style="color: #d1d7dc; margin-bottom: 20px;"></i>
+            <h2>Səbətiniz boşdur.</h2>
+            <p>Öyrənməyə başlamaq üçün kurs əlavə edin!</p>
+            <a href="../index.html"
+                style="display: inline-block; margin-top: 20px; color: #a435f0; font-weight: 700;">Kursları kəşf et</a>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = "https://codebyte-backend-ibyq.onrender.com";
+        const token = localStorage.getItem("token");
+
+        window.addEventListener('DOMContentLoaded', () => {
+            if (!token) {
+                window.location.href = "login.html";
+                return;
+            }
+            loadBasket();
+        });
+
+        async function loadBasket() {
+            const listDiv = document.getElementById('items-list');
+            const content = document.getElementById('basket-content');
+            const loader = document.getElementById('loader');
+            const emptyState = document.getElementById('empty-state');
+            const totalDiv = document.getElementById('total-amount');
+
+            try {
+                const response = await fetch(`${API_BASE}/basket`, {
+                    headers: { "Authorization": `Bearer ${token}` }
+                });
+
+                const data = await response.json();
+                loader.style.display = 'none';
+
+                if (!data || data.length === 0) {
+                    content.style.display = 'none';
+                    emptyState.style.display = 'block';
+                    return;
+                }
+
+                emptyState.style.display = 'none';
+                content.style.display = 'grid';
+
+                let total = 0;
+                listDiv.innerHTML = data.map(item => {
+                    const course = item.courseDetails;
+                    total += parseFloat(course.price || 0);
+                    return `
+                        <div class="item" id="item-${course.id}">
+                            <img src="${course.courseCover || 'https://via.placeholder.com/120x70'}" alt="Course">
+                            <div class="item-info">
+                                <div class="item-title">${course.text}</div>
+                                <div class="item-author">Müəllim: ${course.username}</div>
+                                <button class="btn-remove" onclick="removeFromBasket('${course.id}')">Sil</button>
+                            </div>
+                            <div class="item-price">${course.price} AZN</div>
+                        </div>
+                    `;
+                }).join('');
+
+                totalDiv.innerText = `${total.toFixed(2)} AZN`;
+
+            } catch (err) {
+                console.error("Səbət yüklənmədi:", err);
+                loader.innerText = "Xəta baş verdi.";
+            }
+        }
+
+        async function removeFromBasket(postId) {
+            try {
+                const response = await fetch(`${API_BASE}/basket/${postId}`, {
+                    method: 'DELETE',
+                    headers: { "Authorization": `Bearer ${token}` }
+                });
+
+                if (response.ok) {
+                    loadBasket(); 
+                }
+            } catch (err) {
+                alert("Xəta baş verdi");
+            }
+        }
+
+        function processCheckout() {
+            alert("Ödəniş sisteminə yönləndirilir... (Bu hissə real ödəniş API-ı ilə birləşdirilməlidir)");
+        }
+    </script>
+</body>
+
+</html>
