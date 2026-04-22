@@ -208,6 +208,7 @@ header>.navbar {
 
 .profile{
 
+  display: none;
   font-size: 24px;
 }
 
@@ -1615,6 +1616,11 @@ li>a:hover {
 
   .navbar>.logo img {
     width: 120px;
+  }
+
+  .profile{
+
+    display: block;
   }
 
   .main-section {
