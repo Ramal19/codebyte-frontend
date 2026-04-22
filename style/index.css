@@ -81,6 +81,88 @@ body>.menu-div {
   align-items: center;
 }
 
+.menu-sidebar {
+    position: fixed;
+    top: 0;
+    left: -100%;
+    width: 280px;
+    height: 100vh;
+    background: #fff;
+    box-shadow: 2px 0 15px rgba(0,0,0,0.2);
+    z-index: 10000;
+    transition: left 0.4s ease;
+    padding: 20px;
+}
+
+.menu-sidebar.active {
+    left: 0;
+}
+
+.profile-sidebar {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 300px;
+    height: 100vh;
+    background: #fff;
+    box-shadow: -2px 0 15px rgba(0,0,0,0.2);
+    z-index: 10000;
+    transition: right 0.4s ease;
+    padding: 20px;
+}
+
+.profile-sidebar.active {
+    right: 0;
+}
+
+.side-content {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.close-side {
+    align-self: flex-end;
+    font-size: 32px;
+    cursor: pointer;
+}
+
+.user-item-side {
+    text-align: center;
+    padding: 10px 0;
+}
+
+.profil-img-big {
+    width: 70px;
+    height: 70px;
+    background: #a435f0;
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    margin: 0 auto 10px;
+}
+
+.menu-sidebar button, .profile-sidebar button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    background: #f1f1f1;
+    border-radius: 6px;
+    text-align: left;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.menu-sidebar button:hover, .profile-sidebar button:hover {
+    background: #e2e2e2;
+}
+
 header {
 
   width: 100%;
@@ -107,6 +189,7 @@ header>.navbar {
 .navbar>.menu {
 
   display: none;
+  font-size: 24px;
 }
 
 .navbar>.logo {
@@ -121,6 +204,11 @@ header>.navbar {
   width: 150px;
   filter:
     drop-shadow(0 2px 4px rgba(255, 208, 0, 0.35)) drop-shadow(0 6px 12px rgba(6, 24, 44, 0.25));
+}
+
+.profile{
+
+  font-size: 24px;
 }
 
 .navbar>ul {
@@ -1518,12 +1606,12 @@ li>a:hover {
   .navbar>.registration-part {
     display: none;
   }
-/* 
+
   .navbar>.menu {
     display: block;
     font-size: 24px;
     cursor: pointer;
-  } */
+  }
 
   .navbar>.logo img {
     width: 120px;
