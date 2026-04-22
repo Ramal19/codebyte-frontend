@@ -236,10 +236,6 @@ li>a:hover {
   font-size: 24px;
 }
 
-.navbar>.responsive {
-
-  display: none;
-}
 
 .navbar>.registration-part {
 
@@ -326,6 +322,39 @@ li>a:hover {
 .registration-part:hover>.user-div {
 
   display: block;
+}
+
+/* NAVIGATION BAR */
+
+.navigation-bar {
+
+  width: 100%;
+  height: auto;
+  display: none;
+  justify-content: space-evenly;
+  align-items: center;
+  background-color: #fff;
+  color: #000;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  font-size: 24px;
+  padding: 10px 30px;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+}
+
+.navigation-bar>.add-btn {
+
+  width: 50px;
+  height: 50px;
+  border-radius: 9999px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  background: #22C1C3;
+  background: linear-gradient(0deg, rgba(34, 193, 195, 1) 0%, rgba(45, 160, 253, 1) 100%);
 }
 
 /* MAIN SECTION  */
@@ -871,174 +900,178 @@ li>a:hover {
 }
 
 .lesson-card.card {
-    width: 100%;
-    max-width: 300px;
-    background: #ffffff;
-    border: 1px solid #d1d7dc;
-    border-radius: 8px; /* Udemy-dən daha yumşaq künclər */
-    overflow: hidden;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    position: relative;
-    cursor: pointer;
+  width: 100%;
+  max-width: 300px;
+  background: #ffffff;
+  border: 1px solid #d1d7dc;
+  border-radius: 8px;
+  /* Udemy-dən daha yumşaq künclər */
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  cursor: pointer;
 }
 
 /* Hover effekti: Kart bir az yuxarı qalxır və kölgəsi dərinləşir */
 .lesson-card.card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15) !important;
-    border-color: #a435f0;
+  transform: translateY(-8px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15) !important;
+  border-color: #a435f0;
 }
 
 /* Kursun şəkli */
 .lesson-card img {
-    width: 100%;
-    height: 160px;
-    object-fit: cover;
-    transition: transform 0.5s ease;
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  transition: transform 0.5s ease;
 }
 
 .lesson-card:hover img {
-    transform: scale(1.05); /* Şəkil yüngülcə böyüyür */
+  transform: scale(1.05);
+  /* Şəkil yüngülcə böyüyür */
 }
 
 /* "Ödənişsiz" və ya "Kurs" etiketi */
 .free {
-    position: absolute;
-    top: 12px;
-    left: 12px;
-    background: rgba(255, 255, 255, 0.9);
-    color: #1c1d1f;
-    padding: 4px 10px;
-    font-size: 12px;
-    font-weight: 700;
-    border-radius: 4px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    z-index: 2;
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: rgba(255, 255, 255, 0.9);
+  color: #1c1d1f;
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: 700;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 2;
 }
 
 /* Kartın mətn hissəsi */
 .card-text {
-    padding: 15px;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 /* Kateqoriya və Müəllim adı */
 .name-type {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
 }
 
 .name-type h3 {
-    color: #6a6f73;
-    font-size: 13px !important;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+  color: #6a6f73;
+  font-size: 13px !important;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 #instructor-name {
-    color: #1c1d1f;
-    font-size: 13px;
-    font-weight: 500;
+  color: #1c1d1f;
+  font-size: 13px;
+  font-weight: 500;
 }
 
 /* Kursun Başlığı */
 .course-title {
-    font-size: 16px !important;
-    font-weight: 700 !important;
-    line-height: 1.2 !important;
-    color: #1c1d1f;
-    margin: 0;
-    min-height: 40px;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
+  font-size: 16px !important;
+  font-weight: 700 !important;
+  line-height: 1.2 !important;
+  color: #1c1d1f;
+  margin: 0;
+  min-height: 40px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 /* Reytinq ulduzları */
 .course-rating {
-    margin-top: 5px;
+  margin-top: 5px;
 }
 
 .course-point {
-    color: #b4690e; /* Qızılı rəng */
-    font-size: 14px;
+  color: #b4690e;
+  /* Qızılı rəng */
+  font-size: 14px;
 }
 
 /* Video sayı və Tarix */
 .card-meta {
-    color: #6a6f73 !important;
-    font-weight: 400;
-    display: flex;
-    align-items: center;
-    gap: 5px;
+  color: #6a6f73 !important;
+  font-weight: 400;
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
 
 .card-meta i {
-    color: #a435f0;
+  color: #a435f0;
 }
 
 /* Qiymət hissəsi */
 .price {
-    font-size: 18px !important;
-    font-weight: 800 !important;
-    color: #1c1d1f !important; /* Udemy bənövşəyisindən daha ciddi qara */
+  font-size: 18px !important;
+  font-weight: 800 !important;
+  color: #1c1d1f !important;
+  /* Udemy bənövşəyisindən daha ciddi qara */
 }
 
 /* Düymələr konteyneri */
 .card-btns {
-    display: flex;
-    gap: 8px;
+  display: flex;
+  gap: 8px;
 }
 
 /* Wishlist düyməsi */
 .wish-btn {
-    border: 1px solid #d1d7dc !important;
-    background: transparent !important;
-    width: 36px;
-    height: 36px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s ease;
+  border: 1px solid #d1d7dc !important;
+  background: transparent !important;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
 }
 
 .wish-btn:hover {
-    background: #fff0f3 !important;
-    border-color: #ff3e6c !important;
+  background: #fff0f3 !important;
+  border-color: #ff3e6c !important;
 }
 
 .wish-btn i {
-    font-size: 18px;
-    transition: transform 0.2s ease;
+  font-size: 18px;
+  transition: transform 0.2s ease;
 }
 
 .wish-btn:hover i {
-    transform: scale(1.2);
-    color: #ff3e6c !important;
+  transform: scale(1.2);
+  color: #ff3e6c !important;
 }
 
 /* Səbət düyməsi */
 .basket-btn {
-    background: #a435f0 !important;
-    padding: 0 15px !important;
-    height: 36px;
-    border-radius: 4px;
-    font-weight: 600;
-    transition: all 0.2s ease;
+  background: #a435f0 !important;
+  padding: 0 15px !important;
+  height: 36px;
+  border-radius: 4px;
+  font-weight: 600;
+  transition: all 0.2s ease;
 }
 
 .basket-btn:hover {
-    background: #8710d8 !important;
-    box-shadow: 0 4px 8px rgba(164, 53, 240, 0.3);
+  background: #8710d8 !important;
+  box-shadow: 0 4px 8px rgba(164, 53, 240, 0.3);
 }
 
 .basket-btn i {
-    font-size: 16px;
+  font-size: 16px;
 }
 
 .main-container {
@@ -1464,591 +1497,177 @@ li>a:hover {
   background: rgb(0, 149, 246);
   opacity: .7;
 }
-/* 
+
 @media (max-width: 768px) {
 
+  /* header>.navbar {
+    padding: 10px 20px;
+    justify-content: space-between;
+  } */
 
-  .navbar>.menu {
-
-    display: block;
+  .add {
+    display: none;
   }
-
-  .menu>.bi-list {
-
-    font-size: 24px;
-  }
-
-  header>.navbar {
+  .navigation-bar {
 
     display: flex;
-    justify-content: space-between;
-    padding: 0 20px;
   }
 
-  .navbar>.logo {
-
-    margin-left: 30px;
-  }
-
-  header>.navbar>ul {
-
+  .navbar>ul,
+  .navbar>.ui-input-container,
+  .navbar>.registration-part {
     display: none;
   }
+/* 
+  .navbar>.menu {
+    display: block;
+    font-size: 24px;
+    cursor: pointer;
+  } */
 
-  header>.navbar>.registration-part {
-
-    display: none;
-  }
-
-  header>.navbar>.search-bar,
-  .add {
-
-    display: none;
-  }
-
-  .ui-input-container {
-    display: none;
+  .navbar>.logo img {
+    width: 120px;
   }
 
   .main-section {
-
-    display: flex;
     flex-direction: column;
-  }
-
-  .half-circle>img {
-
-    display: none;
-  }
-
-  .main-left {
-
-    display: flex;
-    flex-direction: column;
-  }
-
-  .main-left>.main-left-top,
-  .main-left-middle {
-
-    display: flex;
-    align-items: center;
-  }
-
-
-
-  .main-left>.main-left-top>h1 {
-
-    width: 510px;
-    font-size: 54px;
+    height: auto;
+    padding: 120px 20px 50px;
     text-align: center;
   }
-/* 
-  .main-left-bottom>.bottom-item{
-    
-  } 
-  
-  .main-right>img {
 
-    width: 300px;
+  .main-left>.main-left-top>h1 {
+    width: 100%;
+    font-size: 40px;
+    line-height: 3rem;
   }
 
-  .container {
+  .main-left>.main-left-top>span {
+    width: 100%;
+    font-size: 16px;
+  }
 
-    padding: 0 20px;
-    padding-top: 50px;
+  .main-left>.main-left-middle {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .main-left-bottom {
+    justify-content: center;
+    gap: 15px;
+  }
+
+  .main-right {
+    width: 100%;
+    margin-top: 40px;
+  }
+
+  .main-right>img {
+    width: 100%;
+    height: auto;
+  }
+
+  .half-circle {
+    display: none;
   }
 
   .container-section {
-
-    padding: 50px 0;
+    padding: 40px 20px;
   }
-
-  /* .main-section>.slide-box {
-
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    position: static;
-  }
-
-  .slide-box>.slide-box-res {
-
-    background-color: transparent;
-    height: 200px;
-  }
-
-  .slide-box-res>.img-text {
-
-    width: 100%;
-    position: static;
-  }
-
-  .img-text>h1 {
-
-    font-size: 24px;
-  }
-
-  .slide-box-res>.img-text-second {
-
-    width: 100%;
-    position: static;
-  }
-
-
-  .img-text-second>h1 {
-
-    font-size: 24px;
-  } 
 
   .elements {
-    display: flex;
     flex-direction: column;
-
+    gap: 40px;
   }
 
-  .scroller {
-
-    overflow-x: scroll;
-  }
-
-  .book-card>.button {
-    display: none;
-  }
-
-  .course-card-list {
-
-    padding: 20px 0;
-    overflow-x: scroll;
-  }
-
-  .course-card-list>.lesson-card {
-
-    width: 209px;
-    height: 337px;
-  }
-
-  .course-list>button {
-
-    width: 100px;
-    font-size: 14px;
-  }
-
-  .lesson-card>img {
-
-    width: 177px;
-    height: 155px;
-  }
-
-  .faq-part {
-
-    padding: 20px;
-  }
-
-  /* 
-  .timer-fade>.timer-modal {
-    position: absolute;
-    top: 100px;
-    left: 30px;
-    width: 410px;
-    height: 500px;
-    border-radius: 15px;
-    background-color: #fff;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    padding: 10px;
-  }
-
-  .timer-fade>#exitBtn {
-    position: absolute;
-    top: 100px;
-    right: 5px;
+  .middle-item>h1 {
+    width: 100%;
     font-size: 32px;
-    color: #fff;
   }
 
-  .timer-left>.timer-img-box>#timer-foto {
-
-    width: 91%;
-    height: 250px;
+  .right-side {
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 60px;
   }
 
-  .timer-modal>.timer-right {
+  .right-side>.item {
+    position: static !important;
+    width: 100%;
+    text-align: center;
+  }
 
+  .right-side>.item>h1 {
+    font-size: 60px;
+    top: -40px !important;
+    left: 0 !important;
     width: 100%;
   }
 
-  .timer-modal>.timer-right>h1 {
-
-    font-size: 24px;
+  .right-side>.item>.line {
+    margin: 10px auto;
   }
 
-  .timer-modal>.timer-right>#locationCourse {
-
-    width: 95%;
-    height: 50px;
-    padding: 0;
-  }
-
-  .timer-modal>.timer-left {
-
-    width: 430px;
-  } 
-}
-
-
-@media only screen and (max-width: 1200px) {
-
-
-  .navbar>.menu {
-
-    display: block;
-  }
-
-  .menu>.bi-list {
-
-    font-size: 24px;
-  }
-
-  header>.navbar {
-
-    display: flex;
-    justify-content: space-between;
-    padding: 0 20px;
-  }
-
-  .navbar>.logo {
-
-    margin-left: 30px;
-  }
-
-  header>.navbar>ul {
-
-    display: none;
-  }
-
-  header>.navbar>.registration-part {
-
-    display: none;
-  }
-
-  header>.navbar>.search-bar,
-  .add {
-
-    display: none;
-  }
-
-  .ui-input-container {
-    display: none;
-  }
-
-  header>.navbar>.responsive {
-
-    display: flex;
+  .heading {
+    flex-direction: column;
     gap: 10px;
-  }
-
-  header>.navbar>.responsive>.bi-search,
-  .bi-cart {
-
-    font-size: 20px;
-  }
-
-  .container {
-
     padding: 0 20px;
-    padding-top: 50px;
+    text-align: center;
   }
 
-  .main-section>.slide-box {
-
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    position: static;
+  .heading>h1 {
+    font-size: 32px;
   }
 
-  .slide-box>.slide-box-res {
-
-    background-color: transparent;
-    height: 200px;
-  }
-
-  .slide-box-res>.img-text {
-
-    width: 100%;
-    position: static;
-  }
-
-  .img-text>h1 {
-
-    font-size: 24px;
-  }
-
-  .slide-box-res>.img-text-second {
-
-    width: 100%;
-    position: static;
-  }
-
-
-  .img-text-second>h1 {
-
-    font-size: 24px;
-  }
-
-  .scroller {
-
-    overflow-x: scroll;
-  }
-
-  .book-card>.button {
-    display: none;
-  }
-
-  .course-card-list {
-
-    padding: 20px 0;
-    overflow-x: scroll;
-  }
-
-  .course-card-list>.lesson-card {
-
-    width: 209px;
-    height: 337px;
+  .course-list {
+    overflow-x: auto;
+    white-space: nowrap;
+    justify-content: flex-start;
   }
 
   .course-list>button {
-
-    width: 100px;
-    font-size: 14px;
+    min-width: 120px;
+    padding: 15px 10px;
   }
 
-  .lesson-card>img {
+  .course-card-list {
+    padding: 20px;
+    justify-content: center;
+  }
 
-    width: 177px;
-    height: 155px;
+  .course-card-list>.lesson-card {
+    width: 100%;
+    max-width: 350px;
   }
 
   .faq-part {
-
-    padding: 20px;
+    padding: 30px 20px;
   }
 
+  .faq-questions {
+    padding: 20px !important;
+  }
 
-  .timer-fade>.timer-modal {
-    position: absolute;
-    top: 100px;
-    left: 30px;
-    width: 480px;
-    height: 500px;
-    border-radius: 15px;
-    background-color: #fff;
-    display: flex;
+  .footer {
+    padding: 40px 20px;
+  }
+
+  .footer-top {
     flex-direction: column;
-    justify-content: space-between;
-    padding: 10px;
+    gap: 20px;
+    text-align: center;
   }
 
-  .timer-fade>#exitBtn {
-    position: absolute;
-    top: 100px;
-    right: 15px;
-    font-size: 32px;
-    color: #fff;
+  .footer-copy {
+    flex-direction: column;
+    gap: 15px;
+    text-align: center;
   }
 
-  .timer-left>.timer-img-box>#timer-foto {
-
-    width: 91%;
-    height: 250px;
+  .container-logForm {
+    width: 90%;
+    padding: 30px 20px;
   }
-
-  .timer-modal>.timer-right {
-
-    width: 100%;
-  }
-
-  .timer-modal>.timer-right>h1 {
-
-    font-size: 24px;
-  }
-
-  .timer-modal>.timer-right>#locationCourse {
-
-    width: 95%;
-    height: 50px;
-    padding: 0;
-  }
-} */ 
-
-@media (max-width: 768px) {
-    /* 1. Navbar və Menyu Düzəlişləri */
-    header>.navbar {
-        padding: 10px 20px;
-        justify-content: space-between;
-    }
-
-    .navbar>ul, 
-    .navbar>.ui-input-container,
-    .navbar>.registration-part {
-        display: none; /* Mobil menyu istifadə olunacağı üçün gizlədirik */
-    }
-
-    .navbar>.menu {
-        display: block; /* Menyu ikonunu görünən edirik */
-        font-size: 24px;
-        cursor: pointer;
-    }
-
-    .navbar>.logo img {
-        width: 120px;
-    }
-
-    /* 2. Main Section (Hero) Düzəlişləri */
-    .main-section {
-        flex-direction: column;
-        height: auto;
-        padding: 120px 20px 50px;
-        text-align: center;
-    }
-
-    .main-left>.main-left-top>h1 {
-        width: 100%;
-        font-size: 40px;
-        line-height: 3rem;
-    }
-
-    .main-left>.main-left-top>span {
-        width: 100%;
-        font-size: 16px;
-    }
-
-    .main-left>.main-left-middle {
-        justify-content: center;
-        flex-wrap: wrap;
-    }
-
-    .main-left-bottom {
-        justify-content: center;
-        gap: 15px;
-    }
-
-    .main-right {
-        width: 100%;
-        margin-top: 40px;
-    }
-
-    .main-right>img {
-        width: 100%;
-        height: auto;
-    }
-
-    .half-circle {
-        display: none; /* Mobildə qarışıqlıq yaratmasın */
-    }
-
-    /* 3. Global Container və Məlumat Hissəsi */
-    .container-section {
-        padding: 40px 20px;
-    }
-
-    .elements {
-        flex-direction: column;
-        gap: 40px;
-    }
-
-    .middle-item>h1 {
-        width: 100%;
-        font-size: 32px;
-    }
-
-    .right-side {
-        width: 100%;
-        height: auto;
-        display: flex;
-        flex-direction: column;
-        gap: 60px;
-    }
-
-    .right-side>.item {
-        position: static !important; /* Mütləq mövqeləri ləğv edirik */
-        width: 100%;
-        text-align: center;
-    }
-
-    .right-side>.item>h1 {
-        font-size: 60px;
-        top: -40px !important;
-        left: 0 !important;
-        width: 100%;
-    }
-
-    .right-side>.item>.line {
-        margin: 10px auto;
-    }
-
-    /* 4. Kurslar Bölməsi */
-    .heading {
-        flex-direction: column;
-        gap: 10px;
-        padding: 0 20px;
-        text-align: center;
-    }
-
-    .heading>h1 {
-        font-size: 32px;
-    }
-
-    .course-list {
-        overflow-x: auto; /* Tablar çoxdursa sürüşdürülsün */
-        white-space: nowrap;
-        justify-content: flex-start;
-    }
-
-    .course-list>button {
-        min-width: 120px;
-        padding: 15px 10px;
-    }
-
-    .course-card-list {
-        padding: 20px;
-        justify-content: center;
-    }
-
-    .course-card-list>.lesson-card {
-        width: 100%; /* Kartlar tam eni tutsun */
-        max-width: 350px;
-    }
-
-    /* 5. FAQ və Footer */
-    .faq-part {
-        padding: 30px 20px;
-    }
-
-    .faq-questions {
-        padding: 20px !important;
-    }
-
-    .footer {
-        padding: 40px 20px;
-    }
-
-    .footer-top {
-        flex-direction: column;
-        gap: 20px;
-        text-align: center;
-    }
-
-    .footer-copy {
-        flex-direction: column;
-        gap: 15px;
-        text-align: center;
-    }
-
-    /* 6. Login Form Modalı */
-    .container-logForm {
-        width: 90%;
-        padding: 30px 20px;
-    }
 }
