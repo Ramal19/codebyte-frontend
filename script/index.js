@@ -11,6 +11,7 @@ const navbar = document.querySelector(".navbar")
 const aTag = document.querySelectorAll("li>a")
 const mouseClick = document.getElementById("mouseClick")
 const webInfoSection = document.getElementById("webInfo")
+const addBtn = document.querySelector(".add-btn")
 
 const API_URL = "https://codebyte-backend-ibyq.onrender.com";
 
@@ -156,6 +157,11 @@ cartIcon.addEventListener("mouseout", () => {
 cartIcon.addEventListener("click", ()=>{
 
     window.location.href = "./document/basket.html"
+})
+
+addBtn.addEventListener("click", ()=>{
+
+    window.location.href = "./document/post-add.html"
 })
 
 const sectionForBubble = document.getElementById("sectionForBubble")
