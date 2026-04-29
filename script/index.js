@@ -125,7 +125,7 @@ if (heartIcon) {
     })
     heartIcon.addEventListener("mouseout", () => {
         heartIcon.classList.replace("bi-heart-fill", "bi-heart");
-        heartIcon.style.cssText = "color: #000; font-size: 24px;"
+        heartIcon.style.cssText = " font-size: 24px;"
     })
 }
 
@@ -394,7 +394,7 @@ async function addToBasket(postId) {
         alert(data.message || "Kurs səbətə əlavə olundu");
     } catch (err) { console.error(err); }
 }
-
+ 
 function createPostElement(p) {
     const div = document.createElement("div");
     div.classList.add("lesson-card", "card", "shadow");

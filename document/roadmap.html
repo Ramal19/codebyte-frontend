@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LuminaPath - Interactive Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-blue: #007bff;
+            --light-blue: #e3f2fd;
+            --bg-color: #f8f9fa;
+            --card-white: #ffffff;
+            --text-dark: #333;
+            --text-gray: #666;
+            --shadow: 0 4px 12px rgba(0,0,0,0.05);
+            --code-bg: #1e1e1e;
+        }
+
+        * {
+            margin: 0; padding: 0; box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body { background-color: var(--bg-color); color: var(--text-dark); overflow-x: hidden; }
+
+        .sidebar {
+            background: var(--card-white); position: fixed; bottom: 0;
+            width: 100%; height: 65px; display: flex;
+            justify-content: space-around; align-items: center;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1); z-index: 1000;
+        }
+
+        .sidebar i {
+            font-size: 1.3rem; color: var(--text-gray); cursor: pointer;
+            transition: 0.3s; padding: 12px; border-radius: 12px;
+        }
+
+        .sidebar i:hover, .sidebar i.active {
+            color: var(--primary-blue); background: var(--light-blue);
+        }
+
+        .main-container {
+            padding: 20px; padding-bottom: 90px;
+            max-width: 1200px; margin: 0 auto;
+        }
+
+        /* Section Visibility Control */
+        .content-section { display: none; animation: fadeIn 0.4s ease; }
+        .content-section.active { display: block; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .header-flex { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+
+        .user-profile-circle {
+            width: 45px; height: 45px; background: var(--primary-blue);
+            color: white; border-radius: 50%; display: flex;
+            align-items: center; justify-content: center; font-weight: bold;
+            border: 3px solid white; box-shadow: var(--shadow);
+        }
+
+        .grid-layout { display: grid; grid-template-columns: 1fr; gap: 20px; }
+
+        .card {
+            background: var(--card-white); border-radius: 16px;
+            padding: 20px; box-shadow: var(--shadow); border: 1px solid var(--light-blue);
+        }
+
+        /* Quiz Styles */
+        .quiz-container { background: linear-gradient(135deg, #1e2a38, #2c3e50); color: white; border-radius: 20px; padding: 30px; margin-top: 20px; }
+        .code-display {
+            background: var(--code-bg); color: #9cdcfe; padding: 20px;
+            border-radius: 10px; font-family: 'Consolas', monospace;
+            font-size: 1.1rem; line-height: 1.6; margin: 20px 0; border-left: 4px solid var(--primary-blue);
+        }
+        .quiz-input {
+            background: rgba(255,255,255,0.1); border: 2px solid var(--primary-blue);
+            border-radius: 4px; color: #ce9178; padding: 2px 8px; width: 120px;
+            font-family: inherit; outline: none; text-align: center;
+        }
+        .btn-action {
+            background: var(--primary-blue); color: white; border: none;
+            padding: 12px 25px; border-radius: 8px; cursor: pointer; font-weight: bold;
+        }
+
+        /* Syllabus Styles */
+        .syllabus-item { border-bottom: 1px solid var(--light-blue); }
+        .syllabus-header { display: flex; justify-content: space-between; padding: 15px 0; cursor: pointer; font-weight: 600; }
+        .syllabus-content { max-height: 0; overflow: hidden; transition: 0.3s ease-out; color: var(--text-gray); font-size: 0.9rem; }
+        .syllabus-content.active { max-height: 200px; padding-bottom: 15px; }
+
+        @media (min-width: 992px) {
+            .sidebar { width: 85px; height: 100vh; left: 0; top: 0; flex-direction: column; justify-content: center; gap: 30px; }
+            .main-container { margin-left: 100px; padding-bottom: 20px; }
+            .grid-layout { grid-template-columns: 2fr 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="sidebar">
+        <i class="fas fa-home active" onclick="switchTab('dashboard', this)"></i>
+        <i class="fas fa-code" onclick="switchTab('practice', this)"></i>
+        <i class="fas fa-map" onclick="switchTab('roadmap', this)"></i>
+        <i class="fas fa-chart-line" onclick="switchTab('dashboard', this)"></i>
+        <i class="fas fa-user" onclick="switchTab('dashboard', this)"></i>
+    </nav>
+
+    <main class="main-container">
+        <div class="header-flex">
+            <div>
+                <h1 id="userNameHeading">Xoş gəldin, Alex 👋</h1>
+                <p class="progress-summary">Bu günə olan hədəflərin səni gözləyir.</p>
+            </div>
+            <div class="user-profile-circle" id="userInitial">A</div>
+        </div>
+
+        <section id="dashboard" class="content-section active">
+            <div class="grid-layout">
+                <div class="left-col">
+                    <h2 style="margin-bottom: 15px; font-size: 1.1rem;">Sillabusun vəziyyəti</h2>
+                    <div class="card">
+                        <div class="syllabus-item">
+                            <div class="syllabus-header" onclick="toggleSyllabus(this)">
+                                <span>Modul 1: HTML & CSS Struktur</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="syllabus-content">
+                                • Semantic Tags <br> • Flexbox & Grid <br> • Animation Basics
+                            </div>
+                        </div>
+                        <div class="syllabus-item">
+                            <div class="syllabus-header" onclick="toggleSyllabus(this)">
+                                <span>Modul 2: JavaScript ES6+</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="syllabus-content">
+                                • Arrow Functions <br> • Async/Await <br> • Array Methods
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="right-col">
+                    <h2 style="margin-bottom: 15px; font-size: 1.1rem;">Statistika</h2>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                        <div class="card" style="text-align: center;">
+                            <i class="fas fa-fire" style="color: #ff5722;"></i>
+                            <h4>14 Gün</h4>
+                        </div>
+                        <div class="card" style="text-align: center;">
+                            <i class="fas fa-star" style="color: #ffd700;"></i>
+                            <h4 id="xpDisplay">1,240 XP</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="practice" class="content-section">
+            <h2>JavaScript Practice</h2>
+            <p style="color: var(--text-gray);">Boşluqları dolduraraq kodu tamamlayın.</p>
+            
+            <div class="quiz-container">
+                <div id="quiz-box">
+                    </div>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px;">
+                    <button class="btn-action" onclick="checkQuizAnswer()">Yoxla</button>
+                    <span id="quiz-feedback"></span>
+                </div>
+            </div>
+        </section>
+
+        <section id="roadmap" class="content-section">
+            <h2>Öyrənmə Yolu</h2>
+            <div class="card" style="margin-top: 20px;">
+                <p>Burada sənin interaktiv yol xəritən (Frontend/Backend) vizuallaşdırılacaq.</p>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // İstifadəçi Məlumatları
+        const storedUser = localStorage.getItem("loginUser") || localStorage.getItem("registeredUser");
+        if (storedUser) {
+            const user = JSON.parse(storedUser);
+            document.getElementById("userNameHeading").innerText = `Xoş gəldin, ${user.username}`;
+            document.getElementById("userInitial").innerText = user.username[0].toUpperCase();
+        }
+
+        // Tab Switcher
+        function switchTab(tabId, element) {
+            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.sidebar i').forEach(i => i.classList.remove('active'));
+            
+            document.getElementById(tabId).classList.add('active');
+            element.classList.add('active');
+
+            if(tabId === 'practice') initQuiz();
+        }
+
+        // Syllabus Toggle
+        function toggleSyllabus(header) {
+            const content = header.nextElementSibling;
+            const icon = header.querySelector('i');
+            content.classList.toggle('active');
+            icon.style.transform = content.classList.contains('active') ? 'rotate(180deg)' : 'rotate(0deg)';
+        }
+
+        // QUIZ SYSTEM
+        const questions = [
+            { code: "const greet = () <input type='text' id='quizInput' class='quiz-input'> 'Hello World';", answer: "=>", hint: "Arrow function işarəsi" },
+            { code: "let colors = ['red', 'blue']; <br> colors.<input type='text' id='quizInput' class='quiz-input'>('green');", answer: "push", hint: "Array-in sonuna element əlavə etmək" },
+            { code: "if (x <input type='text' id='quizInput' class='quiz-input'> 10) { // bərabərdirsə }", answer: "===", hint: "Tam bərabərlik" }
+        ];
+
+        let currentQ = 0;
+        let xp = 1240;
+
+        function initQuiz() {
+            const q = questions[currentQ];
+            document.getElementById('quiz-box').innerHTML = `
+                <h3>Sual ${currentQ + 1}/15</h3>
+                <div class="code-display">${q.code}</div>
+                <p style="font-size: 0.85rem; opacity: 0.8;">İpucu: ${q.hint}</p>
+            `;
+            document.getElementById('quiz-feedback').innerText = "";
+        }
+
+        function checkQuizAnswer() {
+            const val = document.getElementById('quizInput').value.trim();
+            const feedback = document.getElementById('quiz-feedback');
+
+            if(val === questions[currentQ].answer) {
+                feedback.innerHTML = "✅ Doğru! +20 XP";
+                feedback.style.color = "#2ecc71";
+                xp += 20;
+                document.getElementById('xpDisplay').innerText = xp + " XP";
+                
+                setTimeout(() => {
+                    currentQ = (currentQ + 1) % questions.length; 
+                    initQuiz();
+                }, 1500);
+            } else {
+                feedback.innerHTML = "❌ Yanlışdır";
+                feedback.style.color = "#e74c3c";
+            }
+        }
+    </script>
+</body>
+</html>

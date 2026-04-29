@@ -1,278 +1,294 @@
 <!DOCTYPE html>
 <html lang="az">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kursa bax - CodeByte</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <title>Kurs Paneli - CodeByte</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <style>
         :root {
-            --primary-dark: #1c1d1f;
-            --accent-blue: #2da0fd;
-            --text-main: #2d2f31;
-            --text-light: #6a6f73;
-            --border-color: #d1d7dc;
-            --bg-light: #f7f9fa;
+            --primary: #2da0fd;
+            --primary-dark: #1a1c1e;
+            --surface: #ffffff;
+            --background: #f8f9fb;
+            --text-main: #1f2937;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --radius-lg: 16px;
+            --radius-md: 12px;
+            --shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
         }
 
-        /* Mövcud stillər saxlanıldı... */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Inter', sans-serif;
+            font-family: 'Plus Jakarta Sans', sans-serif;
         }
 
         body {
-            background-color: #fff;
+            background-color: var(--background);
+            color: var(--text-main);
             height: 100vh;
             display: flex;
             flex-direction: column;
             overflow: hidden;
         }
 
+        /* --- Header --- */
         header {
-            background-color: var(--primary-dark);
-            color: #fff;
-            height: 56px;
+            background: var(--primary-dark);
+            height: 70px;
             display: flex;
             align-items: center;
-            padding: 0 20px;
-            z-index: 1000;
-            border-bottom: 1px solid #3e4143;
+            padding: 0 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 100;
         }
 
         .navbar {
             display: flex;
             width: 100%;
-            align-items: center;
             justify-content: space-between;
+            align-items: center;
         }
 
-        .left-side {
+        .logo-box {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 20px;
             cursor: pointer;
         }
 
-        .logo img {
-            height: 30px;
+        .logo-box img {
+            height: 32px;
             filter: brightness(0) invert(1);
         }
 
-        .course-name {
-            font-size: 14px;
+        .course-badge {
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
             font-weight: 500;
-            border-left: 1px solid #3e4143;
-            padding-left: 15px;
-            color: #d1d7dc;
+            border: 1px solid rgba(255,255,255,0.1);
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            max-width: 400px;
+            max-width: 300px;
         }
 
-        .main-wrapper {
-            display: flex;
+        /* --- Main Layout --- */
+        .main-container {
+            display: grid;
+            grid-template-columns: 1fr 380px;
             flex: 1;
             overflow: hidden;
         }
 
-        .video-container-main {
-            flex: 3;
+        /* --- Video & Content Area --- */
+        .content-area {
             overflow-y: auto;
-            position: relative;
+            padding: 24px;
+            background: var(--background);
+        }
+
+        .video-wrapper {
+            background: #000;
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            aspect-ratio: 16 / 9;
+            margin-bottom: 24px;
         }
 
         #main-video {
             width: 100%;
-            background-color: #000;
-            aspect-ratio: 16 / 9;
+            height: 100%;
             display: block;
         }
 
-        .btns {
+        /* --- Tabs System --- */
+        .tabs-nav {
             display: flex;
-            border-bottom: 1px solid var(--border-color);
-            background: #fff;
-            padding: 0 30px;
+            gap: 8px;
+            border-bottom: 2px solid var(--border);
+            margin-bottom: 24px;
             position: sticky;
-            top: 0;
+            top: -24px;
+            background: var(--background);
+            padding-top: 10px;
             z-index: 10;
         }
 
-        .btn {
+        .tab-btn {
             background: none;
             border: none;
-            padding: 15px 20px;
-            font-size: 15px;
-            font-weight: 600;
-            color: var(--text-light);
-            cursor: pointer;
-            border-bottom: 2px solid transparent;
-            transition: 0.2s;
-        }
-
-        .btn.active-btn {
-            color: var(--primary-dark);
-            border-bottom: 2px solid var(--primary-dark);
-        }
-
-        .tab-content-wrapper {
-            padding: 30px;
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        /* YENİ: SƏNƏDLƏR ÜÇÜN STİLLƏR */
-        .document-list {
-            list-style: none;
-            padding: 0;
-            margin-top: 15px;
-        }
-
-        .document-item {
-            display: flex;
-            align-items: center;
-            padding: 15px;
-            background: var(--bg-light);
-            border-radius: 8px;
-            margin-bottom: 10px;
-            border: 1px solid var(--border-color);
-            transition: 0.3s;
-            text-decoration: none;
-            color: var(--text-main);
-        }
-
-        .document-item:hover {
-            background: #fff;
-            border-color: var(--accent-blue);
-            transform: translateY(-2px);
-        }
-
-        .document-item i {
-            font-size: 1.5rem;
-            margin-right: 15px;
-            color: #ff4d4d;
-            /* PDF rəngi */
-        }
-
-        .doc-info {
-            flex-grow: 1;
-        }
-
-        .doc-info span {
-            display: block;
-            font-weight: 600;
-            font-size: 14px;
-        }
-
-        .doc-info small {
-            color: var(--text-light);
-            font-size: 12px;
-        }
-
-        /* Rating & Comment stilləri eynilə saxlanıldı... */
-        .rating-section-container {
-            background: var(--bg-light);
-            padding: 25px;
-            border-radius: 8px;
-            margin-bottom: 30px;
-            border: 1px solid var(--border-color);
-        }
-
-        #star-rating {
-            display: flex;
-            gap: 5px;
-            margin: 10px 0;
-        }
-
-        .star {
-            font-size: 30px;
-            color: #ccc;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-
-        #comment-input textarea {
-            width: 100%;
-            border: 1px solid var(--border-color);
-            padding: 15px;
-            border-radius: 4px;
-            resize: none;
-            font-size: 15px;
-            margin-bottom: 10px;
-        }
-
-        #submit-comment {
-            background: var(--primary-dark);
-            color: #fff;
-            border: none;
             padding: 12px 24px;
-            font-weight: 700;
-            border-radius: 4px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-muted);
             cursor: pointer;
-            float: right;
+            position: relative;
+            transition: 0.3s;
         }
 
-        .comment {
-            display: flex;
-            gap: 15px;
-            padding: 20px 0;
-            border-bottom: 1px solid var(--border-color);
+        .tab-btn.active {
+            color: var(--primary);
         }
 
-        .profil span {
-            width: 45px;
-            height: 45px;
-            background: var(--primary-dark);
-            color: #fff;
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--primary);
+        }
+
+        /* --- Sidebar (Video List) --- */
+        .sidebar {
+            background: var(--surface);
+            border-left: 1px solid var(--border);
             display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .sidebar-header {
+            padding: 24px;
             font-weight: 700;
-            text-transform: uppercase;
+            font-size: 1.1rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        .thumbs {
+        .video-list {
             flex: 1;
-            background-color: #fff;
-            border-left: 1px solid var(--border-color);
             overflow-y: auto;
         }
 
-        .thumbs-header {
-            padding: 15px 20px;
-            font-weight: 700;
-            border-bottom: 1px solid var(--border-color);
-            background: var(--bg-light);
-        }
-
-        .video-thumbnail {
-            padding: 12px 15px;
+        .video-item {
             display: flex;
             align-items: center;
-            gap: 12px;
+            padding: 16px 20px;
+            gap: 15px;
             cursor: pointer;
-            border-bottom: 1px solid var(--border-color);
+            transition: 0.2s;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .video-item:hover {
+            background: #f8fafc;
+        }
+
+        .video-item.active {
+            background: #f0f7ff;
+            border-left: 4px solid var(--primary);
+        }
+
+        .video-item .thumb-box {
+            position: relative;
+            width: 100px;
+            border-radius: 8px;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .video-item img {
+            width: 100%;
+            aspect-ratio: 16/9;
+            object-fit: cover;
+            display: block;
+        }
+
+        .video-item .info {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .video-item .title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            line-height: 1.4;
+        }
+
+        /* --- Comments & Rating --- */
+        .glass-card {
+            background: var(--surface);
+            border-radius: var(--radius-md);
+            padding: 24px;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+            margin-bottom: 24px;
+        }
+
+        .rating-stars {
+            display: flex;
+            gap: 8px;
+            margin: 15px 0;
+        }
+
+        .star {
+            font-size: 28px;
+            color: #cbd5e1;
+            cursor: pointer;
             transition: 0.2s;
         }
 
-        .video-thumbnail:hover {
-            background-color: var(--bg-light);
+        .comment-input-group textarea {
+            width: 100%;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 15px;
+            resize: none;
+            margin-bottom: 12px;
+            font-size: 0.95rem;
         }
 
-        .video-thumbnail img {
-            width: 80px;
-            border-radius: 4px;
-            aspect-ratio: 16/9;
-            object-fit: cover;
+        .primary-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 28px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .primary-btn:hover {
+            filter: brightness(1.1);
+            transform: translateY(-1px);
+        }
+
+        /* --- Responsive Design --- */
+        @media (max-width: 1024px) {
+            .main-container {
+                grid-template-columns: 1fr;
+                overflow-y: auto;
+            }
+            .sidebar {
+                border-left: none;
+                border-top: 1px solid var(--border);
+                height: 500px;
+            }
+            body { overflow-y: auto; }
+        }
+
+        @media (max-width: 768px) {
+            header { padding: 0 1rem; }
+            .course-badge { display: none; }
+            .content-area { padding: 12px; }
+            .tabs-nav { overflow-x: auto; white-space: nowrap; }
         }
     </style>
 </head>
@@ -281,66 +297,77 @@
 
     <header>
         <div class="navbar">
-            <div class="left-side">
-                <div class="logo"><img src="../image/codebyteLogoMa.png" alt="Logo"></div>
-                <div class="course-name"><span id="course-title"></span></div>
+            <div class="logo-box" onclick="window.location.href='../index.html'">
+                <img src="../image/codebyteLogoMa.png" alt="CodeByte Logo">
+                <div class="course-badge" id="course-title">Yüklənir...</div>
             </div>
         </div>
     </header>
 
-    <div class="main-wrapper">
-        <div class="video-container-main">
-            <video id="main-video" controlsList="nodownload" controls></video>
-
-            <div class="btns">
-                <button class="btn" id="overview-btn">Ümumi baxış</button>
-                <button class="btn" id="resources-btn">Resurslar</button>
-                <button class="btn active-btn" id="comments-btn">Rəylər</button>
+    <div class="main-container">
+        <div class="content-area">
+            <div class="video-wrapper">
+                <video id="main-video" controlsList="nodownload" controls></video>
             </div>
 
-            <div class="tab-content-wrapper">
-                <div id="overview-section" style="display: none;">
-                    <h3 id="overview-course-name" style="margin-bottom: 10px;"></h3>
-                    <p id="overview-category" style="color: var(--accent-blue); font-weight: 600; margin-bottom: 20px;">
-                    </p>
-                    <div id="overview-description"></div>
-                </div>
+            <nav class="tabs-nav">
+                <button class="tab-btn active" data-tab="overview">Ümumi baxış</button>
+                <button class="tab-btn" data-tab="resources">Resurslar</button>
+                <button class="tab-btn" data-tab="comments">Rəylər</button>
+            </nav>
 
-                <div id="resources-section" style="display: none;">
-                    <h3>Kurs Materialları</h3>
-                    <div id="document-list" class="document-list">
+            <div id="tab-content">
+                <div id="overview-section" class="tab-pane">
+                    <div class="glass-card">
+                        <h2 id="ov-title" style="margin-bottom: 8px;"></h2>
+                        <span id="ov-cat" style="color: var(--primary); font-weight: 700; font-size: 0.9rem;"></span>
+                        <hr style="margin: 20px 0; border: 0; border-top: 1px solid var(--border);">
+                        <div id="ov-desc" style="line-height: 1.7; color: var(--text-muted);"></div>
                     </div>
                 </div>
 
-                <div id="comments-rating-container">
-                    <div class="rating-section-container" id="rating-section">
+                <div id="resources-section" class="tab-pane" style="display: none;">
+                    <div class="glass-card">
+                        <h3 style="margin-bottom: 20px;">Kurs Materialları</h3>
+                        <div id="document-list"></div>
+                    </div>
+                </div>
+
+                <div id="comments-section" class="tab-pane" style="display: none;">
+                    <div class="glass-card">
                         <h3>Kursa Reytinq Ver</h3>
-                        <div id="star-rating">
-                            <span class="star" data-score="1">☆</span>
-                            <span class="star" data-score="2">☆</span>
-                            <span class="star" data-score="3">☆</span>
-                            <span class="star" data-score="4">☆</span>
-                            <span class="star" data-score="5">☆</span>
+                        <div class="rating-stars" id="star-rating">
+                            <i class="bi bi-star-fill star" data-score="1"></i>
+                            <i class="bi bi-star-fill star" data-score="2"></i>
+                            <i class="bi bi-star-fill star" data-score="3"></i>
+                            <i class="bi bi-star-fill star" data-score="4"></i>
+                            <i class="bi bi-star-fill star" data-score="5"></i>
                         </div>
-                        <p id="rating-message">Kursu qiymətləndirərək bizə dəstək olun.</p>
+                        <p id="rating-message" style="font-size: 0.9rem; color: var(--text-muted);"></p>
                     </div>
 
-                    <div class="comments-section-container" id="comments-section">
-                        <h3>Şərhlər</h3>
-                        <div id="comment-input">
-                            <textarea id="comment-text" placeholder="Şərhinizi yazın..." rows="3"></textarea>
-                            <button id="submit-comment">Şərh Yaz</button>
+                    <div class="glass-card">
+                        <h3 style="margin-bottom: 20px;">Şərhlər</h3>
+                        <div class="comment-input-group">
+                            <textarea id="comment-text" placeholder="Fikirlərinizi bölüşün..." rows="3"></textarea>
+                            <div style="display: flex; justify-content: flex-end;">
+                                <button class="primary-btn" id="submit-comment">Şərh Yaz</button>
+                            </div>
                         </div>
-                        <div id="comments-list" style="margin-top: 50px;"></div>
+                        <div id="comments-list" style="margin-top: 30px;"></div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="thumbs">
-            <div class="thumbs-header">Kursun Məzmunu</div>
-            <div id="video-list"></div>
-        </div>
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                Kursun Məzmunu
+                <i class="bi bi-collection-play" style="color: var(--primary);"></i>
+            </div>
+            <div class="video-list" id="video-list">
+                </div>
+        </aside>
     </div>
 
     <script>
@@ -348,199 +375,164 @@
         const post = JSON.parse(localStorage.getItem("selectedPost"));
 
         if (!post) {
-            document.body.innerHTML = "<h3 style='padding:50px; text-align:center;'>Kurs tapılmadı</h3>";
+            window.location.href = "../index.html";
         } else {
+            // Başlanğıc datalar
             document.getElementById("course-title").textContent = post.text;
-            document.getElementById("overview-course-name").textContent = post.text;
-            document.getElementById("overview-category").textContent = post.category || "Kateqoriya yoxdur";
+            document.getElementById("ov-title").textContent = post.text;
+            document.getElementById("ov-cat").textContent = post.category || "General";
+            document.getElementById("ov-desc").innerHTML = post.description || "Təsvir əlavə edilməyib.";
 
             const video = document.getElementById("main-video");
-            const list = document.getElementById("video-list");
-            const commentsList = document.getElementById("comments-list");
-            const commentTextarea = document.getElementById("comment-text");
-            const submitButton = document.getElementById("submit-comment");
-            const starRatingDiv = document.getElementById("star-rating");
-            const ratingMessage = document.getElementById("rating-message");
-            const stars = starRatingDiv.querySelectorAll('.star');
-
+            const videoList = document.getElementById("video-list");
             let currentVideoIndex = 0;
-            let userHasRated = false;
-            let userCurrentScore = 0;
 
-            // --- SƏNƏDLƏRİ RENDER ETMƏK ---
-            function loadDocuments() {
-                const docContainer = document.getElementById("document-list");
-                if (post.documents && post.documents.length > 0) {
-                    docContainer.innerHTML = post.documents.map((docUrl, index) => `
-                        <a href="${docUrl}" target="_blank" class="document-item">
-                            <i class="bi bi-file-earmark-pdf-fill"></i>
-                            <div class="doc-info">
-                                <span>Material #${index + 1}</span>
-                                <small>Yükləmək və ya baxmaq üçün klikləyin</small>
-                            </div>
-                            <i class="bi bi-download" style="color: var(--text-light); font-size: 1rem;"></i>
-                        </a>
-                    `).join('');
-                } else {
-                    docContainer.innerHTML = "<p style='color:var(--text-light);'>Bu kurs üçün əlavə material yüklənməyib.</p>";
-                }
-            }
+            // --- VİDEO SİYAHISINI QURMAQ ---
+            post.videos.forEach((v, i) => {
+                const item = document.createElement("div");
+                item.className = `video-item ${i === 0 ? 'active' : ''}`;
+                const thumb = post.videoCovers[i] || post.courseCover;
+                const title = post.videoTitles[i] || `Dərs ${i + 1}`;
 
-            // --- REYTİNQ FUNKSİYALARI ---
-            const renderStars = (score) => {
-                stars.forEach(star => {
-                    const starScore = parseInt(star.dataset.score);
-                    star.textContent = starScore <= score ? '★' : '☆';
-                    star.style.color = starScore <= score ? '#b4690e' : '#ccc';
-                });
-            };
+                item.innerHTML = `
+                    <div class="thumb-box">
+                        <img src="${thumb}">
+                    </div>
+                    <div class="info">
+                        <span class="title">${title}</span>
+                        <span style="font-size: 0.75rem; color: var(--text-muted)">
+                            <i class="bi bi-play-circle"></i> Video Material
+                        </span>
+                    </div>
+                `;
 
-            const handleStarClick = async (score) => {
-                const token = localStorage.getItem('token');
-                if (!token) { Swal.fire("Daxil Olun", "Reytinq vermək üçün daxil olmalısınız.", "warning"); return; }
-                if (userHasRated) { Swal.fire("Məlumat", "Siz artıq bu kursa reytinq vermisiniz.", "info"); return; }
+                item.onclick = () => {
+                    document.querySelectorAll(".video-item").forEach(el => el.classList.remove("active"));
+                    item.classList.add("active");
+                    video.src = v;
+                    video.play();
+                    currentVideoIndex = i;
+                    loadComments(post.id, i);
+                };
+                videoList.appendChild(item);
+            });
 
-                try {
-                    const response = await fetch(`${API_URL}/rate-course`, {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
-                        body: JSON.stringify({ courseId: post.id, score: score }),
-                    });
-                    if (response.ok) {
-                        userHasRated = true;
-                        userCurrentScore = score;
-                        Swal.fire("Uğurlu!", "Reytinqiniz qeydə alındı.", "success");
-                        loadUserRating(post.id);
-                    }
-                } catch (error) { console.error("Xəta:", error); }
-            };
+            // İlkin video
+            video.src = post.videos[0];
 
-            async function loadUserRating(courseId) {
-                const token = localStorage.getItem('token');
-                try {
-                    const res = await fetch(`${API_URL}/course-rating/${courseId}`);
-                    const data = await res.json();
-                    ratingMessage.textContent = `Kursun orta balı: ${data.averageRating.toFixed(1)} (${data.count} səs)`;
-                } catch (e) { console.error(e); }
-                if (!token) return;
-                try {
-                    const userRes = await fetch(`${API_URL}/user-rating/${courseId}`, {
-                        headers: { "Authorization": `Bearer ${token}` },
-                    });
-                    if (userRes.ok) {
-                        const userData = await userRes.json();
-                        userHasRated = userData.hasRated;
-                        userCurrentScore = userData.score;
-                        if (userHasRated) { renderStars(userCurrentScore); starRatingDiv.style.pointerEvents = 'none'; }
-                    }
-                } catch (e) { console.error(e); }
-            }
+            // --- TAB SİSTEMİ ---
+            document.querySelectorAll(".tab-btn").forEach(btn => {
+                btn.onclick = () => {
+                    document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+                    btn.classList.add("active");
+                    
+                    document.querySelectorAll(".tab-pane").forEach(p => p.style.display = "none");
+                    document.getElementById(`${btn.dataset.tab}-section`).style.display = "block";
+                };
+            });
+
+            // --- REYTİNQ LOGİKASI ---
+            const stars = document.querySelectorAll(".star");
+            let userRating = 0;
 
             stars.forEach(star => {
-                star.addEventListener('click', () => handleStarClick(parseInt(star.dataset.score)));
-                star.addEventListener('mouseover', () => renderStars(parseInt(star.dataset.score)));
-                star.addEventListener('mouseout', () => renderStars(userCurrentScore));
+                star.onmouseover = () => {
+                    const score = star.dataset.score;
+                    updateStars(score);
+                };
+                star.onmouseout = () => updateStars(userRating);
+                star.onclick = () => {
+                    userRating = star.dataset.score;
+                    handleRating(userRating);
+                };
             });
 
-            // --- ŞƏRH FUNKSİYALARI ---
-            async function loadComments(postId, videoIndex) {
-                commentsList.innerHTML = "Yüklənir...";
-                try {
-                    const response = await fetch(`${API_URL}/comments/${postId}/${videoIndex}`);
-                    const comments = await response.json();
-                    commentsList.innerHTML = comments.length === 0 ? "<p>Hələ şərh yoxdur.</p>" : "";
-                    comments.forEach(c => {
-                        const div = document.createElement("div");
-                        div.className = "comment";
-                        let date = c.createdAt && c.createdAt._seconds ? new Date(c.createdAt._seconds * 1000).toLocaleDateString() : 'N/A';
-                        div.innerHTML = `
-                            <div class="profil"><span>${c.username[0]}</span></div>
-                            <div class="comment-main">
-                                <strong>${c.username}</strong>
-                                <p>${c.text}</p>
-                                <small>${date}</small>
-                            </div>`;
-                        commentsList.appendChild(div);
-                    });
-                } catch (e) { commentsList.innerHTML = "Xəta baş verdi."; }
+            function updateStars(score) {
+                stars.forEach(s => {
+                    s.style.color = s.dataset.score <= score ? "#f59e0b" : "#cbd5e1";
+                });
             }
 
-            async function submitComment() {
+            async function handleRating(score) {
                 const token = localStorage.getItem('token');
-                const text = commentTextarea.value.trim();
-                if (!token || text === "") return;
+                if(!token) return Swal.fire("Diqqət", "Reytinq vermək üçün daxil olun", "warning");
+
                 try {
-                    const response = await fetch(`${API_URL}/comments`, {
+                    const res = await fetch(`${API_URL}/rate-course`, {
                         method: "POST",
                         headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
-                        body: JSON.stringify({ postId: post.id, videoIndex: currentVideoIndex, text }),
+                        body: JSON.stringify({ courseId: post.id, score: parseInt(score) })
                     });
-                    if (response.ok) { commentTextarea.value = ""; loadComments(post.id, currentVideoIndex); }
+                    if(res.ok) Swal.fire("Təşəkkürlər!", "Reytinqiniz qəbul edildi", "success");
                 } catch (e) { console.error(e); }
             }
 
-            // --- VİDEO SİYAHISI ---
-            const videoThumbnails = [];
-            post.videos.forEach((v, i) => {
-                const div = document.createElement("div");
-                div.className = "video-thumbnail";
-                if (i === 0) div.style.backgroundColor = "#e4e8eb";
-                const coverUrl = post.videoCovers[i] || post.courseCover;
-                const titleText = post.videoTitles[i] || "Video " + (i + 1);
-                div.innerHTML = `<input type="checkbox" ${i === 0 ? 'checked' : ''}><img src="${coverUrl}"><span>${titleText}</span>`;
-                videoThumbnails.push(div);
-                list.appendChild(div);
-                div.addEventListener("click", () => {
-                    video.src = v; video.play(); currentVideoIndex = i;
-                    loadComments(post.id, i);
-                    videoThumbnails.forEach(t => t.style.backgroundColor = "#fff");
-                    div.style.backgroundColor = "#e4e8eb";
-                });
-            });
-
-            // --- İLKİN YÜKLƏMƏ ---
-            video.src = post.videos[0];
-            loadComments(post.id, 0);
-            loadUserRating(post.id);
-            loadDocuments();
-
-            submitButton.addEventListener("click", submitComment);
-            document.querySelector(".logo").addEventListener("click", () => window.location.href = "../index.html");
-
-            // --- TAB İDARƏETMƏSİ ---
-            const tabButtons = {
-                overview: document.getElementById("overview-btn"),
-                resources: document.getElementById("resources-btn"),
-                comments: document.getElementById("comments-btn")
-            };
-
-            const sections = {
-                overview: document.getElementById("overview-section"),
-                resources: document.getElementById("resources-section"),
-                commentsRating: document.getElementById("comments-rating-container")
-            };
-
-            function switchTab(activeTab) {
-                Object.values(tabButtons).forEach(btn => btn.classList.remove("active-btn"));
-                Object.values(sections).forEach(sec => sec.style.display = "none");
-
-                if (activeTab === 'overview') {
-                    tabButtons.overview.classList.add("active-btn");
-                    sections.overview.style.display = "block";
-                } else if (activeTab === 'resources') {
-                    tabButtons.resources.classList.add("active-btn");
-                    sections.resources.style.display = "block";
-                } else {
-                    tabButtons.comments.classList.add("active-btn");
-                    sections.commentsRating.style.display = "block";
-                }
+            // --- KOMMENTARİYA LOGİKASI ---
+            async function loadComments(postId, vIndex) {
+                const container = document.getElementById("comments-list");
+                container.innerHTML = `<div style="text-align:center; padding:20px;"><i class="bi bi-arrow-repeat spin"></i> Yüklənir...</div>`;
+                
+                try {
+                    const res = await fetch(`${API_URL}/comments/${postId}/${vIndex}`);
+                    const data = await res.json();
+                    container.innerHTML = data.length ? "" : "<p style='color:var(--text-muted)'>Hələ şərh yoxdur.</p>";
+                    
+                    data.forEach(c => {
+                        const date = c.createdAt ? new Date(c.createdAt._seconds * 1000).toLocaleDateString() : '';
+                        container.innerHTML += `
+                            <div style="display:flex; gap:12px; margin-bottom:20px; border-bottom:1px solid #f1f5f9; padding-bottom:15px;">
+                                <div style="width:40px; height:40px; border-radius:50%; background:var(--primary-dark); color:white; display:flex; align-items:center; justify-content:center; font-weight:700;">
+                                    ${c.username[0].toUpperCase()}
+                                </div>
+                                <div>
+                                    <h4 style="font-size:0.9rem;">${c.username} <span style="font-weight:400; color:var(--text-muted); font-size:0.8rem; margin-left:10px;">${date}</span></h4>
+                                    <p style="font-size:0.9rem; color:var(--text-muted); margin-top:4px;">${c.text}</p>
+                                </div>
+                            </div>
+                        `;
+                    });
+                } catch (e) { container.innerHTML = "Şərhlər yüklənmədi."; }
             }
 
-            tabButtons.overview.addEventListener("click", () => switchTab('overview'));
-            tabButtons.resources.addEventListener("click", () => switchTab('resources'));
-            tabButtons.comments.addEventListener("click", () => switchTab('comments'));
+            document.getElementById("submit-comment").onclick = async () => {
+                const token = localStorage.getItem('token');
+                const text = document.getElementById("comment-text").value.trim();
+                if(!token) return Swal.fire("Xəta", "Şərh yazmaq üçün giriş edin", "error");
+                if(!text) return;
+
+                const res = await fetch(`${API_URL}/comments`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
+                    body: JSON.stringify({ postId: post.id, videoIndex: currentVideoIndex, text })
+                });
+
+                if(res.ok) {
+                    document.getElementById("comment-text").value = "";
+                    loadComments(post.id, currentVideoIndex);
+                }
+            };
+
+            // Materialları yüklə
+            if(post.documents) {
+                const dList = document.getElementById("document-list");
+                post.documents.forEach((d, i) => {
+                    dList.innerHTML += `
+                        <a href="${d}" target="_blank" style="display:flex; align-items:center; padding:15px; background:var(--background); border-radius:10px; text-decoration:none; color:inherit; margin-bottom:10px; border:1px solid var(--border);">
+                            <i class="bi bi-file-earmark-pdf" style="font-size:1.5rem; color:#ef4444; margin-right:15px;"></i>
+                            <div style="flex:1">
+                                <div style="font-weight:600; font-size:0.9rem;">Material #${i+1}</div>
+                                <div style="font-size:0.75rem; color:var(--text-muted)">Yükləmək üçün klikləyin</div>
+                            </div>
+                            <i class="bi bi-download"></i>
+                        </a>
+                    `;
+                });
+            }
+
+            // İlk yükləmə
+            loadComments(post.id, 0);
         }
     </script>
-</body>
 
+</body>
 </html>
