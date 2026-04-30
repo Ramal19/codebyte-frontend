@@ -4,8 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>İstifadəçilərin İdarəetmə Paneli</title>
+    <title>CodeByte - Admin Panel</title>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 
     <style>
         body {
@@ -40,22 +41,20 @@
             flex-wrap: wrap;
         }
 
-        #search,
-        #roleFilter {
+        #search, #roleFilter {
             flex-grow: 1;
             padding: 12px 15px;
             font-size: 16px;
             border: 1px solid #ccc;
             border-radius: 8px;
-            transition: border-color 0.3s, box-shadow 0.3s;
+            transition: border-color 0.3s;
             min-width: 200px;
         }
 
-        #search:focus,
-        #roleFilter:focus {
+        #search:focus, #roleFilter:focus {
             border-color: #1a73e8;
-            box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.1);
             outline: none;
+            box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.1);
         }
 
         #users-table {
@@ -68,55 +67,46 @@
             background-color: #1a73e8;
             color: white;
             padding: 15px;
-            font-weight: 500;
             text-align: left;
         }
 
         #users-table tbody td {
-            padding: 15px;
+            padding: 12px 15px;
             border-bottom: 1px solid #eee;
-            background-color: #fff;
+            vertical-align: middle;
         }
 
-        #users-table tbody tr:hover {
-            background-color: #f9f9f9;
+        /* Profil Avatar Stilləri */
+        .avatar-container {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #e2e8f0;
+            border: 2px solid #f8f9fa;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
 
-        #users-table thead tr:first-child th:first-child {
-            border-top-left-radius: 8px;
+        .avatar-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
-        #users-table thead tr:first-child th:last-child {
-            border-top-right-radius: 8px;
+        .avatar-initials {
+            font-size: 16px;
+            font-weight: bold;
+            color: #4a5568;
+            text-transform: uppercase;
         }
 
-        #users-table tbody tr:last-child td:first-child {
-            border-bottom-left-radius: 8px;
-        }
-
-        #users-table tbody tr:last-child td:last-child {
-            border-bottom-right-radius: 8px;
-        }
-
-        #users-table tbody tr:last-child td {
-            border-bottom: none;
-        }
-
-
-        .role-user {
-            color: #28a745;
-            font-weight: 600;
-        }
-
-        .role-teacher {
-            color: #ffc107;
-            font-weight: 600;
-        }
-
-        .role-admin {
-            color: #dc3545;
-            font-weight: 600;
-        }
+        /* Rol rəngləri */
+        .role-user { color: #28a745; font-weight: 600; }
+        .role-teacher { color: #ffc107; font-weight: 600; }
+        .role-admin { color: #dc3545; font-weight: 600; }
 
         button.delete-btn {
             background-color: #dc3545;
@@ -125,71 +115,30 @@
             padding: 8px 15px;
             cursor: pointer;
             border-radius: 6px;
-            transition: background-color 0.3s ease, transform 0.1s ease;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: 0.3s;
         }
 
-        button.delete-btn:hover {
-            background-color: #c82333;
-            transform: translateY(-1px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
+        button.delete-btn:hover { background-color: #c82333; }
 
-        /* Xəta/Məlumat Mesajları üçün Stil */
-        .info-message {
-            color: #dc3545;
-            text-align: center;
-            padding: 20px;
-            font-weight: 600;
-        }
-        
-        /* Media Query stilləri (dəyişmədi, amma tamlıq üçün saxlanıldı) */
+        .info-message { text-align: center; padding: 20px; font-weight: 600; }
+
         @media (max-width: 768px) {
-            .container {
-                margin: 15px;
-                padding: 15px;
-            }
-
-            .controls {
-                flex-direction: column;
-            }
-
-            #users-table,
-            #users-table tbody,
-            #users-table tr,
+            .controls { flex-direction: column; }
+            #users-table thead { display: none; }
             #users-table td {
                 display: block;
-            }
-
-            #users-table thead {
-                display: none;
-            }
-
-            #users-table tr {
-                margin-bottom: 15px;
-                border: 1px solid #ddd;
-                border-radius: 8px;
-                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-            }
-
-            #users-table td {
                 text-align: right;
                 padding-left: 50%;
                 position: relative;
-                border: none;
             }
-
             #users-table td::before {
                 content: attr(data-label);
                 position: absolute;
                 left: 10px;
-                width: calc(50% - 20px);
-                padding-right: 10px;
-                white-space: nowrap;
-                text-align: left;
                 font-weight: 600;
                 color: #555;
             }
+            .avatar-container { margin-left: auto; }
         }
     </style>
 </head>
@@ -200,10 +149,9 @@
         <h1>İstifadəçilərin İdarəetmə Paneli</h1>
 
         <div class="controls">
-            <input type="text" id="search" placeholder="İstifadəçi adı, email üzrə axtar...">
-
+            <input type="text" id="search" placeholder="İstifadəçi adı və ya email ilə axtar...">
             <select id="roleFilter">
-                <option value="">Role görə filter (Hamısı)</option>
+                <option value="">Bütün Rollar</option>
                 <option value="user">User</option>
                 <option value="teacher">Teacher</option>
                 <option value="admin">Admin</option>
@@ -213,15 +161,16 @@
         <table id="users-table">
             <thead>
                 <tr>
-                    <th>ID</th>
+                    <th>№</th>
+                    <th>Şəkil</th>
                     <th>İstifadəçi Adı</th>
                     <th>Email</th>
-                    <th>Role</th>
+                    <th>Rol</th>
                     <th>Əməliyyat</th>
                 </tr>
             </thead>
             <tbody>
-            </tbody>
+                </tbody>
         </table>
     </div>
 
@@ -234,163 +183,134 @@
         const roleFilter = document.querySelector("#roleFilter");
 
         let allUsers = [];
-        const columnLabels = ["ID", "İstifadəçi Adı", "Email", "Role", "Əməliyyat"];
+        const labels = ["№", "Şəkil", "İstifadəçi Adı", "Email", "Rol", "Əməliyyat"];
+
+        // Baş hərfləri götürən funksiya
+        function getInitials(name) {
+            if (!name) return "?";
+            const parts = name.trim().split(' ');
+            if (parts.length >= 2) {
+                return (parts[0][0] + parts[1][0]).toUpperCase();
+            }
+            return name.substring(0, 2).toUpperCase();
+        }
 
         async function fetchUsers() {
-            tableBody.innerHTML = `<tr><td colspan="5" class="info-message" style="color:#1a73e8;">Məlumatlar yüklənir...</td></tr>`;
-
+            tableBody.innerHTML = `<tr><td colspan="6" class="info-message">Məlumatlar yüklənir...</td></tr>`;
             const token = localStorage.getItem('token');
 
             if (!token) {
-                tableBody.innerHTML = `<tr><td colspan="5" class="info-message">❌ **401 Unauthorized**: İstifadəçi məlumatlarını gətirmək üçün admin **giriş tokeni** (Authorization Token) tələb olunur. Zəhmət olmasa daxil olun.</td></tr>`;
+                tableBody.innerHTML = `<tr><td colspan="6" class="info-message" style="color:red;">Giriş tokeni tapılmadı. Zəhmət olmasa daxil olun.</td></tr>`;
                 return;
             }
 
             try {
                 const response = await fetch(USERS_API_URL, {
-                    method: "GET",
-                    headers: {
-                        "Authorization": `Bearer ${token}`
-                    }
+                    headers: { "Authorization": `Bearer ${token}` }
                 });
 
-                if (!response.ok) {
-                    let errorMessage = `HTTP xətası! Status: ${response.status}.`;
-
-                    if (response.status === 401) {
-                        errorMessage = "401 Unauthorized: Token etibarsızdır və ya müddəti bitib. Yenidən daxil olun.";
-                    } else if (response.status === 403) {
-                        errorMessage = "403 Forbidden: Bu əməliyyata icazəniz yoxdur.";
-                    }
-
-                    throw new Error(errorMessage);
-                }
+                if (!response.ok) throw new Error("Məlumatları gətirmək mümkün olmadı.");
 
                 allUsers = await response.json();
                 applyFilters();
-
             } catch (error) {
-                console.error("Məlumat gətirilərkən xəta:", error);
-                tableBody.innerHTML = `<tr><td colspan="5" class="info-message">Məlumatlar yüklənə bilmədi. Serveri yoxlayın. (Xəta: ${error.message || 'Bilinməyən server xətası'})</td></tr>`;
+                tableBody.innerHTML = `<tr><td colspan="6" class="info-message">Xəta: ${error.message}</td></tr>`;
             }
         }
 
-        function getRoleClass(role) {
-            return `role-${role ? role.toLowerCase() : 'user'}`;
-        }
-
         function displayUsers(users) {
-
             tableBody.innerHTML = "";
-
             if (users.length === 0) {
-                tableBody.innerHTML = `<tr><td colspan="5" class="info-message" style="color:#555;">Heç bir istifadəçi tapılmadı.</td></tr>`;
+                tableBody.innerHTML = `<tr><td colspan="6" class="info-message">İstifadəçi tapılmadı.</td></tr>`;
                 return;
             }
 
             users.forEach((user, index) => {
-
                 const row = tableBody.insertRow();
 
-                const data = [
-                    index + 1,
-                    user.username,
-                    user.email,
-                    user.role,
-                    null
-                ];
+                // 1. №
+                row.insertCell().textContent = index + 1;
 
-                data.forEach((value, colIndex) => {
-                    const cell = row.insertCell();
-                    cell.setAttribute('data-label', columnLabels[colIndex]);
+                // 2. Profil Şəkli / Baş Hərf
+                const avatarCell = row.insertCell();
+                const container = document.createElement("div");
+                container.className = "avatar-container";
 
-                    if (value !== null) {
-                        cell.textContent = value;
-                    }
+                if (user.profilePic) {
+                    const img = document.createElement("img");
+                    img.src = user.profilePic;
+                    img.className = "avatar-img";
+                    img.onerror = function() {
+                        this.parentElement.innerHTML = `<span class="avatar-initials">${getInitials(user.username)}</span>`;
+                    };
+                    container.appendChild(img);
+                } else {
+                    container.innerHTML = `<span class="avatar-initials">${getInitials(user.username)}</span>`;
+                }
+                avatarCell.appendChild(container);
 
-                    if (colIndex === 3) {
-                        cell.classList.add(getRoleClass(user.role));
-                    }
+                // 3. Username
+                row.insertCell().textContent = user.username;
 
-                    if (colIndex === 4) {
-                        const deleteBtn = document.createElement("button");
-                        deleteBtn.textContent = "Sil";
-                        deleteBtn.classList.add("delete-btn");
-                        deleteBtn.addEventListener("click", () => deleteUser(user.id));
-                        cell.appendChild(deleteBtn);
-                    }
-                });
+                // 4. Email
+                row.insertCell().textContent = user.email;
+
+                // 5. Role
+                const rCell = row.insertCell();
+                rCell.textContent = user.role || 'user';
+                rCell.className = `role-${(user.role || 'user').toLowerCase()}`;
+
+                // 6. Delete Button
+                const actionCell = row.insertCell();
+                const btn = document.createElement("button");
+                btn.textContent = "Sil";
+                btn.className = "delete-btn";
+                btn.onclick = () => deleteUser(user.id);
+                actionCell.appendChild(btn);
+
+                // Add labels for mobile responsive
+                Array.from(row.cells).forEach((cell, i) => cell.setAttribute('data-label', labels[i]));
             });
         }
 
         async function deleteUser(id) {
-            const token = localStorage.getItem('token');
-            if (!token) {
-                Swal.fire('Giriş Tələb Olunur', 'Əməliyyat üçün giriş tokeni tələb olunur! Zəhmət olmasa admin hesabı ilə daxil olun.', 'warning');
-                return;
-            }
-
-            Swal.fire({
-                title: 'İstifadəçini Silmək?',
-                text: "Bu istifadəçini silmək istədiyinizə əminsiniz? Bu, geri qaytarılmaz bir əməliyyatdır.",
+            const result = await Swal.fire({
+                title: 'Əminsiniz?',
+                text: "İstifadəçi tamamilə silinəcək!",
                 icon: 'warning',
                 showCancelButton: true,
-                confirmButtonColor: '#ef4444',
-                cancelButtonColor: '#6b7280',
                 confirmButtonText: 'Bəli, Sil!',
                 cancelButtonText: 'Ləğv et'
-            }).then(async (result) => {
-                if (result.isConfirmed) {
-                    try {
-                        const response = await fetch(`${USERS_API_URL}/${id}`, {
-                            method: "DELETE",
-                            headers: {
-                                "Authorization": `Bearer ${token}`
-                            },
-                        });
-
-                        let message = "Əməliyyat uğursuz oldu.";
-                        let icon = 'error';
-
-                        if (response.ok) {
-                            message = "İstifadəçi uğurla silindi.";
-                            icon = 'success';
-                            // Cədvəli yeniləyin
-                            allUsers = allUsers.filter(user => user.id !== id);
-                            applyFilters();
-                        } else if (response.status === 401) {
-                            message = "Giriş tokeni etibarsızdır. Yenidən daxil olun.";
-                        } else if (response.status === 403) {
-                            message = "Silməyə icazəniz yoxdur. Yalnız Administratorlar bu əməliyyatı edə bilər.";
-                        } else {
-                            const errorData = await response.json().catch(() => ({ message: "Bilinməyən server xətası." }));
-                            message = errorData.message || `Server xətası: Status ${response.status}`;
-                        }
-
-                        Swal.fire({
-                            title: response.ok ? 'Silindi!' : 'Xəta!',
-                            text: message,
-                            icon: icon
-                        });
-
-                    } catch (e) {
-                        Swal.fire('Xəta!', 'Serverlə əlaqə qurularkən xəta baş verdi.', 'error');
-                        console.error("Delete error:", e);
-                    }
-                }
             });
+
+            if (result.isConfirmed) {
+                const token = localStorage.getItem('token');
+                try {
+                    const res = await fetch(`${USERS_API_URL}/${id}`, {
+                        method: "DELETE",
+                        headers: { "Authorization": `Bearer ${token}` }
+                    });
+                    if (res.ok) {
+                        Swal.fire('Silindi!', '', 'success');
+                        allUsers = allUsers.filter(u => u.id !== id);
+                        applyFilters();
+                    } else {
+                        throw new Error("Silinmə zamanı xəta.");
+                    }
+                } catch (e) {
+                    Swal.fire('Xəta!', e.message, 'error');
+                }
+            }
         }
 
         function applyFilters() {
             const query = searchInput.value.toLowerCase();
             const role = roleFilter.value;
-
-            const filteredUsers = allUsers.filter(user =>
-                (user.username.toLowerCase().includes(query) || user.email.toLowerCase().includes(query)) &&
-                (role === "" || (user.role && user.role.toLowerCase() === role.toLowerCase()))
+            const filtered = allUsers.filter(u => 
+                (u.username.toLowerCase().includes(query) || u.email.toLowerCase().includes(query)) &&
+                (role === "" || u.role === role)
             );
-
-            displayUsers(filteredUsers);
+            displayUsers(filtered);
         }
 
         searchInput.addEventListener("input", applyFilters);
@@ -399,5 +319,4 @@
         fetchUsers();
     </script>
 </body>
-
 </html>

@@ -243,6 +243,66 @@
   padding: 50px;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 }
+/* Profil şəkli bölməsi üçün ümumi qutu */
+.profile-upload {
+    position: relative;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* Sənin orijinal ikon və mətn tərzin */
+.profile-upload .icon {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    color: #ccc; /* Sənin dizaynındakı placeholder rəngi */
+    margin-bottom: 5px;
+    transition: 0.3s;
+}
+
+/* Şəkil inputu üçün xüsusi stil */
+#reg-profilePic {
+    background: rgba(255, 255, 255, 0.05); /* Arxa fon şəffaflığı */
+    border: 1px dashed rgba(255, 255, 255, 0.3); /* Qırıq-qırıq xətlər */
+    color: #fff;
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 13px;
+    transition: all 0.3s ease;
+}
+
+/* Mouse ilə üzərinə gələndə effekti */
+#reg-profilePic:hover {
+    border-color: #007bff; /* Sənin qeydiyyat düyməsinin rəngi ilə uyğun */
+    background: rgba(0, 123, 255, 0.1);
+}
+
+/* Fayl seçilmə düyməsinin öz stili (browser default düyməsi) */
+#reg-profilePic::-webkit-file-upload-button {
+    background: #007bff;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    padding: 5px 12px;
+    margin-right: 10px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: 0.3s;
+}
+
+#reg-profilePic::-webkit-file-upload-button:hover {
+    background: #0056b3;
+}
+
+/* Şəkil seçildikdən sonra fokuslanma */
+.profile-upload:focus-within .icon {
+    color: #007bff;
+    transform: translateY(-5px);
+}
 
 @media (max-width: 1050px) {
   .con>.form-box {

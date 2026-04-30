@@ -1,3 +1,13 @@
+:root {
+  --primary: #2da0fd;
+  --text-dark: #1f2937;
+  --text-gray: #64748b;
+  --bg-light: #f8fafc;
+  --white: #ffffff;
+  --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+  --radius: 16px;
+}
+
 * {
 
   margin: 0px;
@@ -82,85 +92,87 @@ body>.menu-div {
 }
 
 .menu-sidebar {
-    position: fixed;
-    top: 0;
-    left: -100%;
-    width: 280px;
-    height: 100vh;
-    background: #fff;
-    box-shadow: 2px 0 15px rgba(0,0,0,0.2);
-    z-index: 10000;
-    transition: left 0.4s ease;
-    padding: 20px;
+  position: fixed;
+  top: 0;
+  left: -100%;
+  width: 280px;
+  height: 100vh;
+  background: #fff;
+  box-shadow: 2px 0 15px rgba(0, 0, 0, 0.2);
+  z-index: 10000;
+  transition: left 0.4s ease;
+  padding: 20px;
 }
 
 .menu-sidebar.active {
-    left: 0;
+  left: 0;
 }
 
 .profile-sidebar {
-    position: fixed;
-    top: 0;
-    right: -100%;
-    width: 300px;
-    height: 100vh;
-    background: #fff;
-    box-shadow: -2px 0 15px rgba(0,0,0,0.2);
-    z-index: 10000;
-    transition: right 0.4s ease;
-    padding: 20px;
+  position: fixed;
+  top: 0;
+  right: -100%;
+  width: 300px;
+  height: 100vh;
+  background: #fff;
+  box-shadow: -2px 0 15px rgba(0, 0, 0, 0.2);
+  z-index: 10000;
+  transition: right 0.4s ease;
+  padding: 20px;
 }
 
 .profile-sidebar.active {
-    right: 0;
+  right: 0;
 }
 
 .side-content {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }
 
 .close-side {
-    align-self: flex-end;
-    font-size: 32px;
-    cursor: pointer;
+  align-self: flex-end;
+  font-size: 32px;
+  cursor: pointer;
 }
 
 .user-item-side {
-    text-align: center;
-    padding: 10px 0;
+  text-align: center;
+  padding: 10px 0;
 }
 
 .profil-img-big {
-    width: 70px;
-    height: 70px;
-    background: #a435f0;
-    color: #fff;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 30px;
-    margin: 0 auto 10px;
+  width: 70px;
+  height: 70px;
+  background: #a435f0;
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+  margin: 0 auto 10px;
 }
 
-.menu-sidebar button, .profile-sidebar button {
-    width: 100%;
-    padding: 12px;
-    border: none;
-    background: #f1f1f1;
-    border-radius: 6px;
-    text-align: left;
-    font-size: 16px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 10px;
+.menu-sidebar button,
+.profile-sidebar button {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  background: #f1f1f1;
+  border-radius: 6px;
+  text-align: left;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
-.menu-sidebar button:hover, .profile-sidebar button:hover {
-    background: #e2e2e2;
+.menu-sidebar button:hover,
+.profile-sidebar button:hover {
+  background: #e2e2e2;
 }
 
 header {
@@ -206,7 +218,7 @@ header>.navbar {
     drop-shadow(0 2px 4px rgba(255, 208, 0, 0.35)) drop-shadow(0 6px 12px rgba(6, 24, 44, 0.25));
 }
 
-.profile{
+.profile {
 
   display: none;
   font-size: 24px;
@@ -1350,82 +1362,11 @@ li>a:hover {
   padding: 20px 0px;
 }
 
-
-.footer {
-  display: block;
-  background-color: #1c1d1f;
-  color: #ccc;
-  padding: 40px 60px;
-  font-family: Arial, sans-serif;
-}
-
-.footer a {
-  display: block;
-  color: #ccc;
-  text-decoration: none;
-  margin: 4px 0;
+footer {
+  text-align: center;
+  padding: 40px;
+  color: var(--text-gray);
   font-size: 14px;
-}
-
-.footer a:hover {
-  color: #fff;
-}
-
-.footer-top {
-  border-bottom: 1px solid #333;
-  padding-bottom: 20px;
-  margin-bottom: 30px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.footer-top p {
-  font-size: 14px;
-}
-
-.footer-top .footer-logos img {
-  height: 25px;
-  margin-left: 15px;
-}
-
-.footer-links {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: 30px;
-  margin-bottom: 30px;
-}
-
-.footer-links h4 {
-  color: #fff;
-  margin-bottom: 10px;
-  font-size: 15px;
-}
-
-.footer-bottom {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: 30px;
-  margin-bottom: 30px;
-}
-
-.footer-bottom h4 {
-  color: #fff;
-  margin-bottom: 10px;
-  font-size: 15px;
-}
-
-.footer-copy {
-  border-top: 1px solid #333;
-  padding-top: 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 13px;
-}
-
-.footer-copy .language {
-  cursor: pointer;
 }
 
 /* From Uiverse.io by Galahhad */
@@ -1597,6 +1538,7 @@ li>a:hover {
   .add {
     display: none;
   }
+
   .navigation-bar {
 
     display: flex;
@@ -1618,7 +1560,7 @@ li>a:hover {
     width: 120px;
   }
 
-  .profile{
+  .profile {
 
     display: block;
   }

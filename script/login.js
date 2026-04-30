@@ -31,9 +31,13 @@ form.addEventListener("submit", async (e) => {
 
             localStorage.setItem("token", json.token);
 
+            // BURADA DƏYİŞİKLİK EDİLDİ: 
+            // json obyektindən gələn profilePic və email-i də yaddaşa yazırıq
             localStorage.setItem("loginUser", JSON.stringify({
                 username: data.username,
-                role: json.role
+                role: json.role,
+                profilePic: json.profilePic || "", // Serverdən gələn şəkil
+                email: json.email || ""            // Serverdən gələn mail
             }));
 
             Swal.fire({
@@ -41,12 +45,7 @@ form.addEventListener("submit", async (e) => {
                 icon: "success",
             }).then((result) => {
                 if (result.isConfirmed || result.dismiss === Swal.DismissReason.backdrop) {
-
-                    // if (json.role === "admin") {
-                    // window.location.href = "../admin-dashboard/documents/a1d2m3i4n5P1a2n3e4l5.html";
-                    // } else {
                     window.location.href = "../index.html";
-                    // }
                 }
             });
 
@@ -66,32 +65,22 @@ const inputs = document.querySelectorAll(".input");
 const icons = document.querySelectorAll(".icon");
 
 inputs.forEach((inp, index) => {
-
+    // Sənin yazdığın click məntiqini saxladım, 
+    // amma inputun içinə yazı yazılanda yuxarıda qalması üçün kiçik əlavə etdim
     inp.addEventListener("click", () => {
-        if (index === 0) {
-            icons.forEach((el, index) => {
-                if (index === 0) {
-                    el.style.cssText = `font-size: 14px; transform: translateY(-25px); transition: all 0.3s ease;`
-                }
-            });
+        icons[index].style.cssText = `font-size: 14px; transform: translateY(-25px); transition: all 0.3s ease;`;
+    });
 
-
-        } else {
-            icons.forEach((el, index) => {
-                if (index === 1) {
-                    el.style.cssText = `font-size: 14px; transform: translateY(-25px); transition: all 0.3s ease;`
-                }
-            });
+    // Əlavə: İnputdan çıxanda içi boşdursa ikonu yerinə qaytar
+    inp.addEventListener("blur", () => {
+        if (inp.value === "") {
+            icons[index].style.cssText = `font-size: initial; transform: translateY(0); transition: all 0.3s ease;`;
         }
-    })
+    });
 });
 
 icons.forEach((el, index) => {
     el.addEventListener("click", () => {
-        if (index === 0) {
-            el.style.cssText = `font-size: 14px; transform: translateY(-25px); transition: all 0.3s ease;`
-        } else {
-            el.style.cssText = `font-size: 14px; transform: translateY(-25px); transition: all 0.3s ease;`
-        }
-    })
+        el.style.cssText = `font-size: 14px; transform: translateY(-25px); transition: all 0.3s ease;`
+    });
 });

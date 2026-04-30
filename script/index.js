@@ -197,29 +197,24 @@ let adminButtonCreated = false;
 
 async function fetchUsers() {
     let currentUser = null;
-    if (logData) {
+    const storedData = logData || userData;
+
+    if (storedData) {
         try {
-            currentUser = JSON.parse(logData);
-        } catch (e) {
-            console.error(e);
-        }
-    } else if (userData) {
-        try {
-            currentUser = JSON.parse(userData);
-        } catch (e) {
-            console.error(e);
-        }
+            currentUser = JSON.parse(storedData);
+        } catch (e) { console.error(e); }
     }
 
+    // Role admin isə dərhal düyməni təsdiqləyirik
     if (currentUser && currentUser.role === "admin") {
         adminButtonCreated = true;
-        return;
     }
 
     try {
         const response = await fetch(USERS_API_URL);
         if (!response.ok) throw new Error(response.status);
         allUsers = await response.json();
+        
         const isAdmin = allUsers.some(el => {
             return (userData || logData) && el.username === currentUser?.username && el.role === "admin";
         });
@@ -243,13 +238,24 @@ function closeProfile() {
 
 function openProfile(user) {
     if (profileDiv) return;
+    
     profileDiv = document.createElement("div");
     profileDiv.classList.add("profile-sidebar");
+
+    // Login zamanı da profilePic gəldiyi üçün burada düzgün göstərəcək
+    const profileContent = user.profilePic 
+        ? `<img style="width:100%; height: 100%; border-radius: 9999px; object-fit: cover;" src="${user.profilePic}"/>` 
+        : `<div style="width:100%; height: 100%; border-radius: 9999px; background: #ddd; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: bold; color: #555;">
+            ${user.username[0].toUpperCase()}
+           </div>`;
+
     profileDiv.innerHTML = `
         <div class="side-content">
             <span class="close-side" id="closeProfile"><i class="bi bi-x"></i></span>
             <div class="user-item-side">
-                <div class="profil-img-big">${user.username[0]}</div>
+                <div class="profil-img-big">
+                    ${profileContent}
+                </div>
                 <h3>${user.username}</h3>
                 <p>${user.email || ""}</p>
             </div>
@@ -260,6 +266,7 @@ function openProfile(user) {
             <button id="sideLogOut" style="color:red"><i class="bi bi-box-arrow-right"></i> Çıxış et</button>
         </div>
     `;
+
     document.body.appendChild(profileDiv);
     setTimeout(() => profileDiv.classList.add("active"), 10);
     document.body.style.overflow = "hidden";
@@ -288,6 +295,7 @@ if (profileBtn) {
     });
 }
 
+// Navbardakı profil şəkli/hərfi bölməsi
 if (userData || logData) {
     const user = JSON.parse(userData || logData);
     registerBtn.style.display = "none";
@@ -296,9 +304,16 @@ if (userData || logData) {
     const userInfo = document.createElement("div");
     userInfo.id = "userInfo";
     userInfo.className = "profil-img";
-    userInfo.innerHTML = user.username[0];
-    regPart.appendChild(userInfo);
+    
+    // Əgər şəkli varsa şəkli qoyur, yoxdursa baş hərfini
+    if(user.profilePic) {
+        userInfo.style.background = "none";
+        userInfo.innerHTML = `<img src="${user.profilePic}" style="width:100%; height:100%; border-radius:50%; object-fit:cover;" />`;
+    } else {
+        userInfo.innerHTML = user.username[0].toUpperCase();
+    }
 
+    regPart.appendChild(userInfo);
     userInfo.addEventListener("click", () => openProfile(user));
 } else {
     registerBtn.addEventListener("click", () => window.location.href = "./document/register.html");
@@ -394,7 +409,7 @@ async function addToBasket(postId) {
         alert(data.message || "Kurs səbətə əlavə olundu");
     } catch (err) { console.error(err); }
 }
- 
+
 function createPostElement(p) {
     const div = document.createElement("div");
     div.classList.add("lesson-card", "card", "shadow");
