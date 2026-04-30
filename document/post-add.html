@@ -17,6 +17,7 @@
             --light: #f4f7fe;
             --border: #e2e8f0;
             --success: #10b981;
+            --danger: #e53e3e;
         }
 
         * {
@@ -197,13 +198,30 @@
             display: none;
         }
 
-        /* Video Item */
+        /* Yeni Modul Strukturunun Dizaynı */
+        .module-item {
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            margin-bottom: 20px;
+            padding: 20px;
+            background: #fff;
+            border-left: 5px solid var(--primary);
+        }
+
+        .module-header {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
         .video-item {
             background: #f8fafc;
             border: 1px solid var(--border);
-            padding: 20px;
-            border-radius: 12px;
-            margin-bottom: 15px;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            margin-left: 25px;
             position: relative;
         }
 
@@ -255,12 +273,20 @@
             color: var(--dark);
         }
 
-        .btn-add {
-            background: transparent;
-            border: 1px solid var(--primary);
-            color: var(--primary);
+        .btn-add-module {
+            background: var(--dark);
+            color: white;
             width: 100%;
             margin-bottom: 20px;
+        }
+
+        .btn-add-video {
+            background: transparent;
+            border: 1px dashed var(--primary);
+            color: var(--primary);
+            margin-left: 25px;
+            margin-top: 5px;
+            width: calc(100% - 25px);
         }
 
         .hidden {
@@ -289,7 +315,7 @@
             <h2><i class="fa-solid fa-circle-info"></i> Ümumi Məlumat</h2>
             <div class="input-group">
                 <label>Kursun Başlığı</label>
-                <input type="text" id="courseTitle" placeholder="Məsələn: Sıfırdan Python">
+                <input type="text" id="courseTitle" placeholder="Məsələn: Sıfırdan Frontend Proqramlaşdırma">
             </div>
             <div class="input-group">
                 <label>Kateqoriya</label>
@@ -297,6 +323,8 @@
                     <option value="">Seçin...</option>
                     <option value="frontend">Frontend</option>
                     <option value="backend">Backend</option>
+                    <option value="fullstack">Fullstack Proqramlaşdırma</option>
+                    <option value="mobile">Mobil Proqramlaşdırma</option>
                 </select>
             </div>
             <div class="input-group">
@@ -329,9 +357,15 @@
 
         <div class="step-card" id="step3">
             <h2><i class="fa-solid fa-play"></i> Dərs Materialları</h2>
-            <button class="btn btn-add" id="addMoreVideo"><i class="fa-solid fa-plus"></i> Yeni Video Bölməsi</button>
+            <p style="text-align: center; color: gray; font-size: 0.85rem; margin-bottom: 20px;">
+                Kursu bölmələrə ayırın (məs: HTML, CSS, JS) və hər bölməyə uyğun videoları əlavə edin.
+            </p>
 
-            <div id="videosContainer">
+            <button class="btn btn-add-module" id="addModuleBtn">
+                <i class="fa-solid fa-folder-plus"></i> Yeni Bölmə Əlavə et (Məs: HTML)
+            </button>
+
+            <div id="moduleContainer">
             </div>
 
             <div class="btn-row">
@@ -347,8 +381,7 @@
         const token = localStorage.getItem("token");
 
         let currentStep = 1;
-        const MAX_DOC_SIZE = 10 * 1024 * 1024; // 10MB
-        const MAX_VIDEO_SIZE = 100 * 1024 * 1024;
+        const MAX_DOC_SIZE = 10 * 1024 * 1024;
 
         // Step Naviqasiyası
         function updateProgress() {
@@ -359,7 +392,6 @@
         }
 
         function nextStep(step) {
-            // Validation
             if (currentStep === 1) {
                 if (!document.getElementById('courseTitle').value || !document.getElementById('categorySelect').value) {
                     return Swal.fire("Xəta", "Zəhmət olmasa başlıq və kateqoriyanı doldurun", "error");
@@ -398,28 +430,51 @@
             }
         });
 
-        // Video və Sənəd əlavə etmə məntiqi
-        document.getElementById('addMoreVideo').addEventListener('click', () => {
-            const div = document.createElement('div');
-            div.className = 'video-item';
-            div.innerHTML = `
+        // --- DINAMIK BÖLMƏ VƏ VIDEO MƏNTİQİ ---
+        const moduleContainer = document.getElementById('moduleContainer');
+
+        document.getElementById('addModuleBtn').addEventListener('click', () => {
+            const moduleId = Date.now();
+            const moduleDiv = document.createElement('div');
+            moduleDiv.className = 'module-item';
+            moduleDiv.setAttribute('data-module-id', moduleId);
+            moduleDiv.innerHTML = `
+                <div class="module-header">
+                    <input type="text" class="moduleTitle" placeholder="Bölmənin adı (məs: Giriş və ya HTML5)" style="flex:1; padding:10px; border-radius:8px; border:1px solid #ddd;">
+                    <button class="btn" style="background:var(--danger); color:white; padding:10px;" onclick="this.parentElement.parentElement.remove()">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                </div>
+                <div class="videos-list"></div>
+                <button class="btn btn-add-video" onclick="addVideoToModule('${moduleId}')">
+                    <i class="fa-solid fa-plus"></i> Bu bölməyə video əlavə et
+                </button>
+            `;
+            moduleContainer.appendChild(moduleDiv);
+        });
+
+        function addVideoToModule(moduleId) {
+            const moduleDiv = document.querySelector(`[data-module-id="${moduleId}"] .videos-list`);
+            const videoDiv = document.createElement('div');
+            videoDiv.className = 'video-item';
+            videoDiv.innerHTML = `
                 <div class="input-group">
                     <label>Video Faylı (MP4)</label>
                     <input type="file" class="videoInput" accept="video/*">
                 </div>
                 <div class="input-group">
                     <label>Video Başlığı</label>
-                    <input type="text" class="videoTitle" placeholder="Məs: Dərs 1">
+                    <input type="text" class="videoTitle" placeholder="Məsələn: HTML nədir?">
                 </div>
                 <button class="resurs-btn" onclick="this.nextElementSibling.click()">
                     <i class="fa-solid fa-file-pdf"></i> Resurs əlavə et (PDF/Word)
                 </button>
                 <input type="file" class="docInput hidden" accept=".pdf,.doc,.docx" onchange="checkDoc(this)">
                 <p class="doc-info"></p>
-                <i class="fa-solid fa-trash" style="position:absolute; top:15px; right:15px; cursor:pointer; color:#e53e3e" onclick="this.parentElement.remove()"></i>
+                <i class="fa-solid fa-xmark" style="position:absolute; top:15px; right:15px; cursor:pointer; color:gray" onclick="this.parentElement.remove()"></i>
             `;
-            document.getElementById('videosContainer').appendChild(div);
-        });
+            moduleDiv.appendChild(videoDiv);
+        }
 
         function checkDoc(input) {
             const file = input.files[0];
@@ -430,21 +485,21 @@
                     input.value = "";
                     info.style.display = "none";
                 } else {
-                    info.innerText = "Yükləndi: " + file.name;
+                    info.innerText = "Əlavə edildi: " + file.name;
                     info.style.display = "block";
                 }
             }
         }
 
-        // Final Upload
+        // --- FINAL UPLOAD ---
         document.getElementById('uploadCourseBtn').addEventListener('click', async () => {
             const title = document.getElementById('courseTitle').value;
             const category = document.getElementById('categorySelect').value;
             const price = document.getElementById('coursePrice').value;
             const cover = document.getElementById('courseCover').files[0];
 
-            const videoItems = document.querySelectorAll('.video-item');
-            if (videoItems.length === 0) return Swal.fire("Xəta", "Ən azı bir video dərs əlavə etməlisiniz", "error");
+            const modules = document.querySelectorAll('.module-item');
+            if (modules.length === 0) return Swal.fire("Xəta", "Ən azı bir bölmə (modul) yaratmalısınız", "error");
 
             const formData = new FormData();
             formData.append("text", title);
@@ -452,31 +507,57 @@
             formData.append("price", price);
             formData.append("courseCover", cover);
 
-            const titles = [];
+            let moduleData = [];
             let valid = true;
 
-            videoItems.forEach((item, index) => {
-                const video = item.querySelector('.videoInput').files[0];
-                const vTitle = item.querySelector('.videoTitle').value;
-                const doc = item.querySelector('.docInput').files[0];
+            modules.forEach((mod) => {
+                const mTitle = mod.querySelector('.moduleTitle').value;
+                const videoItems = mod.querySelectorAll('.video-item');
 
-                if (!video || !vTitle) {
+                if (!mTitle || videoItems.length === 0) {
                     valid = false;
                     return;
                 }
 
-                formData.append("videos", video);
-                titles.push(vTitle);
-                if (doc) {
-                    formData.append("documents", doc); // Backenddə bu adı tutmalısan
-                }
+                let videosInModule = [];
+                videoItems.forEach((vItem) => {
+                    const videoFile = vItem.querySelector('.videoInput').files[0];
+                    const vTitle = vItem.querySelector('.videoTitle').value;
+                    const docFile = vItem.querySelector('.docInput').files[0];
+
+                    if (!videoFile || !vTitle) {
+                        valid = false;
+                        return;
+                    }
+
+                    // Faylları formData-ya əlavə edirik (Backenddə sıranı qorumaq üçün)
+                    formData.append("videos", videoFile);
+                    if (docFile) {
+                        formData.append("documents", docFile);
+                    }
+
+                    videosInModule.push({
+                        title: vTitle,
+                        hasDoc: !!docFile
+                    });
+                });
+
+                moduleData.push({
+                    moduleName: mTitle,
+                    videos: videosInModule
+                });
             });
 
-            if (!valid) return Swal.fire("Xəta", "Bütün video və başlıq sahələrini doldurun", "error");
+            if (!valid) return Swal.fire("Xəta", "Bütün bölmə adlarını, videoları və başlıqları doldurun", "error");
 
-            formData.append("videoTitles", JSON.stringify(titles));
+            // Modul strukturunu serverə JSON olaraq göndəririk
+            formData.append("moduleStructure", JSON.stringify(moduleData));
 
-            Swal.fire({ title: 'Göndərilir...', didOpen: () => Swal.showLoading() });
+            Swal.fire({
+                title: 'Kurs göndərilir...',
+                html: 'Videoların ölçüsündən asılı olaraq bir neçə dəqiqə çəkə bilər.',
+                didOpen: () => Swal.showLoading()
+            });
 
             try {
                 const res = await fetch(`${API_URL}/posts`, {
@@ -484,13 +565,16 @@
                     headers: { "Authorization": "Bearer " + token },
                     body: formData
                 });
+
                 if (res.ok) {
-                    Swal.fire("Uğurlu!", "Kurs təsdiq üçün göndərildi", "success").then(() => window.location.href = "../index.html");
+                    Swal.fire("Uğurlu!", "Kursunuz uğurla yaradıldı və yayımlandı!", "success")
+                        .then(() => window.location.href = "../index.html");
                 } else {
-                    Swal.fire("Xəta", "Server xətası baş verdi", "error");
+                    const errorResponse = await res.json();
+                    Swal.fire("Xəta", errorResponse.message || "Server xətası baş verdi", "error");
                 }
             } catch (err) {
-                Swal.fire("Xəta", err.message, "error");
+                Swal.fire("Xəta", "Bağlantı xətası: " + err.message, "error");
             }
         });
     </script>

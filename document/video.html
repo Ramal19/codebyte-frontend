@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="az">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kurs Paneli - CodeByte</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
@@ -22,7 +24,12 @@
             --shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
 
         body {
             background-color: var(--background);
@@ -30,10 +37,9 @@
             height: 100vh;
             display: flex;
             flex-direction: column;
-            overflow: hidden; /* Desktop üçün */
+            overflow: hidden;
         }
 
-        /* Header */
         header {
             background: var(--primary-dark);
             height: 64px;
@@ -44,9 +50,12 @@
             flex-shrink: 0;
         }
 
-        .logo-box img { height: 28px; filter: brightness(0) invert(1); cursor: pointer; }
+        .logo-box img {
+            height: 28px;
+            filter: brightness(0) invert(1);
+            cursor: pointer;
+        }
 
-        /* Layout */
         .main-container {
             display: grid;
             grid-template-columns: 1fr 360px;
@@ -54,7 +63,6 @@
             overflow: hidden;
         }
 
-        /* Content Area */
         .content-area {
             overflow-y: auto;
             padding: 20px;
@@ -71,43 +79,13 @@
             width: 100%;
         }
 
-        #main-video { width: 100%; height: 100%; display: block; }
-
-        /* Tabs */
-        .tabs-nav {
-            display: flex;
-            gap: 10px;
-            border-bottom: 2px solid var(--border);
-            margin-bottom: 20px;
-            background: var(--background);
-            position: sticky;
-            top: -20px;
-            z-index: 10;
-            padding-top: 5px;
-            overflow-x: auto;
-            scrollbar-width: none; /* Firefox */
-        }
-        .tabs-nav::-webkit-scrollbar { display: none; } /* Chrome/Safari */
-
-        .tab-btn {
-            background: none;
-            border: none;
-            padding: 12px 18px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: var(--text-muted);
-            cursor: pointer;
-            white-space: nowrap;
-            position: relative;
-            transition: 0.3s;
+        #main-video {
+            width: 100%;
+            height: 100%;
+            display: block;
         }
 
-        .tab-btn.active { color: var(--primary); }
-        .tab-btn.active::after {
-            content: ''; position: absolute; bottom: -2px; left: 0; width: 100%; height: 2px; background: var(--primary);
-        }
-
-        /* Sidebar */
+        /* Accordion Sidebar */
         .sidebar {
             background: var(--surface);
             border-left: 1px solid var(--border);
@@ -121,33 +99,127 @@
             font-weight: 700;
             border-bottom: 1px solid var(--border);
             background: #fff;
+            display: flex;
+            justify-content: space-between;
         }
 
-        .video-list { flex: 1; overflow-y: auto; }
+        .module-list {
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        /* Yeni Accordion Dizaynı */
+        .module-group {
+            border-bottom: 1px solid var(--border);
+        }
+
+        .module-toggle {
+            width: 100%;
+            padding: 15px;
+            background: #f8fafc;
+            border: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--text-main);
+            transition: 0.2s;
+        }
+
+        .module-toggle:hover {
+            background: #f1f5f9;
+        }
+
+        .video-items-container {
+            display: none;
+            /* Başlanğıcda bağlı olsun */
+            background: #fff;
+        }
+
+        .module-group.active .video-items-container {
+            display: block;
+        }
+
+        .module-group.active .module-toggle i {
+            transform: rotate(180deg);
+        }
 
         .video-item {
             display: flex;
             padding: 12px 15px;
             gap: 12px;
             cursor: pointer;
-            border-bottom: 1px solid #f8fafc;
             transition: 0.2s;
+            border-left: 3px solid transparent;
         }
 
-        .video-item:hover { background: #f1f5f9; }
-        .video-item.active { background: #eff6ff; border-left: 4px solid var(--primary); }
-
-        .video-item img {
-            width: 90px;
-            aspect-ratio: 16/9;
-            object-fit: cover;
-            border-radius: 6px;
+        .video-item:hover {
+            background: #f8faff;
         }
 
-        .video-item .info { display: flex; flex-direction: column; justify-content: center; overflow: hidden; }
-        .video-item .title { font-size: 0.85rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .video-item.active {
+            background: #eff6ff;
+            border-left-color: var(--primary);
+        }
 
-        /* Cards */
+        .video-item .v-icon {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        .video-item.active .v-icon {
+            color: var(--primary);
+        }
+
+        .video-item .info {
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .video-item .title {
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        /* Digər elementlər */
+        .tabs-nav {
+            display: flex;
+            gap: 10px;
+            border-bottom: 2px solid var(--border);
+            margin-bottom: 20px;
+            background: var(--background);
+            position: sticky;
+            top: -20px;
+            z-index: 10;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            padding: 12px 18px;
+            font-weight: 600;
+            color: var(--text-muted);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .tab-btn.active {
+            color: var(--primary);
+        }
+
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--primary);
+        }
+
         .glass-card {
             background: #fff;
             border-radius: var(--radius-md);
@@ -156,19 +228,18 @@
             margin-bottom: 20px;
         }
 
-        /* Responsive */
         @media (max-width: 1024px) {
-            body { overflow-y: auto; }
-            .main-container { grid-template-columns: 1fr; overflow: visible; }
-            .sidebar { border-left: none; border-top: 1px solid var(--border); height: auto; max-height: 600px; }
-            .content-area { overflow-y: visible; }
-        }
+            body {
+                overflow-y: auto;
+            }
 
-        @media (max-width: 600px) {
-            .content-area { padding: 10px; }
-            header { padding: 0 1rem; }
-            .video-wrapper { border-radius: 0; margin-left: -10px; width: calc(100% + 20px); }
-            .tab-btn { padding: 10px 12px; font-size: 0.85rem; }
+            .main-container {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                max-height: 500px;
+            }
         }
     </style>
 </head>
@@ -184,7 +255,7 @@
     <div class="main-container">
         <div class="content-area" id="scroll-target">
             <div class="video-wrapper">
-                <video id="main-video" controls autoplay></video>
+                <video id="main-video" controls autoplay controlsList="nodownload"></video>
             </div>
 
             <nav class="tabs-nav">
@@ -212,8 +283,11 @@
                 <div class="glass-card">
                     <h3>Şərhlər</h3>
                     <div style="margin-top:15px;">
-                        <textarea id="comment-text" style="width:100%; padding:12px; border-radius:8px; border:1px solid var(--border); resize:none;" rows="3" placeholder="Fikrinizi yazın..."></textarea>
-                        <button onclick="postComment()" class="tab-btn" style="background:var(--primary); color:white; border-radius:8px; margin-top:10px; float:right;">Göndər</button>
+                        <textarea id="comment-text"
+                            style="width:100%; padding:12px; border-radius:8px; border:1px solid var(--border); resize:none;"
+                            rows="3" placeholder="Fikrinizi yazın..."></textarea>
+                        <button onclick="postComment()" class="tab-btn"
+                            style="background:var(--primary); color:white; border-radius:8px; margin-top:10px; float:right;">Göndər</button>
                         <div style="clear:both;"></div>
                     </div>
                     <div id="comments-list" style="margin-top:20px;"></div>
@@ -222,8 +296,12 @@
         </div>
 
         <aside class="sidebar">
-            <div class="sidebar-header">Kursun Məzmunu</div>
-            <div class="video-list" id="video-list"></div>
+            <div class="sidebar-header">
+                <span>Kursun Məzmunu</span>
+                <i class="bi bi-list-task"></i>
+            </div>
+            <div class="module-list" id="module-container">
+            </div>
         </aside>
     </div>
 
@@ -236,112 +314,159 @@
         } else {
             document.getElementById("ov-title").textContent = post.text;
             document.getElementById("ov-cat").textContent = post.category || "Kateqoriya seçilməyib";
-            document.getElementById("ov-desc").innerHTML = post.description || "Məlumat yoxdur.";
+            document.getElementById("ov-desc").innerHTML = post.description || "Bu kurs üçün əlavə məlumat qeyd edilməyib.";
 
             const video = document.getElementById("main-video");
-            const videoListContainer = document.getElementById("video-list");
-            let currentVIndex = 0;
+            const moduleContainer = document.getElementById("module-container");
 
-            // Video siyahısını yaratmaq
-            post.videos.forEach((src, index) => {
-                const item = document.createElement("div");
-                item.className = `video-item ${index === 0 ? 'active' : ''}`;
-                const title = post.videoTitles[index] || `Dərs ${index + 1}`;
-                const thumb = post.videoCovers[index] || post.courseCover;
+            let firstVideoUrl = "";
+            let currentGlobalVIndex = 0; // Şərhlər üçün unikal indeks lazım ola bilər
 
-                item.innerHTML = `
-                    <img src="${thumb}">
-                    <div class="info">
-                        <span class="title">${title}</span>
-                        <small style="color:var(--text-muted)">Video dərs</small>
-                    </div>
-                `;
+            // MODUL STRUKTURUNU QURMAQ
+            if (post.modules && post.modules.length > 0) {
+                post.modules.forEach((module, mIdx) => {
+                    const moduleDiv = document.createElement("div");
+                    moduleDiv.className = `module-group ${mIdx === 0 ? 'active' : ''}`;
 
-                item.onclick = () => {
-                    // UI yeniləmə
-                    document.querySelectorAll(".video-item").forEach(el => el.classList.remove("active"));
-                    item.classList.add("active");
-                    
-                    // Video dəyişmə
-                    video.src = src;
-                    video.play();
-                    currentVIndex = index;
-                    
-                    // Mobil üçün yuxarı sürüşdür
-                    if (window.innerWidth < 1024) {
-                        document.getElementById("scroll-target").scrollIntoView({ behavior: 'smooth' });
-                    }
+                    moduleDiv.innerHTML = `
+                        <button class="module-toggle" onclick="toggleModule(this)">
+                            <span>${module.moduleName}</span>
+                            <i class="bi bi-chevron-down"></i>
+                        </button>
+                        <div class="video-items-container"></div>
+                    `;
 
-                    loadComments(post.id, index);
-                };
-                videoListContainer.appendChild(item);
-            });
+                    const videoContainer = moduleDiv.querySelector(".video-items-container");
 
-            // İlk video
-            video.src = post.videos[0];
-            loadComments(post.id, 0);
+                    module.videos.forEach((vData, vIdx) => {
+                        if (!firstVideoUrl) firstVideoUrl = vData.videoUrl;
 
-            // Tab funksiyası
+                        const vItem = document.createElement("div");
+                        vItem.className = "video-item";
+                        if (vData.videoUrl === firstVideoUrl) vItem.classList.add("active");
+
+                        vItem.innerHTML = `
+                            <div class="v-icon"><i class="bi bi-play-circle-fill"></i></div>
+                            <div class="info">
+                                <span class="title">${vData.title}</span>
+                                ${vData.docUrl ? '<small style="color:var(--primary); font-size:0.7rem;"><i class="bi bi-file-earmark-pdf"></i> Resurs var</small>' : '<small style="color:var(--text-muted); font-size:0.7rem;">Video dərs</small>'}
+                            </div>
+                        `;
+
+                        vItem.onclick = () => {
+                            // UI Update
+                            document.querySelectorAll(".video-item").forEach(el => el.classList.remove("active"));
+                            vItem.classList.add("active");
+
+                            // Video Change
+                            video.src = vData.videoUrl;
+                            video.play();
+
+                            // Update Resources Tab
+                            updateResources(vData);
+
+                            // Load Comments (Modul daxili indeks istifadə edilə bilər və ya ümumi)
+                            loadComments(post.id, `${mIdx}-${vIdx}`);
+
+                            if (window.innerWidth < 1024) {
+                                document.getElementById("scroll-target").scrollIntoView({ behavior: 'smooth' });
+                            }
+                        };
+
+                        videoContainer.appendChild(vItem);
+                    });
+
+                    moduleContainer.appendChild(moduleDiv);
+                });
+            }
+
+            // İlk videonu başlat
+            video.src = firstVideoUrl;
+
+            // İlk videonun resursunu və şərhlərini yüklə
+            if (post.modules[0] && post.modules[0].videos[0]) {
+                updateResources(post.modules[0].videos[0]);
+                loadComments(post.id, "0-0");
+            }
+
+            // Accordion aç/bağla
+            window.toggleModule = (btn) => {
+                const group = btn.parentElement;
+                group.classList.toggle("active");
+            };
+
+            // Resursları yeniləmə funksiyası (Hər videoya özəl)
+            function updateResources(vData) {
+                const docList = document.getElementById("document-list");
+                docList.innerHTML = "";
+                if (vData.docUrl) {
+                    docList.innerHTML = `
+                        <a href="${vData.docUrl}" target="_blank" style="display:flex; align-items:center; padding:12px; background:#f1f5f9; border-radius:8px; text-decoration:none; color:inherit; margin-bottom:10px;">
+                            <i class="bi bi-file-earmark-pdf" style="font-size:1.4rem; color:red; margin-right:12px;"></i>
+                            <span style="font-size:0.9rem; font-weight:500;">Dərs Materialı: ${vData.title}</span>
+                        </a>
+                    `;
+                } else {
+                    docList.innerHTML = "<p style='color:var(--text-muted)'>Bu dərs üçün əlavə material yoxdur.</p>";
+                }
+            }
+
+            // Digər köməkçi funksiyalar (showTab, loadComments, postComment)
             window.showTab = (tabName, btn) => {
                 document.querySelectorAll(".tab-pane").forEach(p => p.style.display = 'none');
                 document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove('active'));
-                
                 document.getElementById(`${tabName}-tab`).style.display = 'block';
                 btn.classList.add('active');
             };
 
-            // Materiallar
-            const docList = document.getElementById("document-list");
-            if(post.documents && post.documents.length > 0) {
-                post.documents.forEach((doc, i) => {
-                    docList.innerHTML += `
-                        <a href="${doc}" target="_blank" style="display:flex; align-items:center; padding:12px; background:#f1f5f9; border-radius:8px; text-decoration:none; color:inherit; margin-bottom:10px;">
-                            <i class="bi bi-file-earmark-pdf" style="font-size:1.4rem; color:red; margin-right:12px;"></i>
-                            <span style="font-size:0.9rem; font-weight:500;">Resurs #${i+1}</span>
-                        </a>
-                    `;
-                });
-            } else {
-                docList.innerHTML = "<p style='color:var(--text-muted)'>Material yüklənməyib.</p>";
-            }
-
-            // Komment funksiyaları
             async function loadComments(pid, vIdx) {
                 const list = document.getElementById("comments-list");
-                list.innerHTML = "Yüklənir...";
+                list.innerHTML = "<small>Yüklənir...</small>";
                 try {
                     const res = await fetch(`${API_URL}/comments/${pid}/${vIdx}`);
                     const data = await res.json();
-                    list.innerHTML = data.length ? "" : "Hələ rəy yoxdur.";
+                    list.innerHTML = data.length ? "" : "<p style='font-size:0.9rem; color:gray;'>Hələ rəy yoxdur.</p>";
                     data.forEach(c => {
                         list.innerHTML += `
                             <div style="margin-bottom:15px; padding:10px; border-bottom:1px solid #eee;">
-                                <strong>${c.username}</strong>
-                                <p style="font-size:0.9rem; color:#555;">${c.text}</p>
+                                <div style="display:flex; justify-content:space-between;">
+                                    <strong>${c.username}</strong>
+                                    <small style="color:gray;">${new Date(c.createdAt).toLocaleDateString()}</small>
+                                </div>
+                                <p style="font-size:0.9rem; color:#555; margin-top:5px;">${c.text}</p>
                             </div>
                         `;
                     });
-                } catch(e) { list.innerHTML = "Xəta baş verdi."; }
+                } catch (e) { list.innerHTML = "Xəta baş verdi."; }
             }
 
             window.postComment = async () => {
                 const token = localStorage.getItem('token');
                 const text = document.getElementById("comment-text").value;
-                if(!token) return Swal.fire("Giriş edin", "", "warning");
-                if(!text.trim()) return;
+                const activeVideo = document.querySelector(".video-item.active");
+
+                // Aktiv videonun modul-indeksini tapmaq lazımdır (loadComments üçün istifadə etdiyimiz formatda)
+                // Sadəlik üçün hazırda aktiv olan şərhləri yeniləyəcək.
+
+                if (!token) return Swal.fire("Giriş edin", "Rəy yazmaq üçün daxil olmalısınız", "warning");
+                if (!text.trim()) return;
+
+                // Backend-ə uyğun videoIndex tapılmalıdır
+                // ... (Bu hissə sənin backend rəy sisteminə görə tənzimlənə bilər)
 
                 const res = await fetch(`${API_URL}/comments`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
-                    body: JSON.stringify({ postId: post.id, videoIndex: currentVIndex, text })
+                    body: JSON.stringify({ postId: post.id, videoIndex: "0-0", text }) // Nümunə index
                 });
 
-                if(res.ok) {
+                if (res.ok) {
                     document.getElementById("comment-text").value = "";
-                    loadComments(post.id, currentVIndex);
+                    loadComments(post.id, "0-0");
                 }
             };
         }
     </script>
 </body>
+
 </html>

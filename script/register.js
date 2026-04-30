@@ -17,6 +17,16 @@ let userDataToRegister = {};
 const EMAILJS_SERVICE_ID = "service_uxvssjk";
 const EMAILJS_TEMPLATE_ID = "template_i41ipll";
 
+
+const getBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = (error) => reject(error);
+    });
+};
+
 function getPasswordStrength(password) {
     const checks = {
         length: password.length >= 8,
@@ -34,6 +44,21 @@ function updatePasswordRequirements(checks) {
         const reqKey = li.getAttribute('data-requirement');
         if (checks[reqKey]) li.classList.add('fulfilled');
         else li.classList.remove('fulfilled');
+    });
+}
+
+
+if (inpPass) {
+    inpPass.addEventListener("input", () => {
+        const { score, checks } = getPasswordStrength(inpPass.value);
+        updatePasswordRequirements(checks);
+
+        let widthPercentage = (score / 5) * 100;
+        line.style.width = widthPercentage + "%";
+        line.style.backgroundColor = score === 5 ? 'green' : (score >= 3 ? 'orange' : 'red');
+        line.style.height = "5px";
+
+        passRequirements.style.display = (inpPass.value.length > 0 && score < 5) ? 'block' : 'none';
     });
 }
 
@@ -99,20 +124,36 @@ verifyButton.addEventListener("click", async () => {
     verifyButton.disabled = true;
 
     try {
+        const fileInput = document.getElementById("reg-profilePic");
+        const formData = new FormData();
+
+        formData.append("username", userDataToRegister.username);
+        formData.append("email", userDataToRegister.email);
+        formData.append("password", userDataToRegister.password);
+
+        if (fileInput && fileInput.files[0]) {
+            formData.append("profilePic", fileInput.files[0]);
+        }
+
         const res = await fetch(`${API_URL}/register`, {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(userDataToRegister)
+            body: formData
         });
 
         const json = await res.json();
         if (!res.ok) throw new Error(json.message || "Qeydiyyat zamanı xəta.");
 
+        let profilePicBase64 = "";
+        if (fileInput && fileInput.files[0]) {
+            profilePicBase64 = await getBase64(fileInput.files[0]);
+        }
+
         localStorage.setItem("token", json.token);
         localStorage.setItem("registeredUser", JSON.stringify({
             username: userDataToRegister.username,
             email: userDataToRegister.email,
-            role: json.role
+            role: json.role,
+            profilePic: profilePicBase64
         }));
 
         Swal.fire({ title: "Uğurlu!", text: "Qeydiyyat tamamlandı! Xoş gəldiniz.", icon: "success" })
@@ -124,20 +165,6 @@ verifyButton.addEventListener("click", async () => {
         verifyButton.disabled = false;
     }
 });
-
-if (inpPass) {
-    inpPass.addEventListener("input", () => {
-        const { score, checks } = getPasswordStrength(inpPass.value);
-        updatePasswordRequirements(checks);
-
-        let widthPercentage = (score / 5) * 100;
-        line.style.width = widthPercentage + "%";
-        line.style.backgroundColor = score === 5 ? 'green' : (score >= 3 ? 'orange' : 'red');
-        line.style.height = "5px";
-
-        passRequirements.style.display = (inpPass.value.length > 0 && score < 5) ? 'block' : 'none';
-    });
-}
 
 let eye = document.querySelector(".bi-eye-fill");
 let eyeClose = document.querySelector(".bi-eye-slash-fill");
@@ -156,83 +183,24 @@ if (eye && eyeClose && inpPass) {
 
 const inputs = document.querySelectorAll(".input");
 const icons = document.querySelectorAll(".icon");
+
 inputs.forEach((inp, index) => {
+    if (inp.type === "file") return;
 
     inp.addEventListener("focus", () => {
-
-        if (index === 0) {
-            icons.forEach((el, index) => {
-                if (index === 0) {
-
-                    el.style.cssText = `transform: translateY(-25px); font-size: 14px`
-                }
-            })
-        } else if (index === 1) {
-            icons.forEach((el, index) => {
-                if (index === 1) {
-
-                    el.style.cssText = `transform: translateY(-25px); font-size: 14px`
-                }
-            })
-        } else {
-            icons.forEach((el, index) => {
-                if (index === 2) {
-
-                    el.style.cssText = `transform: translateY(-25px); font-size: 14px`
-                }
-            })
-        }
-
-    })
+        icons[index].style.transform = "translateY(-25px)";
+        icons[index].style.fontSize = "14px";
+    });
 
     inp.addEventListener("blur", () => {
-
-        if (index === 0) {
-            icons.forEach((el, index) => {
-                if (index === 0) {
-
-                    el.style.cssText = `transform: translateY(0); font-size: 18px`
-                }
-            })
-        } else if (index === 1) {
-            icons.forEach((el, index) => {
-                if (index === 1) {
-
-                    el.style.cssText = `transform: translateY(0); font-size: 18px`
-                }
-            })
-        } else {
-            icons.forEach((el, index) => {
-                if (index === 2) {
-
-                    el.style.cssText = `transform: translateY(0); font-size: 18px`
-                }
-            })
+        if (inp.value.trim() === "") {
+            icons[index].style.transform = "translateY(0)";
+            icons[index].style.fontSize = "18px";
         }
+    });
 
-        if (index === 0 && inp.value.trim() !== "") {
-            icons.forEach((el, index) => {
-                if (index === 0) {
-                    el.style.cssText = `transform: translateY(-25px); font-size: 14px`
-                }
-            })
-        } else if (index === 1 && inp.value.trim() !== "") {
-            icons.forEach((el, index) => {
-                if (index === 1) {
-                    el.style.cssText = `transform: translateY(-25px); font-size: 14px`
-                }
-            })
-        } else {
-
-            icons.forEach((el, index) => {
-                if (index === 2) {
-                    el.style.cssText = `transform: translateY(-25px); font-size: 14px`
-                }
-            })
-        }
-    })
-
-
-
-
+    if (inp.value.trim() !== "") {
+        icons[index].style.transform = "translateY(-25px)";
+        icons[index].style.fontSize = "14px";
+    }
 });
